@@ -214,10 +214,11 @@ body {
 
 .select-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.6rem;
+  grid-template-columns: 1fr;   /* 1列＝カードを縦に積む（誕生花は誕生石の真下） */
+  gap: 1.2rem;
   width: 100%;
-  max-width: 760px;
+  max-width: 460px;
+  margin: 0 auto;
 }
 
 .fortune-card {
