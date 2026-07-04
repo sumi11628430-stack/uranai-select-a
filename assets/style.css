@@ -299,3 +299,141 @@ body {
     transition-duration: .001ms !important;
   }
 }
+
+/* =========================================================
+   誕生石ページ専用スタイル
+   ========================================================= */
+
+/* コンテンツが縦に長いので上寄せ＋スクロール可 */
+.bs-page {
+  justify-content: flex-start;
+  padding-top: 8vh;
+  padding-bottom: 12vh;
+}
+
+/* 月選択ボタン */
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: .7rem;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto 2.2rem;
+}
+@media (min-width: 560px) {
+  .month-grid { grid-template-columns: repeat(6, 1fr); max-width: 560px; }
+}
+.month-btn {
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--gold-bright);
+  background: linear-gradient(160deg, rgba(60,30,110,.55), rgba(20,8,50,.55));
+  border: 1px solid rgba(232,200,110,.4);
+  border-radius: 12px;
+  padding: .7rem .2rem;
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+}
+.month-btn:hover, .month-btn:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--gold-bright);
+  box-shadow: 0 6px 20px rgba(232,200,110,.28);
+  outline: none;
+}
+.month-btn.on {
+  background: linear-gradient(160deg, rgba(120,70,190,.75), rgba(60,25,120,.75));
+  border-color: var(--gold-bright);
+  box-shadow: 0 0 22px rgba(232,200,110,.45);
+}
+
+/* 選択結果パネル */
+.bs-result {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto 3rem;
+  padding: 1.8rem 1.4rem;
+  border-radius: 18px;
+  background: linear-gradient(160deg, rgba(40,18,80,.6), rgba(15,6,40,.6));
+  border: 1px solid rgba(232,200,110,.35);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 10px 34px rgba(0,0,0,.4);
+  animation: page-fade-in .6s ease both;
+}
+.bs-rtitle {
+  color: var(--gold-bright);
+  font-size: clamp(1.1rem, 4vw, 1.5rem);
+  letter-spacing: .1em;
+  margin-bottom: .7rem;
+  text-shadow: 0 0 14px rgba(232,200,110,.4);
+}
+.bs-msg {
+  color: var(--text-dim);
+  line-height: 1.9;
+  margin-bottom: 1.5rem;
+  letter-spacing: .04em;
+}
+
+/* 宝石カード */
+.gem-cards { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
+.gem-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .55rem;
+  width: 150px;
+  padding: 1.1rem .6rem;
+  border-radius: 14px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(232,200,110,.25);
+}
+.gem-name {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--gold-bright);
+  font-size: 1rem;
+  letter-spacing: .04em;
+  text-align: center;
+}
+.gem-name small { color: var(--text-dim); font-size: .68rem; letter-spacing: .12em; margin-top: .1em; }
+.gem-words { color: var(--text); font-size: .8rem; text-align: center; opacity: .85; line-height: 1.6; }
+
+/* CSSで描く宝石アイコン（誕生石カラー） */
+.gem-ico {
+  width: 46px;
+  height: 46px;
+  background: radial-gradient(circle at 35% 25%, #ffffff 0%, var(--gem, #b980ff) 78%);
+  clip-path: polygon(50% 0%, 90% 33%, 72% 100%, 28% 100%, 10% 33%);
+  box-shadow: 0 0 14px var(--gem, #b980ff);
+  flex: 0 0 auto;
+}
+.gem-ico.sm { width: 22px; height: 22px; box-shadow: 0 0 8px var(--gem, #b980ff); }
+
+/* 全月一覧 */
+.bs-listtitle {
+  color: var(--gold-bright);
+  letter-spacing: .2em;
+  font-size: 1.05rem;
+  margin: 1rem 0 1.2rem;
+  text-align: center;
+}
+.stone-list {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+.list-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: .7rem 1rem;
+  border-radius: 12px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(232,200,110,.18);
+}
+.list-month { color: var(--gold-bright); min-width: 3em; font-size: .95rem; }
+.list-gems { display: flex; flex-wrap: wrap; gap: .5rem 1rem; }
+.list-gem { display: flex; align-items: center; gap: .4rem; font-size: .85rem; color: var(--text); }
