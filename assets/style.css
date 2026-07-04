@@ -35,15 +35,44 @@ html, body {
   display: block;
 }
 
-/* グラデーションの下地（canvasの下に敷く） */
+/* グラデーションの下地（canvasの下に敷く）。
+   ここはCSSだけで常に動くため、JS/canvasが止まっても真っ暗にならない。 */
 .bg-gradient {
   position: fixed;
   inset: 0;
   z-index: -4;
+  overflow: hidden;
+  background: linear-gradient(180deg, #23124f 0%, #120730 55%, #1b0c3c 100%);
+}
+/* ゆっくり漂うオーロラ状の光（2枚を別々に動かす） */
+.bg-gradient::before,
+.bg-gradient::after {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  will-change: transform;
+}
+.bg-gradient::before {
   background:
-    radial-gradient(ellipse at 50% 20%, #2c1560 0%, transparent 55%),
-    radial-gradient(ellipse at 50% 100%, #180a3a 0%, transparent 60%),
-    linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-mid) 50%, var(--bg-deep) 100%);
+    radial-gradient(closest-side at 30% 35%, rgba(132,78,220,.55), transparent 70%),
+    radial-gradient(closest-side at 75% 28%, rgba(74,40,158,.48), transparent 70%);
+  filter: blur(60px);
+  animation: nebula-a 20s ease-in-out infinite alternate;
+}
+.bg-gradient::after {
+  background:
+    radial-gradient(closest-side at 65% 75%, rgba(96,48,182,.5), transparent 70%),
+    radial-gradient(closest-side at 22% 82%, rgba(216,176,98,.20), transparent 70%);
+  filter: blur(70px);
+  animation: nebula-b 27s ease-in-out infinite alternate;
+}
+@keyframes nebula-a {
+  0%   { transform: translate3d(-4%, -3%, 0) scale(1.05); }
+  100% { transform: translate3d(5%,  4%,  0) scale(1.18); }
+}
+@keyframes nebula-b {
+  0%   { transform: translate3d(4%,  3%,  0) scale(1.12); }
+  100% { transform: translate3d(-5%, -4%, 0) scale(1.0);  }
 }
 
 /* 周囲を暗くするビネット（雰囲気づくり） */

@@ -22,6 +22,9 @@
     canvas.style.width  = innerWidth  + "px";
     canvas.style.height = innerHeight + "px";
     build();
+    // 静止モードでは、リサイズ（スマホのアドレスバー開閉など）でcanvasが
+    // クリアされたまま真っ暗になるのを防ぐため、ここで描き直す。
+    if (reduceMotion) drawStatic();
   }
 
   function rand(a, b) { return a + Math.random() * (b - a); }
@@ -29,8 +32,8 @@
   function build() {
     // 画面の広さに応じて星の数を調整
     const area = (w * h) / (dpr * dpr);
-    const starCount = Math.min(220, Math.floor(area / 6000));
-    const moteCount = Math.min(40, Math.floor(area / 30000));
+    const starCount = Math.min(320, Math.floor(area / 4200));
+    const moteCount = Math.min(60, Math.floor(area / 20000));
 
     stars = [];
     for (let i = 0; i < starCount; i++) {
@@ -38,7 +41,7 @@
         x: Math.random() * w,
         y: Math.random() * h,
         r: rand(.4, 1.6) * dpr,
-        base: rand(.25, .9),          // 基本の明るさ
+        base: rand(.4, 1),            // 基本の明るさ
         tw: rand(.6, 2.2),            // 瞬きの速さ
         phase: rand(0, Math.PI * 2),
         gold: Math.random() < .25     // 一部を金色に
@@ -125,7 +128,6 @@
       if (s.life <= 0 || s.y > h || s.x < 0 || s.x > w) shooting = null;
     }
 
-    requestAnimationFrame(frame);
   }
 
   function drawStatic() {
@@ -142,6 +144,11 @@
   addEventListener("resize", resize, { passive: true });
   resize();
 
+  // 例外が出てもアニメが止まらないよう、ループ側で毎フレーム再スケジュールする
+  function loop(t) {
+    try { frame(t); } catch (e) { /* 無視して継続 */ }
+    requestAnimationFrame(loop);
+  }
   if (reduceMotion) drawStatic();
-  else requestAnimationFrame(frame);
+  else requestAnimationFrame(loop);
 })();
