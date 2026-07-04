@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>あなたの誕生花は？ ― 占いの館</title>
+  <meta name="description" content="生まれた月日から、あなたの誕生花・花言葉・運勢・開運アドバイスを詳しく占います（366日対応）。" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/style.css?v=7" />
+</head>
+<body>
+
+  <!-- 背景：花びらが舞う専用アニメ -->
+  <div class="bg-floral"></div>
+  <!-- ▼ 本物の花の写真/動画背景にしたいとき:
+  <video class="bg-video" autoplay muted loop playsinline poster="assets/flower-poster.jpg">
+    <source src="assets/flower-bg.mp4" type="video/mp4" />
+  </video>
+  -->
+  <canvas class="bg-canvas"></canvas>
+  <div class="bg-vignette"></div>
+
+  <!-- 本文 -->
+  <main class="page bs-page">
+    <h1 class="brand" style="font-size: clamp(1.5rem, 5vw, 2.6rem);">🌸 あなたの誕生花</h1>
+    <p class="select-lead">お誕生日（月日）を選んでください</p>
+
+    <!-- 月日ピッカー -->
+    <div class="date-pick">
+      <select id="selMonth" class="date-sel" aria-label="生まれ月"></select>
+      <select id="selDay" class="date-sel" aria-label="生まれた日"></select>
+      <button id="btnDivine" class="date-go" type="button">占う</button>
+    </div>
+
+    <!-- 結果（JSで挿入：その日の誕生花・花言葉＋その月の占い） -->
+    <section class="bs-result" id="result" hidden></section>
+
+    <p class="bs-source">
+      ※誕生花・花言葉は、花の専門情報サイト「プレミアガーデン（prrr.jp）」の
+      366日の誕生花一覧を参考にしています。誕生花・花言葉は地域や書籍によって
+      諸説あり、運勢・アドバイスは占いのお楽しみコンテンツです。
+    </p>
+
+    <a class="back-link" href="select.html">← 占いの選択へ戻る</a>
+  </main>
+
+  <p class="site-foot">© 占いの館</p>
+
+  <script src="assets/petals.js?v=1"></script>
+  <script src="assets/birthflowers_daily.js?v=1"></script>
+  <script src="assets/birthflowers.js?v=1"></script>
+  <script src="assets/nav.js?v=3"></script>
+</body>
+</html>

@@ -636,3 +636,44 @@ body {
   font-size: clamp(.88rem, 1.1vw, .98rem);
 }
 .lucky-chip b { color: var(--gold-bright); font-size: .68rem; letter-spacing: .12em; font-weight: 700; }
+
+/* =========================================================
+   誕生花ページ専用（花の背景・花のSVG）
+   ========================================================= */
+.bg-floral {
+  position: fixed;
+  inset: 0;
+  z-index: -4;
+  overflow: hidden;
+  background: linear-gradient(180deg, #3a1533 0%, #26123a 55%, #1a0b2e 100%);
+}
+.bg-floral::before,
+.bg-floral::after {
+  content: "";
+  position: absolute;
+  inset: -25%;
+  will-change: transform;
+}
+.bg-floral::before {
+  background:
+    radial-gradient(closest-side at 30% 32%, rgba(232,120,172,.50), transparent 70%),
+    radial-gradient(closest-side at 75% 28%, rgba(150,70,180,.40), transparent 70%);
+  filter: blur(65px);
+  animation: nebula-a 22s ease-in-out infinite alternate;
+}
+.bg-floral::after {
+  background:
+    radial-gradient(closest-side at 65% 72%, rgba(206,92,150,.42), transparent 70%),
+    radial-gradient(closest-side at 22% 80%, rgba(240,200,120,.22), transparent 70%);
+  filter: blur(75px);
+  animation: nebula-b 28s ease-in-out infinite alternate;
+}
+
+.flower-svg { width: 100%; height: 100%; display: block; }
+.flower-visual {
+  flex: 0 0 auto;
+  width: clamp(100px, 9vw, 142px);
+  height: clamp(100px, 9vw, 142px);
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,.45));
+}
+.flower-words-wrap { text-align: center; margin-bottom: 1.5rem; }
