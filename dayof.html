@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>あなたは何の日？ ― 占いの館</title>
+  <meta name="description" content="生まれた日・気になる日は何の日？366日の記念日と由来・意味をチェックできます。" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/style.css?v=9" />
+</head>
+<body class="sky-text">
+
+  <!-- 背景：祭事・春夏秋冬・朝昼晩のアニメ風（月に連動して季節が変わる） -->
+  <div class="bg-sky"></div>
+  <canvas class="bg-canvas"></canvas>
+
+  <!-- 本文 -->
+  <main class="page bs-page">
+    <h1 class="brand" style="font-size: clamp(1.5rem, 5vw, 2.6rem);">📅 あなたは何の日？</h1>
+    <p class="select-lead">気になる日（月日）を選んでください</p>
+
+    <!-- 月日ピッカー -->
+    <div class="date-pick">
+      <select id="selMonth" class="date-sel" aria-label="月"></select>
+      <select id="selDay" class="date-sel" aria-label="日"></select>
+      <button id="btnDivine" class="date-go" type="button">結果</button>
+    </div>
+
+    <!-- 結果（JSで挿入：その日の記念日と由来） -->
+    <section class="bs-result" id="result" hidden></section>
+
+    <!-- 選択中の月の一覧（クリックでその日を表示） -->
+    <div class="dayof-list-wrap">
+      <h2 class="bs-listtitle" id="listTitle">今月の「何の日」一覧</h2>
+      <div class="stone-list" id="dayList"></div>
+    </div>
+
+    <p class="bs-source">
+      ※記念日は「雑学ネタ帳（zatsuneta.com）」の記念日一覧を参考に、各日の代表的な1件を掲載しています。
+      1日には複数の記念日があり、由来には諸説あります。国民の祝日や二十四節気・年中行事の日付は年により変わるものがあります。
+    </p>
+
+    <a class="back-link" href="select.html">← 占いの選択へ戻る</a>
+  </main>
+
+  <p class="site-foot">© 占いの館</p>
+
+  <script src="assets/seasons.js?v=1"></script>
+  <script src="assets/daysof_daily.js?v=1"></script>
+  <script src="assets/daysof.js?v=1"></script>
+  <script src="assets/nav.js?v=3"></script>
+</body>
+</html>
