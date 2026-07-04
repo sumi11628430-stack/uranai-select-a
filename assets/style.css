@@ -517,3 +517,121 @@ body {
   color: rgba(185,174,224,.6);
   text-align: center;
 }
+
+/* =========================================================
+   誕生石（月別）リッチ解説パネル
+   ========================================================= */
+.bs-title {
+  text-align: center;
+  color: var(--gold-bright);
+  font-size: clamp(1rem, 3.4vw, 1.3rem);
+  letter-spacing: .08em;
+  margin: .2rem 0 1rem;
+  text-shadow: 0 0 14px rgba(232,200,110,.4);
+}
+.bs-catch {
+  max-width: 680px;
+  margin: 0 auto 2rem;
+  color: var(--text);
+  line-height: 2;
+  letter-spacing: .03em;
+  text-align: center;
+}
+
+/* 宝石のショーケース */
+.stone-showcase {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-bottom: 2.4rem;
+}
+.stone-block {
+  display: flex;
+  align-items: center;
+  gap: 1.3rem;
+  padding: 1.3rem 1.2rem;
+  border-radius: 16px;
+  background: linear-gradient(150deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
+  border: 1px solid rgba(232,200,110,.25);
+  text-align: left;
+}
+.stone-visual {
+  flex: 0 0 auto;
+  width: 92px;
+  height: 92px;
+  filter: drop-shadow(0 6px 16px rgba(0,0,0,.5));
+}
+.gem-svg { width: 100%; height: 100%; display: block; }
+.stone-info { flex: 1 1 auto; min-width: 0; }
+.stone-title {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: .5em;
+  font-size: clamp(1.05rem, 3.2vw, 1.35rem);
+  color: var(--gold-bright);
+  letter-spacing: .05em;
+  margin-bottom: .5rem;
+}
+.stone-title small { color: var(--text-dim); font-size: .68rem; letter-spacing: .12em; }
+.stone-appear { color: var(--text); line-height: 1.85; font-size: .92rem; margin-bottom: .6rem; opacity: .95; }
+.stone-words {
+  display: inline-block;
+  color: #1a0b2e;
+  background: linear-gradient(160deg, #f7e6ac, #e8c86e);
+  font-size: .8rem;
+  letter-spacing: .06em;
+  padding: .2em .8em;
+  border-radius: 999px;
+  margin-bottom: .5rem;
+}
+.stone-meaning { color: var(--text-dim); line-height: 1.8; font-size: .85rem; }
+
+/* 占いセクション（総合・恋愛・仕事金運・気質・アドバイス） */
+.fortune-sections {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+@media (min-width: 620px) { .fortune-sections { grid-template-columns: 1fr 1fr; } }
+.f-sec {
+  padding: 1.1rem 1.2rem;
+  border-radius: 14px;
+  background: rgba(20,8,50,.5);
+  border: 1px solid rgba(232,200,110,.2);
+  text-align: left;
+}
+.f-sec h3 {
+  font-size: .98rem;
+  color: var(--gold-bright);
+  letter-spacing: .08em;
+  margin-bottom: .5rem;
+  font-weight: 700;
+}
+.f-sec p { color: var(--text); line-height: 1.85; font-size: .88rem; }
+.f-sec.advice {
+  grid-column: 1 / -1;
+  background: linear-gradient(150deg, rgba(120,70,190,.45), rgba(60,25,120,.4));
+  border-color: rgba(232,200,110,.45);
+}
+
+/* ラッキー要素チップ */
+.lucky-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .7rem;
+  justify-content: center;
+}
+.lucky-chip {
+  display: flex;
+  flex-direction: column;
+  gap: .15em;
+  padding: .6rem 1rem;
+  border-radius: 12px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(232,200,110,.25);
+  color: var(--text);
+  font-size: .85rem;
+}
+.lucky-chip b { color: var(--gold-bright); font-size: .68rem; letter-spacing: .12em; font-weight: 700; }
