@@ -19,7 +19,8 @@ html, body {
   min-height: 100vh;
   font-family: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
   color: var(--text);
-  background: var(--bg-deep);
+  /* 最下層の色付き下地。どんな場合でもここが見えるので真っ黒にはならない。 */
+  background: linear-gradient(180deg, #23124f 0%, #120730 55%, #1b0c3c 100%) fixed;
   overflow-x: hidden;
 }
 
@@ -110,13 +111,15 @@ html, body {
   padding: 6vh 5vw;
 }
 
-/* 画面遷移フェード */
+/* 表示時のフェードイン：CSSアニメーションのみで完結（JS不要）。
+   万一スクリプトが動かなくても、最後は必ず opacity:1 になり真っ暗にならない。 */
 body {
-  opacity: 0;
-  transition: opacity .9s ease;
+  animation: page-fade-in 1s ease both;
 }
-body.loaded  { opacity: 1; }
-body.leaving { opacity: 0; }
+@keyframes page-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
 
 /* ---- タイトル文字 ------------------------------------------------ */
 
