@@ -437,3 +437,83 @@ body {
 .list-month { color: var(--gold-bright); min-width: 3em; font-size: .95rem; }
 .list-gems { display: flex; flex-wrap: wrap; gap: .5rem 1rem; }
 .list-gem { display: flex; align-items: center; gap: .4rem; font-size: .85rem; color: var(--text); }
+
+/* ---- 誕生日（月日）ピッカー ---- */
+.date-pick {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: .7rem;
+  margin: 0 auto 2.4rem;
+}
+.date-sel {
+  font-family: inherit;
+  font-size: 1.05rem;
+  color: var(--gold-bright);
+  background: rgba(20,8,50,.7);
+  border: 1px solid rgba(232,200,110,.45);
+  border-radius: 10px;
+  padding: .6rem .9rem;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.date-sel:focus-visible { outline: none; border-color: var(--gold-bright); box-shadow: 0 0 14px rgba(232,200,110,.4); }
+.date-sel option { background: #180a3a; color: var(--text); }
+.date-go {
+  font-family: inherit;
+  font-size: 1.05rem;
+  letter-spacing: .1em;
+  color: #1a0b2e;
+  background: linear-gradient(160deg, #f7e6ac, #e8c86e);
+  border: none;
+  border-radius: 10px;
+  padding: .6rem 1.6rem;
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.date-go:hover, .date-go:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(232,200,110,.5);
+  outline: none;
+}
+
+/* 日別誕生石のヒーロー表示 */
+.daily-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  margin: .4rem 0 1.6rem;
+}
+.gem-ico.big {
+  width: 74px;
+  height: 74px;
+  box-shadow: 0 0 26px var(--gem, #b980ff);
+}
+.daily-name { text-align: left; }
+.daily-label { display: block; font-size: .75rem; letter-spacing: .2em; color: var(--text-dim); margin-bottom: .2em; }
+.daily-name b {
+  font-size: clamp(1.2rem, 5vw, 1.8rem);
+  color: var(--gold-bright);
+  font-weight: 700;
+  text-shadow: 0 0 16px rgba(232,200,110,.45);
+}
+.gem-sub {
+  color: var(--text-dim);
+  letter-spacing: .15em;
+  font-size: .85rem;
+  margin: 1.4rem 0 .9rem;
+  text-align: center;
+}
+
+/* 出典の注記 */
+.bs-source {
+  max-width: 640px;
+  margin: 2.2rem auto 0;
+  font-size: .72rem;
+  line-height: 1.7;
+  color: rgba(185,174,224,.6);
+  text-align: center;
+}

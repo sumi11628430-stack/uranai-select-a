@@ -1,7 +1,6 @@
 /* =========================================================
    誕生石データ（誕生月ごと）と表示ロジック
-   ・国際的／日本の宝石業界で一般的に用いられる誕生石一覧に基づく
-   ・月によって複数の石があるものは、すべて掲載
+   ・月ごとの誕生石（複数石は網羅）＋ 日別の誕生日石（DAILY_BIRTHSTONES）
    c = 表示用の宝石カラー, w = 石言葉
    ========================================================= */
 const BIRTHSTONES = [
@@ -34,7 +33,7 @@ const BIRTHSTONES = [
 
   { m: 8,  msg: "太陽のような明るさのあなたへ。輝く石々が、平和と向上心、幸福な絆を育てます。",
     stones: [ { jp: "ペリドット", en: "Peridot", c: "#9acd32", w: "夫婦の幸福・平和・希望" },
-              { jp: "サードオニキス", en: "Sardonyx", c: "#a0522d", w: "夫婦の幸福・friendship" },
+              { jp: "サードオニキス", en: "Sardonyx", c: "#a0522d", w: "夫婦の幸福・友愛" },
               { jp: "スピネル", en: "Spinel", c: "#d6336c", w: "向上心・情熱・成功" } ] },
 
   { m: 9,  msg: "深く澄んだ心のあなたへ。青と薄紅の石が、誠実な愛と無償のやさしさを守ります。",
@@ -43,11 +42,11 @@ const BIRTHSTONES = [
 
   { m: 10, msg: "七色の魅力を放つあなたへ。移ろう光の石が、希望と忍耐、心身の浄化を導きます。",
     stones: [ { jp: "オパール", en: "Opal", c: "#8fd6d0", w: "希望・幸福・忍耐" },
-              { jp: "トルマリン", en: "Tourmaline", c: "#e0457b", w: "心身の浄化・希望・電気の石" } ] },
+              { jp: "トルマリン", en: "Tourmaline", c: "#e0457b", w: "心身の浄化・希望" } ] },
 
   { m: 11, msg: "実りの季節に育つあなたへ。金と黄の石が、友情と希望、豊かな繁栄をもたらします。",
     stones: [ { jp: "トパーズ", en: "Topaz", c: "#f2b705", w: "友情・希望・潔白" },
-              { jp: "シトリン", en: "Citrine", c: "#e6a817", w: "繁栄・富・friendship" } ] },
+              { jp: "シトリン", en: "Citrine", c: "#e6a817", w: "繁栄・富・友愛" } ] },
 
   { m: 12, msg: "冬の澄んだ空を映すあなたへ。青の石々が、成功と真実、旅の安全と安らぎを守ります。",
     stones: [ { jp: "ターコイズ（トルコ石）", en: "Turquoise", c: "#17a2b8", w: "成功・繁栄・旅の安全" },
@@ -56,11 +55,52 @@ const BIRTHSTONES = [
               { jp: "ジルコン", en: "Zircon", c: "#7fbfe0", w: "安らかな眠り・平和" } ] }
 ];
 
+/* 石名から表示アイコンの色を推定（見た目用。石名そのものは正確なデータ） */
+function colorForStone(name) {
+  var n = String(name);
+  function has(keys) { for (var i = 0; i < keys.length; i++) if (n.indexOf(keys[i]) >= 0) return true; return false; }
+  if (has(["ルビー","ガーネット","レッド","赤","コーラル","珊瑚","カーネリアン","インカローズ","ロードクロサイト","ジャスパー"])) return "#c0392b";
+  if (has(["ピンク","ローズ","モルガナイト","クンツァイト","桜","ロードナイト","インカ"])) return "#e0457b";
+  if (has(["サファイア","ブルー","ラピス","アズ","青","ソーダライト","インディゴ","アイオライト"])) return "#2a6fd6";
+  if (has(["アクア","ターコイズ","トルコ","カルセドニー","アマゾナイト","クリソコラ","アパタイト"])) return "#20b6c9";
+  if (has(["エメラルド","グリーン","翡翠","ジェイド","ペリドット","マラカイト","ネフライト","ツァボ","緑","プレナイト","クリソプレーズ","アベンチュリン"])) return "#1f9e6a";
+  if (has(["アメジスト","アメトリン","パープル","バイオレット","タンザナイト","スギライト","紫","チャロアイト","スペクトロライト","ラベンダー"])) return "#8e44ad";
+  if (has(["シトリン","イエロー","ゴールド","金","トパゾ","ヘリオドール","黄","アンバー","琥珀","オレンジ","タイガー","シトリ","ヘソナイト","ブラウン"])) return "#e0b100";
+  if (has(["パール","ムーンストーン","オパール","水晶","クォーツ","クリスタル","ダイヤ","ホワイト","白","銀","プラチナ","カルサイト","シェル","琅玕"])) return "#dbe6ff";
+  if (has(["オニキス","オブシディアン","ブラック","黒","ジェット","ヘマタイト","スモーキー","隕石"])) return "#6a6482";
+  return "#b183e0";
+}
+
 document.addEventListener("DOMContentLoaded", function () {
-  const grid   = document.getElementById("monthGrid");
-  const result = document.getElementById("result");
-  const list   = document.getElementById("stoneList");
-  if (!grid || !result || !list) return;
+  var selMonth = document.getElementById("selMonth");
+  var selDay   = document.getElementById("selDay");
+  var btn      = document.getElementById("btnDivine");
+  var result   = document.getElementById("result");
+  var list     = document.getElementById("stoneList");
+  if (!selMonth || !selDay || !btn || !result || !list) return;
+
+  var DAYS = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+  function fillDays(m) {
+    var max = DAYS[m - 1];
+    var cur = parseInt(selDay.value, 10) || 1;
+    selDay.innerHTML = "";
+    for (var d = 1; d <= max; d++) {
+      var o = document.createElement("option");
+      o.value = d; o.textContent = d + "日";
+      selDay.appendChild(o);
+    }
+    selDay.value = Math.min(cur, max);
+  }
+
+  for (var m = 1; m <= 12; m++) {
+    var o = document.createElement("option");
+    o.value = m; o.textContent = m + "月";
+    selMonth.appendChild(o);
+  }
+  selMonth.value = 1;
+  fillDays(1);
+  selMonth.addEventListener("change", function () { fillDays(parseInt(selMonth.value, 10)); });
 
   function gemCard(s) {
     return '<div class="gem-card">' +
@@ -70,28 +110,28 @@ document.addEventListener("DOMContentLoaded", function () {
            '</div>';
   }
 
-  // 月ボタンを生成
-  BIRTHSTONES.forEach(function (b) {
-    const btn = document.createElement("button");
-    btn.className = "month-btn";
-    btn.type = "button";
-    btn.textContent = b.m + "月";
-    btn.addEventListener("click", function () {
-      document.querySelectorAll(".month-btn").forEach(function (x) { x.classList.remove("on"); });
-      btn.classList.add("on");
-      result.hidden = false;
-      result.innerHTML =
-        '<h2 class="bs-rtitle">' + b.m + '月生まれのあなたの誕生石</h2>' +
-        '<p class="bs-msg">' + b.msg + '</p>' +
-        '<div class="gem-cards">' + b.stones.map(gemCard).join("") + '</div>';
-      result.scrollIntoView({ behavior: "smooth", block: "center" });
-    });
-    grid.appendChild(btn);
+  btn.addEventListener("click", function () {
+    var m = parseInt(selMonth.value, 10);
+    var d = parseInt(selDay.value, 10);
+    var daily = (typeof DAILY_BIRTHSTONES !== "undefined" && DAILY_BIRTHSTONES[m] && DAILY_BIRTHSTONES[m][d]) ? DAILY_BIRTHSTONES[m][d] : "―";
+    var month = BIRTHSTONES[m - 1];
+    var dcol = colorForStone(daily);
+    result.hidden = false;
+    result.innerHTML =
+      '<h2 class="bs-rtitle">' + m + '月' + d + '日生まれのあなたの誕生石</h2>' +
+      '<div class="daily-hero">' +
+        '<span class="gem-ico big" style="--gem:' + dcol + '"></span>' +
+        '<div class="daily-name"><span class="daily-label">あなたの誕生日石</span><b>' + daily + '</b></div>' +
+      '</div>' +
+      '<p class="bs-msg">' + month.msg + '</p>' +
+      '<div class="gem-sub">' + m + '月の誕生月石</div>' +
+      '<div class="gem-cards">' + month.stones.map(gemCard).join("") + '</div>';
+    result.scrollIntoView({ behavior: "smooth", block: "center" });
   });
 
-  // 全月の一覧（網羅）を生成
+  // 全月の誕生月石 一覧（網羅）
   list.innerHTML = BIRTHSTONES.map(function (b) {
-    const gems = b.stones.map(function (s) {
+    var gems = b.stones.map(function (s) {
       return '<span class="list-gem"><span class="gem-ico sm" style="--gem:' + s.c + '"></span>' + s.jp + '</span>';
     }).join("");
     return '<div class="list-row"><span class="list-month">' + b.m + '月</span>' +

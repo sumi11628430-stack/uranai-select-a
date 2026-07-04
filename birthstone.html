@@ -4,13 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>あなたの誕生石は？ ― 占いの館</title>
-  <meta name="description" content="生まれ月から、あなたの誕生石と石言葉を占います。" />
+  <meta name="description" content="生まれた月日から、あなたの誕生石（誕生日石・誕生月石）と石言葉を占います。" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="assets/style.css?v=4" />
+  <link rel="stylesheet" href="assets/style.css?v=5" />
 </head>
 <body>
 
@@ -27,17 +27,27 @@
   <!-- 本文 -->
   <main class="page bs-page">
     <h1 class="brand" style="font-size: clamp(1.5rem, 5vw, 2.6rem);">💎 あなたの誕生石</h1>
-    <p class="select-lead">生まれ月を選んでください</p>
+    <p class="select-lead">お誕生日（月日）を選んでください</p>
 
-    <!-- 月選択ボタン（JSで生成） -->
-    <div class="month-grid" id="monthGrid"></div>
+    <!-- 月日ピッカー -->
+    <div class="date-pick">
+      <select id="selMonth" class="date-sel" aria-label="生まれ月"></select>
+      <select id="selDay" class="date-sel" aria-label="生まれた日"></select>
+      <button id="btnDivine" class="date-go" type="button">占う</button>
+    </div>
 
-    <!-- 選択結果（JSで挿入） -->
+    <!-- 結果（JSで挿入：日別の誕生日石＋その月の誕生月石） -->
     <section class="bs-result" id="result" hidden></section>
 
-    <!-- 全月の誕生石 一覧（網羅） -->
-    <h2 class="bs-listtitle">誕生石 一覧（1月〜12月）</h2>
+    <!-- 全月の誕生月石 一覧（網羅） -->
+    <h2 class="bs-listtitle">誕生月の石 一覧（1月〜12月）</h2>
     <div class="stone-list" id="stoneList"></div>
+
+    <p class="bs-source">
+      ※「誕生日石（日別）」は、一般に流布している「365日の誕生石」の一覧
+      （出典: gemstone-wiki.com）に基づきます。日本ジュエリー協会が公認したものではなく、
+      選定される石には諸説があります。楽しみのひとつとしてご覧ください。
+    </p>
 
     <a class="back-link" href="select.html">← 占いの選択へ戻る</a>
   </main>
@@ -45,7 +55,8 @@
   <p class="site-foot">© 占いの館</p>
 
   <script src="assets/gems.js?v=1"></script>
-  <script src="assets/birthstones.js?v=1"></script>
+  <script src="assets/birthstones_daily.js?v=1"></script>
+  <script src="assets/birthstones.js?v=2"></script>
   <script src="assets/nav.js?v=3"></script>
 </body>
 </html>
