@@ -1,0 +1,269 @@
+/* =========================================================
+   占いサイト 共通スタイル
+   幻想的な星空テーマ（金×深い紫）
+   ========================================================= */
+
+:root {
+  --bg-deep:    #0b0118;   /* 最も暗い背景 */
+  --bg-mid:     #1a0b3d;   /* 中間の紫 */
+  --gold:       #e8c86e;   /* ゴールド */
+  --gold-bright:#f7e6ac;   /* 明るいゴールド */
+  --text:       #f3ecff;   /* 文字色 */
+  --text-dim:   #b9aee0;   /* 薄い文字色 */
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  font-family: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  color: var(--text);
+  background: var(--bg-deep);
+  overflow-x: hidden;
+}
+
+/* ---- 背景レイヤー ------------------------------------------------ */
+
+/* 星や粒子を描くcanvas */
+.bg-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -3;
+  display: block;
+}
+
+/* グラデーションの下地（canvasの下に敷く） */
+.bg-gradient {
+  position: fixed;
+  inset: 0;
+  z-index: -4;
+  background:
+    radial-gradient(ellipse at 50% 20%, #2c1560 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 100%, #180a3a 0%, transparent 60%),
+    linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-mid) 50%, var(--bg-deep) 100%);
+}
+
+/* 周囲を暗くするビネット（雰囲気づくり） */
+.bg-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,.65) 100%);
+}
+
+/* ▼ 将来、本物の動画背景に差し替えたいとき ▼
+   HTML側で <video class="bg-video" autoplay muted loop playsinline> を使い、
+   下の .bg-video を有効にしてください。canvasより手前・内容より奥に表示されます。 */
+.bg-video {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   /* 画面いっぱいに（縦横比を保って）表示 */
+  z-index: -3;
+  opacity: .55;        /* 文字を読みやすくするため少し暗く */
+}
+
+/* ---- ページ共通レイアウト --------------------------------------- */
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 6vh 5vw;
+}
+
+/* 画面遷移フェード */
+body {
+  opacity: 0;
+  transition: opacity .9s ease;
+}
+body.loaded  { opacity: 1; }
+body.leaving { opacity: 0; }
+
+/* ---- タイトル文字 ------------------------------------------------ */
+
+.brand {
+  font-size: clamp(1.8rem, 6vw, 3.4rem);
+  letter-spacing: .35em;
+  color: var(--gold-bright);
+  text-shadow: 0 0 18px rgba(232,200,110,.55), 0 0 40px rgba(232,200,110,.25);
+  margin-bottom: .4em;
+  animation: glow-pulse 4.5s ease-in-out infinite;
+}
+
+.subtitle {
+  font-size: clamp(.8rem, 2.6vw, 1.05rem);
+  letter-spacing: .5em;
+  color: var(--text-dim);
+  margin-bottom: 3.2rem;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { text-shadow: 0 0 18px rgba(232,200,110,.45), 0 0 40px rgba(232,200,110,.20); }
+  50%      { text-shadow: 0 0 26px rgba(232,200,110,.85), 0 0 60px rgba(232,200,110,.40); }
+}
+
+/* ---- トップページ：入口ゲート ----------------------------------- */
+
+.gate {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: clamp(180px, 44vw, 260px);
+  height: clamp(180px, 44vw, 260px);
+  border-radius: 50%;
+  border: 2px solid rgba(232,200,110,.6);
+  color: var(--gold-bright);
+  text-decoration: none;
+  cursor: pointer;
+  background: radial-gradient(circle at center, rgba(60,25,120,.55) 0%, rgba(11,1,24,.2) 70%);
+  box-shadow: 0 0 40px rgba(232,200,110,.25), inset 0 0 40px rgba(232,200,110,.15);
+  transition: transform .4s ease, box-shadow .4s ease, border-color .4s ease;
+  animation: gate-breathe 3.6s ease-in-out infinite;
+}
+.gate::before {
+  content: "";
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  border: 1px solid rgba(232,200,110,.25);
+  animation: ring-expand 3.6s ease-out infinite;
+}
+.gate:hover, .gate:focus-visible {
+  transform: scale(1.06);
+  border-color: var(--gold-bright);
+  box-shadow: 0 0 70px rgba(232,200,110,.55), inset 0 0 60px rgba(232,200,110,.3);
+  outline: none;
+}
+.gate .gate-mark {
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  margin-bottom: .2em;
+}
+.gate .gate-label {
+  font-size: clamp(1.3rem, 4.5vw, 1.9rem);
+  letter-spacing: .3em;
+}
+.gate .gate-en {
+  margin-top: .5em;
+  font-size: .7rem;
+  letter-spacing: .45em;
+  color: var(--text-dim);
+}
+
+@keyframes gate-breathe {
+  0%, 100% { box-shadow: 0 0 40px rgba(232,200,110,.25), inset 0 0 40px rgba(232,200,110,.15); }
+  50%      { box-shadow: 0 0 65px rgba(232,200,110,.5),  inset 0 0 55px rgba(232,200,110,.28); }
+}
+@keyframes ring-expand {
+  0%   { transform: scale(1);   opacity: .5; }
+  100% { transform: scale(1.25); opacity: 0; }
+}
+
+/* ---- 選択ページ：占いカード ------------------------------------- */
+
+.select-lead {
+  font-size: clamp(1.1rem, 3.6vw, 1.6rem);
+  color: var(--gold-bright);
+  letter-spacing: .25em;
+  margin-bottom: 2.4rem;
+  text-shadow: 0 0 16px rgba(232,200,110,.4);
+}
+
+.select-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.6rem;
+  width: 100%;
+  max-width: 760px;
+}
+
+.fortune-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .8rem;
+  padding: 2.4rem 1.4rem;
+  border-radius: 18px;
+  text-decoration: none;
+  color: var(--text);
+  background: linear-gradient(160deg, rgba(60,30,110,.55), rgba(20,8,50,.55));
+  border: 1px solid rgba(232,200,110,.35);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 8px 30px rgba(0,0,0,.4);
+  transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+}
+.fortune-card:hover, .fortune-card:focus-visible {
+  transform: translateY(-6px);
+  border-color: var(--gold-bright);
+  box-shadow: 0 14px 44px rgba(232,200,110,.3);
+  outline: none;
+}
+.fortune-card .card-icon {
+  font-size: 2.6rem;
+  filter: drop-shadow(0 0 10px rgba(232,200,110,.6));
+}
+.fortune-card .card-title {
+  font-size: clamp(1.05rem, 3.2vw, 1.3rem);
+  letter-spacing: .12em;
+  color: var(--gold-bright);
+}
+.fortune-card .card-note {
+  font-size: .78rem;
+  color: var(--text-dim);
+  letter-spacing: .1em;
+}
+
+/* 「準備中」カードの見た目 */
+.fortune-card.coming {
+  opacity: .55;
+  cursor: default;
+  border-style: dashed;
+}
+.fortune-card.coming:hover { transform: none; box-shadow: 0 8px 30px rgba(0,0,0,.4); }
+
+/* ---- 戻るリンク / フッター --------------------------------------- */
+
+.back-link {
+  margin-top: 3rem;
+  display: inline-block;
+  color: var(--text-dim);
+  text-decoration: none;
+  letter-spacing: .2em;
+  font-size: .9rem;
+  border-bottom: 1px solid transparent;
+  transition: color .3s ease, border-color .3s ease;
+}
+.back-link:hover { color: var(--gold-bright); border-color: var(--gold); }
+
+.site-foot {
+  position: fixed;
+  bottom: 1rem;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: .7rem;
+  letter-spacing: .2em;
+  color: rgba(185,174,224,.5);
+  pointer-events: none;
+}
+
+/* ---- 動きを抑える設定の人への配慮 ------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}

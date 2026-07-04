@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>占いを選ぶ ― 占いの館</title>
+  <meta name="description" content="占いのメニューを選んでください。" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+  <!-- 背景 -->
+  <div class="bg-gradient"></div>
+  <!-- ▼ 本物の動画背景にしたいとき（占いイメージの動画）:
+  <video class="bg-video" autoplay muted loop playsinline poster="assets/poster.jpg">
+    <source src="assets/fortune-bg.mp4" type="video/mp4" />
+  </video>
+  -->
+  <canvas class="bg-canvas"></canvas>
+  <div class="bg-vignette"></div>
+
+  <!-- 本文 -->
+  <main class="page">
+    <h1 class="brand" style="font-size: clamp(1.5rem, 5vw, 2.6rem);">占いを選ぶ</h1>
+    <p class="select-lead">今日、あなたが知りたいことは？</p>
+
+    <div class="select-grid">
+
+      <!-- ① 誕生石占い（現在ご用意している占い） -->
+      <a class="fortune-card" href="birthstone.html" data-transition>
+        <span class="card-icon">💎</span>
+        <span class="card-title">あなたの誕生石は？</span>
+        <span class="card-note">生まれ月から石とメッセージを占う</span>
+      </a>
+
+      <!-- ② これから増やす枠（見た目のヒント。不要なら削除OK） -->
+      <div class="fortune-card coming" aria-hidden="true">
+        <span class="card-icon">🔮</span>
+        <span class="card-title">近日公開</span>
+        <span class="card-note">占いメニューを準備中…</span>
+      </div>
+
+    </div>
+
+    <a class="back-link" href="index.html" data-transition>← 入口へ戻る</a>
+  </main>
+
+  <p class="site-foot">© 占いの館</p>
+
+  <script src="assets/starfield.js"></script>
+  <script src="assets/nav.js"></script>
+</body>
+</html>

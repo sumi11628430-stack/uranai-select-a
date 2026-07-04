@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>占いの館 ― 入口</title>
+  <meta name="description" content="星の導く占いの館。入口から占いの世界へ。" />
+
+  <!-- Google Fonts（日本語明朝＋装飾ラテン） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+
+  <!-- 背景（奥から：グラデ → 星canvas → ビネット） -->
+  <div class="bg-gradient"></div>
+  <!-- ▼ 本物の動画にしたいときは、この下にvideoを置きます（style.cssの.bg-video参照）
+  <video class="bg-video" autoplay muted loop playsinline poster="assets/poster.jpg">
+    <source src="assets/entrance.mp4" type="video/mp4" />
+  </video>
+  -->
+  <canvas class="bg-canvas"></canvas>
+  <div class="bg-vignette"></div>
+
+  <!-- 本文 -->
+  <main class="page">
+    <h1 class="brand">占いの館</h1>
+    <p class="subtitle">― 星が導く、あなたの物語 ―</p>
+
+    <!-- 入口ゲート：クリックで選択ページへ -->
+    <a class="gate" href="select.html" data-transition aria-label="占いの世界へ入る">
+      <span class="gate-mark">⛩</span>
+      <span class="gate-label">入口</span>
+      <span class="gate-en">E N T E R</span>
+    </a>
+  </main>
+
+  <p class="site-foot">© 占いの館</p>
+
+  <script src="assets/starfield.js"></script>
+  <script src="assets/nav.js"></script>
+</body>
+</html>
