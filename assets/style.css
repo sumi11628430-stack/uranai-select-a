@@ -741,6 +741,13 @@ body {
   outline: none;
 }
 .day-row-name { flex: 1 1 auto; }
+/* そのほかの記念日の大量リスト（テキストで読みやすく） */
+.dayof-more {
+  color: var(--text) !important;
+  line-height: 2.1 !important;
+  font-size: clamp(.9rem, 1.2vw, 1rem) !important;
+  letter-spacing: .02em;
+}
 /* 何の日ページの一覧は読める背景を担保 */
 .dayof-list-wrap {
   width: 100%;
