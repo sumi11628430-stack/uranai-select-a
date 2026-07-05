@@ -22,17 +22,10 @@
   <!-- 本文 -->
   <main class="page bs-page">
     <h1 class="brand" style="font-size: clamp(1.5rem, 5vw, 2.6rem);">✨ 星座占い</h1>
-    <p class="select-lead">あなたの星座を選ぶか、生まれた月日から占ってください</p>
+    <p class="select-lead">あなたの星座を選んでください</p>
 
     <!-- 12星座ボタン -->
     <div class="month-grid zodiac-grid" id="zodiacGrid"></div>
-
-    <!-- 月日から調べる -->
-    <div class="date-pick">
-      <select id="selMonth" class="date-sel" aria-label="生まれ月"></select>
-      <select id="selDay" class="date-sel" aria-label="生まれた日"></select>
-      <button id="btnDivine" class="date-go" type="button">結果</button>
-    </div>
 
     <!-- 結果（JSで挿入） -->
     <section class="bs-result" id="result" hidden></section>

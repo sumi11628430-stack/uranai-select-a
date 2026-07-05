@@ -1,16 +1,11 @@
 /* =========================================================
    星座占い：表示ロジック
-   ・12星座ボタン、または生まれ月日から星座を判定して「結果」で詳細表示
+   ・12星座ボタンから選んで詳細表示
    ========================================================= */
 document.addEventListener("DOMContentLoaded", function () {
   var grid   = document.getElementById("zodiacGrid");
-  var selMonth = document.getElementById("selMonth");
-  var selDay   = document.getElementById("selDay");
-  var btn      = document.getElementById("btnDivine");
-  var result   = document.getElementById("result");
-  if (!result) return;
-
-  var DAYS = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  var result = document.getElementById("result");
+  if (!grid || !result) return;
 
   function fortuneSec(icon, label, text, extra) {
     return '<div class="f-sec' + (extra ? ' ' + extra : '') + '"><h3>' + icon + ' ' + label + '</h3><p>' + text + '</p></div>';
@@ -41,50 +36,17 @@ document.addEventListener("DOMContentLoaded", function () {
     result.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  if (grid) {
-    ZODIAC.forEach(function (z) {
-      var b = document.createElement("button");
-      b.className = "month-btn zodiac-btn";
-      b.type = "button";
-      b.innerHTML = '<span class="zodiac-btn-symbol">' + z.symbol + '</span>' + z.name;
-      b.addEventListener("click", function () {
-        var actives = grid.querySelectorAll(".month-btn");
-        for (var i = 0; i < actives.length; i++) actives[i].classList.remove("on");
-        b.classList.add("on");
-        render(z);
-      });
-      grid.appendChild(b);
-    });
-  }
-
-  if (selMonth && selDay && btn) {
-    function fillDays(m) {
-      var max = DAYS[m - 1];
-      var cur = parseInt(selDay.value, 10) || 1;
-      selDay.innerHTML = "";
-      for (var d = 1; d <= max; d++) {
-        var o = document.createElement("option");
-        o.value = d; o.textContent = d + "日";
-        selDay.appendChild(o);
-      }
-      selDay.value = Math.min(cur, max);
-    }
-    for (var m = 1; m <= 12; m++) {
-      var o = document.createElement("option");
-      o.value = m; o.textContent = m + "月";
-      selMonth.appendChild(o);
-    }
-    selMonth.addEventListener("change", function () { fillDays(parseInt(selMonth.value, 10)); });
-    fillDays(1);
-
-    btn.addEventListener("click", function () {
-      var mm = parseInt(selMonth.value, 10), dd = parseInt(selDay.value, 10);
-      var z = zodiacOf(mm, dd);
-      if (grid) {
-        var actives = grid.querySelectorAll(".month-btn");
-        for (var i = 0; i < actives.length; i++) actives[i].classList.toggle("on", actives[i].textContent.indexOf(z.name) >= 0);
-      }
+  ZODIAC.forEach(function (z) {
+    var b = document.createElement("button");
+    b.className = "month-btn zodiac-btn";
+    b.type = "button";
+    b.innerHTML = '<span class="zodiac-btn-symbol">' + z.symbol + '</span>' + z.name;
+    b.addEventListener("click", function () {
+      var actives = grid.querySelectorAll(".month-btn");
+      for (var i = 0; i < actives.length; i++) actives[i].classList.remove("on");
+      b.classList.add("on");
       render(z);
     });
-  }
+    grid.appendChild(b);
+  });
 });

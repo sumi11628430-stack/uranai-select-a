@@ -138,16 +138,3 @@ var ZODIAC = [
     compatible: ["蟹座", "蠍座"]
   }
 ];
-
-function zodiacOf(month, day) {
-  for (var i = 0; i < ZODIAC.length; i++) {
-    var z = ZODIAC[i];
-    if (z.startM > z.endM) {
-      // 年をまたぐ星座（山羊座: 12/22〜1/19）
-      if ((month === z.startM && day >= z.startD) || (month === z.endM && day <= z.endD)) return z;
-    } else {
-      if ((month === z.startM && day >= z.startD) || (month === z.endM && day <= z.endD) || (month > z.startM && month < z.endM)) return z;
-    }
-  }
-  return ZODIAC[0];
-}
