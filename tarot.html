@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>本格タロット占い（ケルト十字） ― 占いの館</title>
+  <meta name="description" content="78枚のタロットカードを使ったケルト十字スプレッド（10枚）で、現在から未来までを読み解く本格タロット占い。星座・惑星との対応（占星タロット）つき。" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/style.css?v=17" />
+</head>
+<body>
+
+  <!-- 背景：紫の魔法陣＋漂う光 -->
+  <div class="bg-tarot"></div>
+  <canvas class="bg-canvas"></canvas>
+  <div class="bg-vignette"></div>
+
+  <!-- 本文 -->
+  <main class="page bs-page">
+    <h1 class="brand" style="font-size: clamp(1.5rem, 5vw, 2.6rem);">🔮 本格タロット占い</h1>
+    <p class="select-lead">ケルト十字スプレッド（10枚）で、今のあなたを読み解く</p>
+
+    <div id="tarotIntro">
+      <p class="tarot-intro">
+        78枚のタロットカードから10枚を引き、「現在の状況」「障害」「顕在意識」「潜在意識」「近い過去」
+        「近い未来」「あなたの立場」「周囲の環境」「願望と不安」「最終結果」という10の視点で
+        今のテーマを読み解く、タロットの中でも最も本格的なスプレッドです。
+      </p>
+    </div>
+
+    <button class="tarot-start-btn" id="tarotStart" type="button">カードをシャッフルして展開する</button>
+
+    <div class="tarot-spread" id="tarotSpread" hidden></div>
+
+    <!-- 結果（JSで1枚めくるごとに追加） -->
+    <section class="bs-result" id="result" hidden></section>
+
+    <p class="bs-source">
+      ※カードの意味の解説はオリジナルで作成しています。一部のカード（大アルカナ22枚、小アルカナの
+      数札2〜10・36枚）には、19世紀末の神秘主義結社「黄金の夜明け団」が体系化した、星座・惑星・
+      デカン（星座を10日ごとに3分割した区分）との伝統的な対応（占星タロット）を表示しています。
+      エースと宮廷札（ペイジ・ナイト・クイーン・キング）は、対応する元素（火・水・風・地）のみを
+      扱い、個別の星座対応は今回のスコープには含めていません。占いのお楽しみコンテンツとしてご活用ください。
+    </p>
+
+    <a class="back-link" href="select.html">← 占いの選択へ戻る</a>
+  </main>
+
+  <p class="site-foot">© 占いの館</p>
+
+  <script src="assets/tarot_bg.js?v=1"></script>
+  <script src="assets/tarot_data.js?v=1"></script>
+  <script src="assets/tarot.js?v=1"></script>
+  <script src="assets/nav.js?v=3"></script>
+</body>
+</html>
