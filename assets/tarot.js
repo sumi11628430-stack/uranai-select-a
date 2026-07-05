@@ -1,14 +1,17 @@
 /* =========================================================
    タロット占い：ケルト十字（10枚）
    ・シャッフル→10枚を展開（裏向き）→1枚ずつタップして開く
-   ・開いたカードは下の結果欄に、位置の意味・正逆位置・
-   　カード解説・星座/惑星対応（ある場合）を積み上げて表示
+   ・下の結果欄には「直前にめくった1枚」だけを表示する
+   　（積み上げ式だと下に長くなり探しづらいため）
+   ・「全体の結果を見る」ボタンで、めくった分を一覧できる
+   　別ウィンドウを開く（1画面にできるだけ多く収まる配置）
    ========================================================= */
 document.addEventListener("DOMContentLoaded", function () {
-  var startBtn = document.getElementById("tarotStart");
-  var spread   = document.getElementById("tarotSpread");
-  var result   = document.getElementById("result");
-  var intro    = document.getElementById("tarotIntro");
+  var startBtn   = document.getElementById("tarotStart");
+  var spread     = document.getElementById("tarotSpread");
+  var result     = document.getElementById("result");
+  var intro      = document.getElementById("tarotIntro");
+  var fullBtn    = document.getElementById("tarotFullResults");
   if (!startBtn || !spread || !result) return;
 
   var SUIT_ICON = { wand: "🔥", cup: "💧", sword: "⚔", pentacle: "🪙" };
@@ -31,33 +34,85 @@ document.addEventListener("DOMContentLoaded", function () {
     return null;
   }
 
-  var revealedCount = 0;
-
-  function appendDetail(entry) {
-    var box = document.createElement("div");
-    box.className = "f-sec tarot-detail";
+  function detailHTML(entry) {
     var orient = entry.reversed
       ? '<span class="tarot-badge tarot-badge-rev">逆位置</span>'
       : '<span class="tarot-badge tarot-badge-up">正位置</span>';
     var meaning = entry.reversed ? entry.card.reversed : entry.card.upright;
     var astro = astroText(entry.card);
-    box.innerHTML =
+    return (
       '<h3>' + entry.position.n + '. ' + entry.position.label + '</h3>' +
       '<p class="tarot-detail-pos">' + entry.position.desc + '</p>' +
       '<p class="tarot-detail-card">' + cardIcon(entry.card) + ' <b>' + cardTitle(entry.card) + '</b> ' + orient + '</p>' +
       '<p>' + meaning + '</p>' +
       (astro ? '<div class="lucky-row"><span class="lucky-chip"><b>キーワード</b>' + entry.card.keyword + '</span><span class="lucky-chip"><b>星の対応</b>' + astro + '</span></div>'
-             : '<div class="lucky-row"><span class="lucky-chip"><b>キーワード</b>' + entry.card.keyword + '</span></div>');
+             : '<div class="lucky-row"><span class="lucky-chip"><b>キーワード</b>' + entry.card.keyword + '</span></div>')
+    );
+  }
+
+  var revealedCount = 0;
+  var revealedByPos = {};
+
+  function showDetail(entry) {
+    var box = document.createElement("div");
+    box.className = "f-sec tarot-detail";
+    box.innerHTML = detailHTML(entry);
+    if (revealedCount === 10) {
+      var p = document.createElement("p");
+      p.className = "bs-source tarot-closing";
+      p.textContent = "10枚すべてが出そろいました。「全体の結果を見る」で通して眺めると、より深いメッセージが見えてきます。";
+      box.appendChild(p);
+    }
+    result.innerHTML = "";
     result.appendChild(box);
     result.hidden = false;
     if (revealedCount === 1) result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    if (fullBtn) fullBtn.hidden = false;
   }
 
-  function appendClosing() {
-    var p = document.createElement("p");
-    p.className = "bs-source tarot-closing";
-    p.textContent = "10枚すべてが出そろいました。一枚ごとの意味だけでなく、全体を通して眺めると、より深いメッセージが見えてきます。";
-    result.appendChild(p);
+  function openFullResults() {
+    var order = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    var entries = order.map(function (n) { return revealedByPos[n]; }).filter(Boolean);
+    if (!entries.length) return;
+
+    var cssHref = "";
+    var link = document.querySelector('link[rel="stylesheet"][href*="style.css"]');
+    if (link) cssHref = link.href;
+
+    var items = entries.map(function (entry) {
+      return '<div class="f-sec tarot-detail tarot-popup-item">' + detailHTML(entry) + '</div>';
+    }).join("");
+
+    var note = entries.length < 10
+      ? '<p class="tarot-popup-note">現在 ' + entries.length + ' / 10 枚が判明しています。残りのカードもめくると全体が更新されます。</p>'
+      : '<p class="tarot-popup-note">10枚すべてが出そろいました。全体を通して眺めると、より深いメッセージが見えてきます。</p>';
+
+    var html =
+      '<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8">' +
+      '<title>ケルト十字：全体の結果 ― 占いの館</title>' +
+      '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+      (cssHref ? '<link rel="stylesheet" href="' + cssHref + '">' : "") +
+      '<style>' +
+      'body{background:#180c28;padding:1.4rem clamp(1rem,3vw,2.2rem);}' +
+      '.tarot-popup-head{max-width:1200px;margin:0 auto 1.2rem;text-align:center;}' +
+      '.tarot-popup-note{color:var(--text-dim);font-size:.9rem;margin-top:.4rem;}' +
+      '.tarot-popup-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));gap:.8rem;max-width:1200px;margin:0 auto;align-items:start;}' +
+      '.tarot-popup-item{margin:0;padding:1rem 1.1rem;}' +
+      '.tarot-popup-item h3{font-size:1rem;margin-bottom:.3rem;}' +
+      '.tarot-popup-item p{font-size:.86rem;line-height:1.6;margin:.35rem 0;}' +
+      '.tarot-popup-item .tarot-detail-card{font-size:.94rem;}' +
+      '.tarot-popup-item .lucky-row{gap:.35rem;}' +
+      '.tarot-popup-item .lucky-chip{font-size:.72rem;padding:.25rem .5rem;}' +
+      '</style></head><body>' +
+      '<div class="tarot-popup-head"><h1 class="brand" style="font-size:clamp(1.3rem,3.6vw,1.9rem);">🔮 ケルト十字：全体の結果</h1>' + note + '</div>' +
+      '<div class="tarot-popup-grid">' + items + '</div>' +
+      '</body></html>';
+
+    var win = window.open("", "_blank");
+    if (!win) return; // ポップアップブロック時は何もしない
+    win.document.open();
+    win.document.write(html);
+    win.document.close();
   }
 
   function makeCardEl(entry, extraClass) {
@@ -89,8 +144,8 @@ document.addEventListener("DOMContentLoaded", function () {
       if (cardEl.classList.contains("revealed")) return;
       cardEl.classList.add("revealed");
       revealedCount++;
-      appendDetail(entry);
-      if (revealedCount === 10) appendClosing();
+      revealedByPos[entry.position.n] = entry;
+      showDetail(entry);
     }
     cardEl.addEventListener("click", reveal);
     cardEl.addEventListener("keydown", function (e) {
@@ -143,6 +198,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  if (fullBtn) fullBtn.addEventListener("click", openFullResults);
+
   var drawing = false;
   startBtn.addEventListener("click", function () {
     if (drawing) return;
@@ -151,7 +208,9 @@ document.addEventListener("DOMContentLoaded", function () {
     result.innerHTML = "";
     result.hidden = true;
     revealedCount = 0;
+    revealedByPos = {};
     if (intro) intro.hidden = true;
+    if (fullBtn) fullBtn.hidden = true;
 
     var draw = drawCelticCross();
     spread.hidden = false;

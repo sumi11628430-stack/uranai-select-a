@@ -10,9 +10,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="assets/style.css?v=17" />
+  <link rel="stylesheet" href="assets/style.css?v=18" />
 </head>
-<body>
+<body class="tarot-page-body">
 
   <!-- 背景：紫の魔法陣＋漂う光 -->
   <div class="bg-tarot"></div>
@@ -36,8 +36,10 @@
 
     <div class="tarot-spread" id="tarotSpread" hidden></div>
 
-    <!-- 結果（JSで1枚めくるごとに追加） -->
+    <!-- 結果（直前にめくった1枚だけを表示） -->
     <section class="bs-result" id="result" hidden></section>
+
+    <button class="tarot-full-btn" id="tarotFullResults" type="button" hidden>全体の結果を見る</button>
 
     <p class="bs-source">
       ※カードの意味の解説はオリジナルで作成しています。一部のカード（大アルカナ22枚、小アルカナの
@@ -54,7 +56,7 @@
 
   <script src="assets/tarot_bg.js?v=1"></script>
   <script src="assets/tarot_data.js?v=1"></script>
-  <script src="assets/tarot.js?v=1"></script>
+  <script src="assets/tarot.js?v=2"></script>
   <script src="assets/nav.js?v=3"></script>
 </body>
 </html>

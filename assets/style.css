@@ -1388,6 +1388,31 @@ body.ok-impact-shake { animation: ok-impact-shake .3s ease-out 1; }
 .tarot-detail-pos { color: var(--text-dim); font-size: .85rem; font-style: italic; margin-bottom: .5rem; }
 .tarot-detail-card { font-size: 1.05rem; margin-bottom: .5rem; }
 .tarot-closing { margin-top: 1.6rem; }
+body.tarot-page-body { padding-bottom: 5.5rem; }
+.tarot-full-btn {
+  position: fixed;
+  left: 50%;
+  bottom: 1.1rem;
+  transform: translateX(-50%);
+  z-index: 60;
+  padding: .8rem 1.8rem;
+  border-radius: 999px;
+  border: 2px solid rgba(232,200,110,.7);
+  background: linear-gradient(160deg, #5a3480, #2c1450);
+  color: var(--gold-bright);
+  font-family: inherit;
+  font-size: .95rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(0,0,0,.45), 0 0 24px rgba(150,90,220,.4);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.tarot-full-btn:hover, .tarot-full-btn:focus-visible {
+  transform: translateX(-50%) scale(1.04);
+  box-shadow: 0 4px 28px rgba(0,0,0,.5), 0 0 34px rgba(150,90,220,.55);
+  outline: none;
+}
 @media (prefers-reduced-motion: reduce) {
   .tarot-slot { transition: none; }
   .tarot-card, .tarot-card-inner { transition: none; }
