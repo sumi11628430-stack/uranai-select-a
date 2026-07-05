@@ -2,7 +2,7 @@
    「あなたは何の日？」表示ロジック
    ・月日ピッカー →「結果」でその日の記念日（代表＋由来）と、
      そのほかの記念日を大量に表示
-   ・下部の月別一覧は「結果」を押すまで隠す（結果を見る前のネタバレ防止）
+   ・一覧は表示しない（1日ずつ調べる楽しみを残すため）
    ・月を変えると背景の季節も切り替わる（seasons.js 連動）
    ========================================================= */
 document.addEventListener("DOMContentLoaded", function () {
@@ -10,9 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
   var selDay   = document.getElementById("selDay");
   var btn      = document.getElementById("btnDivine");
   var result   = document.getElementById("result");
-  var list     = document.getElementById("dayList");
-  var listWrap = document.getElementById("listWrap");
-  var listTitle= document.getElementById("listTitle");
   if (!selMonth || !selDay || !btn || !result) return;
 
   var DAYS = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -22,7 +19,6 @@ document.addEventListener("DOMContentLoaded", function () {
     7: "七夕・夏祭りの季節", 8: "花火・お盆の季節", 9: "お月見・実りの季節",
     10: "収穫祭・紅葉の季節", 11: "七五三・晩秋の季節", 12: "冬至・年の瀬の季節"
   };
-  var listShown = false;
 
   function fillDays(m) {
     var max = DAYS[m - 1];
@@ -51,7 +47,6 @@ document.addEventListener("DOMContentLoaded", function () {
   function moreOf(mm, dd, headline) {
     var s = (typeof DAYS_MORE !== "undefined" && DAYS_MORE[mm] && DAYS_MORE[mm][dd]) ? DAYS_MORE[mm][dd] : "";
     if (!s) return "";
-    // 見出しの記念日名を（区切りの単位で）取り除く
     if (headline) {
       s = ("・" + s + "・").split("・" + headline + "・").join("・");
       s = s.replace(/^・+|・+$/g, "");
@@ -78,54 +73,22 @@ document.addEventListener("DOMContentLoaded", function () {
     if (typeof setSeasonMonth === "function") setSeasonMonth(mm);
   }
 
-  function renderList(mm) {
-    if (!list) return;
-    if (listTitle) listTitle.textContent = mm + "月の「何の日」一覧（代表）";
-    var rows = [];
-    for (var d = 1; d <= DAYS[mm - 1]; d++) {
-      var e = entry(mm, d);
-      rows.push('<button type="button" class="list-row day-row" data-d="' + d + '">' +
-        '<span class="list-month">' + d + '日</span>' +
-        '<span class="day-row-name">' + e.name + '</span></button>');
-    }
-    list.innerHTML = rows.join("");
-    var btns = list.querySelectorAll(".day-row");
-    for (var i = 0; i < btns.length; i++) {
-      btns[i].addEventListener("click", function () {
-        var d = parseInt(this.getAttribute("data-d"), 10);
-        selDay.value = d;
-        render(parseInt(selMonth.value, 10), d);
-        result.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-    }
-  }
-
-  function revealList(mm) {
-    renderList(mm);
-    if (listWrap) listWrap.hidden = false;
-    listShown = true;
-  }
-
   selMonth.addEventListener("change", function () {
     var mm = parseInt(selMonth.value, 10);
     fillDays(mm);
-    if (listShown) renderList(mm);
     if (typeof setSeasonMonth === "function") setSeasonMonth(mm);
   });
 
   btn.addEventListener("click", function () {
-    var mm = parseInt(selMonth.value, 10);
-    render(mm, parseInt(selDay.value, 10));
-    revealList(mm);
+    render(parseInt(selMonth.value, 10), parseInt(selDay.value, 10));
     result.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 
-  // 初期表示：今日の日付（結果は表示、一覧は隠したまま）
+  // 初期表示：今日の日付（結果のみ。一覧は出さない）
   var now = new Date();
   var im = now.getMonth() + 1;
   selMonth.value = im;
   fillDays(im);
   selDay.value = Math.min(now.getDate(), DAYS[im - 1]);
   render(im, parseInt(selDay.value, 10));
-  if (listWrap) listWrap.hidden = true;
 });
