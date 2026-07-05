@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>本格 姓名判断 ― 占いの館</title>
+  <meta name="description" content="姓と名の画数から、五格（天格・人格・地格・外格・総格）で占う本格姓名判断。" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/style.css?v=11" />
+</head>
+<body>
+
+  <!-- 背景：墨と和紙のイメージ -->
+  <div class="bg-inkwash"></div>
+  <canvas class="bg-canvas"></canvas>
+  <div class="bg-vignette"></div>
+
+  <!-- 本文 -->
+  <main class="page bs-page">
+    <h1 class="brand" style="font-size: clamp(1.4rem, 4.6vw, 2.3rem);">🖌 本格 姓名判断</h1>
+    <p class="seimei-lead">
+      姓と名の画数から「五格」（天格・人格・地格・外格・総格）を算出する、
+      熊崎式姓名判断の考え方にもとづく本格診断です。
+      画数は伝統的な旧字体（正字）の画数を用いており、憶測での判定は行いません。
+    </p>
+
+    <!-- 入力フォーム -->
+    <div class="seimei-form">
+      <div class="seimei-field">
+        <label for="seiInput">姓（苗字）</label>
+        <input id="seiInput" type="text" placeholder="例：田中" autocomplete="off" />
+      </div>
+      <div class="seimei-field">
+        <label for="meiInput">名（下の名前）</label>
+        <input id="meiInput" type="text" placeholder="例：太郎" autocomplete="off" />
+        <span class="field-note">漢字・ひらがな・カタカナに対応（旧字体を直接入力してもOK）</span>
+      </div>
+      <button id="btnDivine" class="date-go" type="button" style="align-self:center; padding:.7rem 2.4rem;">結果</button>
+    </div>
+
+    <p class="seimei-error" id="seimeiError" hidden></p>
+
+    <!-- 結果（JSで挿入） -->
+    <section class="bs-result" id="result" hidden></section>
+
+    <p class="bs-source">
+      ※本ページは熊崎式姓名判断の考え方（五格・画数の吉凶）に基づく占いコンテンツです。
+      画数の吉凶は複数の姓名判断資料を照合した代表的な分類であり、特に49画以降は流派により
+      評価が分かれる場合があります。また、対応できる漢字は代表的なものに限られ、辞典に
+      ない漢字は「非対応」と表示されます（誤った画数を推測で表示することはありません）。
+      結果は統計や伝承に基づく占いであり、絶対的な評価ではなく、楽しみの一つとしてご覧ください。
+    </p>
+
+    <a class="back-link" href="select.html">← 占いの選択へ戻る</a>
+  </main>
+
+  <p class="site-foot">© 占いの館</p>
+
+  <script src="assets/inkwash.js?v=1"></script>
+  <script src="assets/seimei_data.js?v=1"></script>
+  <script src="assets/seimei_numbers.js?v=1"></script>
+  <script src="assets/seimei.js?v=1"></script>
+  <script src="assets/nav.js?v=3"></script>
+</body>
+</html>
