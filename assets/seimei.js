@@ -16,10 +16,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function analyzeName(str) {
     var chars = Array.from(str);
-    var items = chars.map(function (c) {
+    var items = [];
+    for (var i = 0; i < chars.length; i++) {
+      var c = chars[i];
+      // 々（同の字点・踊り字）は直前の文字と同じ画数として数える（例: 佐々木の々＝佐と同じ7画）
+      if ((c === "々" || c === "〻") && items.length > 0 && items[items.length - 1].ok) {
+        items.push({ ch: c, ok: true, n: items[items.length - 1].n });
+        continue;
+      }
       var r = charStrokes(c);
-      return { ch: c, ok: r.ok, n: r.n };
-    });
+      items.push({ ch: c, ok: r.ok, n: r.n });
+    }
     return items;
   }
 

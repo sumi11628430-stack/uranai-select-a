@@ -1,12 +1,16 @@
 /* =========================================================
-   姓名判断：画数データ
+   姓名判断：画数データ（本ファイル）＋ seimei_joyo.js ＋ seimei_jinmei.js
    出典・方針:
    ・新字体と旧字体（正字）で画数が異なる漢字は、姓名判断の伝統的な
      数え方に合わせ「旧字体（画数の多い方）」の画数を採用。
      対応表は新旧漢字対照ページ（旧字体・新字体で画数が変わる代表的な
-     漢字の一覧）に基づく。KYUJITAI が優先的に参照される。
-   ・旧字体・新字体で画数が変わらない漢字は、標準的な総画数を採用
-     （COMMON_KANJI）。数百字程度の代表的な姓・名用漢字を収録。
+     漢字の一覧）に基づく。KYUJITAI が最優先で参照される。
+   ・旧字体・新字体で画数が変わらない漢字は、標準的な総画数を採用。
+     常用漢字2136字は seimei_joyo.js の JOYO_STROKES（文化庁の常用漢字表
+     掲載字種に基づく検証済みデータ）で網羅。人名用漢字（追加863字）は
+     seimei_jinmei.js の JINMEI_STROKES で対応（詳細はそのファイルの
+     コメント参照）。COMMON_KANJI はこの2つと重複してもよい少数の
+     手動キュレーションリスト（互換性のため保持）。
    ・未収録の漢字は「非対応」として扱い、憶測の画数は出さない。
    ・かな文字は、ひらがなをカタカナに直してから数える方式（伝統的な
      数え方）を採用。濁点は+2画、半濁点は+1画。
@@ -54,7 +58,8 @@ var KYUJITAI_SELF = {
   "鎭":18,"顏":18,"騷":20,"鬪":20,"飜":21,"穰":22,"顯":23,"驗":23,"觀":24,
   "瀨":19,"鷄":21,"霸":21,"臟":22,"髓":23,"艷":24,
   "巖":23,"釀":24,"讓":24,
-  "嶋":14,"嶌":14
+  "嶋":14,"嶌":14,
+  "髙":10,"﨑":11,"𠮷":6,"德":15,"渕":11,"眞":10,"曻":8,"槗":15
 };
 
 /* ---- 標準画数（旧字体でも変化しない一般的な姓・名用漢字） --------- */
@@ -130,6 +135,8 @@ function charStrokes(ch) {
   if (KYUJITAI[ch] !== undefined) return { ok: true, n: KYUJITAI[ch] };
   if (KYUJITAI_SELF[ch] !== undefined) return { ok: true, n: KYUJITAI_SELF[ch] };
   if (COMMON_KANJI[ch] !== undefined) return { ok: true, n: COMMON_KANJI[ch] };
+  if (typeof JOYO_STROKES !== "undefined" && JOYO_STROKES[ch] !== undefined) return { ok: true, n: JOYO_STROKES[ch] };
+  if (typeof JINMEI_STROKES !== "undefined" && JINMEI_STROKES[ch] !== undefined) return { ok: true, n: JINMEI_STROKES[ch] };
 
   if (DAKUTEN_KATA[ch] !== undefined) {
     var baseD = KANA_BASE[DAKUTEN_KATA[ch]];
