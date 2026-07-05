@@ -7,12 +7,41 @@
    　別ウィンドウを開く（1画面にできるだけ多く収まる配置）
    ========================================================= */
 document.addEventListener("DOMContentLoaded", function () {
-  var startBtn   = document.getElementById("tarotStart");
-  var spread     = document.getElementById("tarotSpread");
-  var result     = document.getElementById("result");
-  var intro      = document.getElementById("tarotIntro");
-  var fullBtn    = document.getElementById("tarotFullResults");
+  var startBtn    = document.getElementById("tarotStart");
+  var spread      = document.getElementById("tarotSpread");
+  var result      = document.getElementById("result");
+  var intro       = document.getElementById("tarotIntro");
+  var fullBtn     = document.getElementById("tarotFullResults");
+  var hint        = document.getElementById("tarotHint");
+  var shuffleBox  = document.getElementById("tarotShuffle");
+  var shuffleDeck = document.getElementById("tarotShuffleDeck");
   if (!startBtn || !spread || !result) return;
+
+  var reducedMotion = false;
+  try { reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { /* 判定不能なら演出あり */ }
+
+  function runShuffle(callback) {
+    if (!shuffleBox || !shuffleDeck || reducedMotion) { callback(); return; }
+    shuffleDeck.innerHTML = "";
+    var count = 7;
+    for (var i = 0; i < count; i++) {
+      var c = document.createElement("div");
+      c.className = "tarot-shuffle-card";
+      c.textContent = "✦";
+      c.style.setProperty("--dx", (Math.random() * 46 - 23).toFixed(0) + "px");
+      c.style.setProperty("--r0", (Math.random() * 14 - 7).toFixed(1) + "deg");
+      c.style.setProperty("--r1", (Math.random() * 44 - 22).toFixed(1) + "deg");
+      c.style.setProperty("--r2", (Math.random() * 30 - 15).toFixed(1) + "deg");
+      c.style.animationDelay = (i * 0.08).toFixed(2) + "s";
+      shuffleDeck.appendChild(c);
+    }
+    shuffleBox.hidden = false;
+    shuffleBox.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(function () {
+      shuffleBox.hidden = true;
+      callback();
+    }, 1750);
+  }
 
   var SUIT_ICON = { wand: "🔥", cup: "💧", sword: "⚔", pentacle: "🪙" };
 
@@ -57,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var box = document.createElement("div");
     box.className = "f-sec tarot-detail";
     box.innerHTML = detailHTML(entry);
-    if (revealedCount === 10) {
+    if (Object.keys(revealedByPos).length === 10) {
       var p = document.createElement("p");
       p.className = "bs-source tarot-closing";
       p.textContent = "10枚すべてが出そろいました。「全体の結果を見る」で通して眺めると、より深いメッセージが見えてきます。";
@@ -141,10 +170,12 @@ document.addEventListener("DOMContentLoaded", function () {
     cardEl.appendChild(inner);
 
     function reveal() {
-      if (cardEl.classList.contains("revealed")) return;
-      cardEl.classList.add("revealed");
-      revealedCount++;
-      revealedByPos[entry.position.n] = entry;
+      if (!cardEl.classList.contains("revealed")) {
+        cardEl.classList.add("revealed");
+        cardEl.setAttribute("aria-label", entry.position.n + "番目・" + entry.position.label + "の結果をもう一度見る");
+        revealedCount++;
+        revealedByPos[entry.position.n] = entry;
+      }
       showDetail(entry);
     }
     cardEl.addEventListener("click", reveal);
@@ -204,6 +235,7 @@ document.addEventListener("DOMContentLoaded", function () {
   startBtn.addEventListener("click", function () {
     if (drawing) return;
     drawing = true;
+    startBtn.disabled = true;
 
     result.innerHTML = "";
     result.hidden = true;
@@ -211,18 +243,24 @@ document.addEventListener("DOMContentLoaded", function () {
     revealedByPos = {};
     if (intro) intro.hidden = true;
     if (fullBtn) fullBtn.hidden = true;
-
-    var draw = drawCelticCross();
-    spread.hidden = false;
+    if (hint) hint.hidden = true;
+    spread.hidden = true;
     spread.classList.remove("dealt");
-    buildSlots(draw);
 
-    requestAnimationFrame(function () {
-      requestAnimationFrame(function () { spread.classList.add("dealt"); });
+    runShuffle(function () {
+      var draw = drawCelticCross();
+      spread.hidden = false;
+      buildSlots(draw);
+
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { spread.classList.add("dealt"); });
+      });
+
+      startBtn.textContent = "もう一度シャッフルする";
+      startBtn.disabled = false;
+      if (hint) hint.hidden = false;
+      spread.scrollIntoView({ behavior: "smooth", block: "start" });
+      drawing = false;
     });
-
-    startBtn.textContent = "もう一度シャッフルする";
-    spread.scrollIntoView({ behavior: "smooth", block: "start" });
-    drawing = false;
   });
 });

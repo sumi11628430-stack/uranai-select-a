@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="assets/style.css?v=18" />
+  <link rel="stylesheet" href="assets/style.css?v=19" />
 </head>
 <body class="tarot-page-body">
 
@@ -34,9 +34,17 @@
 
     <button class="tarot-start-btn" id="tarotStart" type="button">カードをシャッフルして展開する</button>
 
+    <!-- シャッフル演出（占い映像風のカット） -->
+    <div class="tarot-shuffle" id="tarotShuffle" hidden aria-live="polite">
+      <div class="tarot-shuffle-deck" id="tarotShuffleDeck"></div>
+      <p class="tarot-status">カードをシャッフルしています…</p>
+    </div>
+
     <div class="tarot-spread" id="tarotSpread" hidden></div>
 
-    <!-- 結果（直前にめくった1枚だけを表示） -->
+    <p class="tarot-hint" id="tarotHint" hidden>カードは何度でもタップして見直せます。すべてめくったら「全体の結果を見る」でまとめて確認できます。</p>
+
+    <!-- 結果（直前にタップしたカードだけを表示） -->
     <section class="bs-result" id="result" hidden></section>
 
     <button class="tarot-full-btn" id="tarotFullResults" type="button" hidden>全体の結果を見る</button>
@@ -56,7 +64,7 @@
 
   <script src="assets/tarot_bg.js?v=1"></script>
   <script src="assets/tarot_data.js?v=1"></script>
-  <script src="assets/tarot.js?v=2"></script>
+  <script src="assets/tarot.js?v=3"></script>
   <script src="assets/nav.js?v=3"></script>
 </body>
 </html>
