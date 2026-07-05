@@ -1011,6 +1011,7 @@ body {
   transition: transform .3s ease, box-shadow .3s ease;
   color: var(--gold-bright);
   user-select: none;
+  position: relative;
 }
 .omikuji-box:hover, .omikuji-box:focus-visible { transform: scale(1.04); box-shadow: 0 0 60px rgba(200,60,50,.5), inset 0 0 30px rgba(0,0,0,.4); outline: none; }
 .omikuji-box.drawn { cursor: default; opacity: .85; }
@@ -1037,4 +1038,112 @@ body {
   color: var(--gold-bright);
   font-size: .95rem;
   text-align: center;
+}
+
+/* --- おみくじを引く演出 --- */
+.omikuji-status {
+  min-height: 1.6em;
+  margin: -.6rem 0 1.2rem;
+  color: var(--gold-bright);
+  letter-spacing: .18em;
+  font-size: 1.05rem;
+  text-align: center;
+}
+@keyframes ok-shake {
+  0%, 100% { transform: rotate(0) translate(0, 0); }
+  10% { transform: rotate(-7deg) translate(-6px, 1px); }
+  20% { transform: rotate(6deg)  translate(6px, -2px); }
+  30% { transform: rotate(-8deg) translate(-7px, 2px); }
+  40% { transform: rotate(7deg)  translate(6px, -3px); }
+  50% { transform: rotate(-6deg) translate(-5px, -4px); }
+  60% { transform: rotate(8deg)  translate(7px, 1px); }
+  70% { transform: rotate(-7deg) translate(-6px, -2px); }
+  80% { transform: rotate(5deg)  translate(4px, -3px); }
+  90% { transform: rotate(-4deg) translate(-3px, 1px); }
+}
+.omikuji-box.shaking {
+  animation: ok-shake .55s ease-in-out 3;
+  box-shadow: 0 0 70px rgba(242,197,61,.55), inset 0 0 30px rgba(0,0,0,.4);
+}
+.omikuji-stick {
+  position: absolute;
+  left: 50%;
+  top: 8%;
+  width: 15%;
+  height: 62%;
+  transform: translate(-50%, 25%);
+  opacity: 0;
+  background: linear-gradient(180deg, #eedcb2 0%, #d8bc82 55%, #c2a067 100%);
+  border: 1px solid rgba(120, 80, 30, .55);
+  border-radius: 7px 7px 3px 3px;
+  box-shadow: 0 0 20px rgba(242,197,61,.55);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 12%;
+  color: #7a2020;
+  font-weight: 700;
+  writing-mode: vertical-rl;
+  font-size: clamp(.78rem, 2.2vw, 1rem);
+  letter-spacing: .22em;
+  pointer-events: none;
+}
+.omikuji-box.stick-out .omikuji-stick {
+  animation: ok-stick-rise .7s cubic-bezier(.2, 1.4, .4, 1) forwards;
+}
+@keyframes ok-stick-rise {
+  0%   { opacity: 0; transform: translate(-50%, 25%); }
+  30%  { opacity: 1; }
+  100% { opacity: 1; transform: translate(-50%, -72%); }
+}
+.omikuji-box.flash::after {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,240,190,.9) 0%, rgba(242,197,61,.35) 40%, transparent 70%);
+  animation: ok-flash .7s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes ok-flash {
+  0%   { opacity: 0; transform: scale(.4); }
+  25%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.5); }
+}
+.ok-spark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ffe9a8;
+  box-shadow: 0 0 12px 4px rgba(242,197,61,.8);
+  pointer-events: none;
+  opacity: 0;
+  animation: ok-spark-fly .9s ease-out forwards;
+}
+@keyframes ok-spark-fly {
+  0%   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.3); }
+}
+.bs-result.ok-reveal { animation: ok-reveal-in .6s ease-out both; }
+@keyframes ok-reveal-in {
+  0%   { opacity: 0; transform: translateY(18px) scale(.96); }
+  100% { opacity: 1; transform: none; }
+}
+.ok-reveal .omikuji-result-title {
+  animation: ok-title-pop .7s cubic-bezier(.2, 1.5, .4, 1) .15s both;
+}
+@keyframes ok-title-pop {
+  0%   { opacity: 0; transform: scale(.3) rotate(-6deg); }
+  100% { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .omikuji-box.shaking,
+  .omikuji-box.stick-out .omikuji-stick,
+  .omikuji-box.flash::after,
+  .ok-spark,
+  .bs-result.ok-reveal,
+  .ok-reveal .omikuji-result-title { animation: none; }
 }
