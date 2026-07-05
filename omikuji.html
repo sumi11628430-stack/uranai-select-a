@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>おみくじ ― 占いの館</title>
+  <meta name="description" content="今日の運勢をおみくじで占う。1日1回引ける、大吉から大凶までの7段階。" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/style.css?v=14" />
+</head>
+<body>
+
+  <!-- 背景：神社の夜（提灯・灯・紙吹雪） -->
+  <div class="bg-shrine"></div>
+  <canvas class="bg-canvas"></canvas>
+  <div class="bg-vignette"></div>
+
+  <!-- 本文 -->
+  <main class="page bs-page">
+    <h1 class="brand" style="font-size: clamp(1.5rem, 5vw, 2.6rem);">🎋 おみくじ</h1>
+    <p class="select-lead">箱をタップして、今日の運勢を占いましょう</p>
+
+    <div class="omikuji-box" id="omikujiBox" role="button" tabindex="0" aria-label="おみくじを引く">🎍</div>
+
+    <p class="omikuji-already" id="omikujiAlready" hidden>今日はもうおみくじを引いています。結果はこちらです（おみくじは1日1回、日付が変わるとまた引けます）。</p>
+
+    <!-- 結果（JSで挿入） -->
+    <section class="bs-result" id="result" hidden></section>
+
+    <p class="bs-source">
+      ※おみくじの階級（大吉〜大凶）の並び方や出現比率は神社によって異なり、本ページの内容はその一般的な慣例を
+      参考にした、占いのお楽しみコンテンツです。運勢は1日1回、その日の結果が保存されます。
+    </p>
+
+    <a class="back-link" href="select.html">← 占いの選択へ戻る</a>
+  </main>
+
+  <p class="site-foot">© 占いの館</p>
+
+  <script src="assets/shrine.js?v=1"></script>
+  <script src="assets/omikuji_data.js?v=1"></script>
+  <script src="assets/omikuji.js?v=1"></script>
+  <script src="assets/nav.js?v=3"></script>
+</body>
+</html>
