@@ -253,9 +253,9 @@ body {
   color: var(--gold-bright);
 }
 .fortune-card .card-note {
-  font-size: .78rem;
+  font-size: .9rem;
   color: var(--text-dim);
-  letter-spacing: .1em;
+  letter-spacing: .06em;
 }
 
 /* 「準備中」カードの見た目 */
@@ -273,8 +273,8 @@ body {
   display: inline-block;
   color: var(--text-dim);
   text-decoration: none;
-  letter-spacing: .2em;
-  font-size: .9rem;
+  letter-spacing: .15em;
+  font-size: 1rem;
   border-bottom: 1px solid transparent;
   transition: color .3s ease, border-color .3s ease;
 }
@@ -396,8 +396,8 @@ body {
   letter-spacing: .04em;
   text-align: center;
 }
-.gem-name small { color: var(--text-dim); font-size: .68rem; letter-spacing: .12em; margin-top: .1em; }
-.gem-words { color: var(--text); font-size: .8rem; text-align: center; opacity: .85; line-height: 1.6; }
+.gem-name small { color: var(--text-dim); font-size: .8rem; letter-spacing: .12em; margin-top: .1em; }
+.gem-words { color: var(--text); font-size: .92rem; text-align: center; opacity: .9; line-height: 1.7; }
 
 /* CSSで描く宝石アイコン（誕生石カラー） */
 .gem-ico {
@@ -435,9 +435,9 @@ body {
   background: rgba(255,255,255,.04);
   border: 1px solid rgba(232,200,110,.18);
 }
-.list-month { color: var(--gold-bright); min-width: 3em; font-size: .95rem; }
+.list-month { color: var(--gold-bright); min-width: 3em; font-size: 1.05rem; }
 .list-gems { display: flex; flex-wrap: wrap; gap: .5rem 1rem; }
-.list-gem { display: flex; align-items: center; gap: .4rem; font-size: .85rem; color: var(--text); }
+.list-gem { display: flex; align-items: center; gap: .4rem; font-size: .95rem; color: var(--text); }
 
 /* ---- 誕生日（月日）ピッカー ---- */
 .date-pick {
@@ -494,7 +494,7 @@ body {
   box-shadow: 0 0 26px var(--gem, #b980ff);
 }
 .daily-name { text-align: left; }
-.daily-label { display: block; font-size: .75rem; letter-spacing: .2em; color: var(--text-dim); margin-bottom: .2em; }
+.daily-label { display: block; font-size: .85rem; letter-spacing: .2em; color: var(--text-dim); margin-bottom: .2em; }
 .daily-name b {
   font-size: clamp(1.2rem, 5vw, 1.8rem);
   color: var(--gold-bright);
@@ -504,18 +504,18 @@ body {
 .gem-sub {
   color: var(--text-dim);
   letter-spacing: .15em;
-  font-size: .85rem;
+  font-size: .95rem;
   margin: 1.4rem 0 .9rem;
   text-align: center;
 }
 
 /* 出典の注記 */
 .bs-source {
-  max-width: 640px;
+  max-width: 680px;
   margin: 2.2rem auto 0;
-  font-size: .72rem;
-  line-height: 1.7;
-  color: rgba(185,174,224,.6);
+  font-size: .85rem;
+  line-height: 1.8;
+  color: rgba(200,190,230,.75);
   text-align: center;
 }
 
@@ -575,19 +575,19 @@ body {
   letter-spacing: .05em;
   margin-bottom: .55rem;
 }
-.stone-title small { color: var(--text-dim); font-size: .68rem; letter-spacing: .12em; }
-.stone-appear { color: var(--text); line-height: 1.95; font-size: clamp(.98rem, 1.35vw, 1.1rem); margin-bottom: .7rem; opacity: .95; }
+.stone-title small { color: var(--text-dim); font-size: .82rem; letter-spacing: .12em; }
+.stone-appear { color: var(--text); line-height: 1.95; font-size: clamp(1.05rem, 1.6vw, 1.15rem); margin-bottom: .7rem; opacity: .95; }
 .stone-words {
   display: inline-block;
   color: #1a0b2e;
   background: linear-gradient(160deg, #f7e6ac, #e8c86e);
-  font-size: clamp(.82rem, 1.1vw, .95rem);
+  font-size: clamp(.92rem, 1.3vw, 1rem);
   letter-spacing: .06em;
   padding: .25em .9em;
   border-radius: 999px;
   margin-bottom: .5rem;
 }
-.stone-meaning { color: var(--text-dim); line-height: 1.85; font-size: clamp(.9rem, 1.2vw, 1rem); }
+.stone-meaning { color: var(--text-dim); line-height: 1.85; font-size: clamp(1rem, 1.4vw, 1.05rem); }
 
 /* 占いセクション（総合・恋愛・仕事金運・気質・アドバイス） */
 .fortune-sections {
@@ -605,13 +605,13 @@ body {
   text-align: left;
 }
 .f-sec h3 {
-  font-size: clamp(1.02rem, 1.4vw, 1.18rem);
+  font-size: clamp(1.1rem, 1.6vw, 1.22rem);
   color: var(--gold-bright);
   letter-spacing: .08em;
   margin-bottom: .5rem;
   font-weight: 700;
 }
-.f-sec p { color: var(--text); line-height: 1.9; font-size: clamp(.94rem, 1.25vw, 1.05rem); }
+.f-sec p { color: var(--text); line-height: 1.9; font-size: clamp(1.02rem, 1.4vw, 1.1rem); }
 .f-sec.advice {
   grid-column: 1 / -1;
   background: linear-gradient(150deg, rgba(120,70,190,.45), rgba(60,25,120,.4));
@@ -634,9 +634,9 @@ body {
   background: rgba(255,255,255,.05);
   border: 1px solid rgba(232,200,110,.25);
   color: var(--text);
-  font-size: clamp(.88rem, 1.1vw, .98rem);
+  font-size: clamp(.95rem, 1.2vw, 1.03rem);
 }
-.lucky-chip b { color: var(--gold-bright); font-size: .68rem; letter-spacing: .12em; font-weight: 700; }
+.lucky-chip b { color: var(--gold-bright); font-size: .8rem; letter-spacing: .1em; font-weight: 700; }
 
 /* =========================================================
    誕生花ページ専用（花の背景・花のSVG）
@@ -745,7 +745,7 @@ body {
 .dayof-more {
   color: var(--text) !important;
   line-height: 2.1 !important;
-  font-size: clamp(.9rem, 1.2vw, 1rem) !important;
+  font-size: clamp(1rem, 1.4vw, 1.08rem) !important;
   letter-spacing: .02em;
 }
 /* 何の日ページの一覧は読める背景を担保 */
@@ -769,12 +769,12 @@ body {
 }
 
 .seimei-lead {
-  max-width: 640px;
+  max-width: 680px;
   margin: 0 auto 1.6rem;
   color: var(--text-dim);
   line-height: 1.9;
   text-align: center;
-  font-size: clamp(.92rem, 1.4vw, 1.02rem);
+  font-size: clamp(1rem, 1.6vw, 1.08rem);
 }
 
 .seimei-form {
@@ -793,8 +793,8 @@ body {
 }
 .seimei-field label {
   color: var(--gold-bright);
-  font-size: .82rem;
-  letter-spacing: .18em;
+  font-size: .92rem;
+  letter-spacing: .16em;
 }
 .seimei-field input {
   font-family: inherit;
@@ -811,18 +811,18 @@ body {
   border-color: var(--gold-bright);
   box-shadow: 0 0 14px rgba(232,200,110,.35);
 }
-.seimei-field .field-note { font-size: .74rem; color: rgba(185,174,224,.65); }
+.seimei-field .field-note { font-size: .85rem; color: rgba(205,196,230,.8); }
 
 .seimei-error {
-  max-width: 520px;
+  max-width: 560px;
   margin: 0 auto 1.2rem;
   padding: .9rem 1.1rem;
   border-radius: 12px;
   background: rgba(120,40,40,.35);
   border: 1px solid rgba(230,120,110,.5);
   color: #ffe4e0;
-  font-size: .88rem;
-  line-height: 1.7;
+  font-size: 1rem;
+  line-height: 1.8;
   text-align: center;
 }
 
@@ -849,7 +849,7 @@ body {
   font-size: 1.3rem;
   color: var(--gold-bright);
 }
-.char-chip b { font-size: .68rem; font-weight: 500; color: var(--text-dim); }
+.char-chip b { font-size: .8rem; font-weight: 500; color: var(--text-dim); }
 .char-chip.bad { border-color: rgba(230,120,110,.6); color: #ffb3ab; }
 .char-chip.bad b { color: #ffb3ab; }
 
@@ -878,11 +878,11 @@ body {
   letter-spacing: .1em;
   margin-bottom: .3rem;
 }
-.grid-role { font-size: .72rem; color: var(--text-dim); letter-spacing: .05em; }
-.grid-num { font-size: 2rem; color: var(--text); font-weight: 700; line-height: 1; margin-bottom: .3rem; }
-.grid-num small { font-size: 1rem; color: var(--text-dim); margin-left: .2rem; font-weight: 400; }
-.grid-kind { font-size: .95rem; margin-bottom: .5rem; }
-.grid-text { color: var(--text); line-height: 1.8; font-size: .88rem; }
+.grid-role { font-size: .84rem; color: var(--text-dim); letter-spacing: .05em; }
+.grid-num { font-size: 2.1rem; color: var(--text); font-weight: 700; line-height: 1; margin-bottom: .3rem; }
+.grid-num small { font-size: 1.05rem; color: var(--text-dim); margin-left: .2rem; font-weight: 400; }
+.grid-kind { font-size: 1.05rem; margin-bottom: .5rem; }
+.grid-text { color: var(--text); line-height: 1.85; font-size: 1rem; }
 
 .kk-daikichi { border-left-color: #f2c53d; }
 .kk-daikichi .grid-kind { color: #f2c53d; }
@@ -894,3 +894,74 @@ body {
 .kk-kyo .grid-kind { color: #d68a5c; }
 .kk-daikyo { border-left-color: #e0645c; }
 .kk-daikyo .grid-kind { color: #e0645c; }
+
+/* 陰陽配列 */
+.inyou-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: .3rem;
+  margin: .6rem 0 1rem;
+}
+.inyou-dot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .1rem;
+  font-size: 1.5rem;
+  line-height: 1;
+  min-width: 2.6rem;
+}
+.inyou-dot b { font-size: .82rem; font-weight: 500; color: var(--text-dim); }
+.inyou-dot.yo { color: var(--gold-bright); }
+.inyou-dot.in { color: #9cc4e8; }
+.inyou-arrow { color: var(--text-dim); font-size: 1rem; }
+.inyou-judge { font-size: 1.05rem; margin-bottom: .5rem; }
+.inyou-judge b { color: var(--gold-bright); }
+
+/* 三才配置 */
+.sansai-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  margin: .6rem 0 1rem;
+}
+.sansai-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .1rem;
+  padding: .5rem .9rem;
+  border-radius: 10px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(232,200,110,.3);
+  font-size: .88rem;
+  color: var(--text-dim);
+}
+.sansai-badge b { font-size: 1.35rem; color: var(--gold-bright); font-weight: 700; }
+.sansai-rel { font-size: .95rem; padding: .2rem .6rem; border-radius: 999px; white-space: nowrap; }
+.sansai-rel.rel-good { color: #7fd6a0; background: rgba(127,214,160,.12); }
+.sansai-rel.rel-bad { color: #e0645c; background: rgba(224,100,92,.14); }
+.sansai-rel.rel-neutral { color: var(--text-dim); background: rgba(255,255,255,.06); }
+
+/* 名前の色 */
+.name-color-row {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin: .6rem 0 .3rem;
+  text-align: left;
+}
+.name-color-swatch {
+  flex: 0 0 auto;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: var(--nc, #888);
+  box-shadow: 0 0 22px var(--nc, #888);
+  border: 2px solid rgba(255,255,255,.4);
+}
+.name-color-name { color: var(--gold-bright); font-size: 1.1rem; margin-bottom: .3rem; }
