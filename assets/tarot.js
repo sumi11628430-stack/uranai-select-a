@@ -1,6 +1,10 @@
 /* =========================================================
    タロット占い：ケルト十字（10枚）
-   ・シャッフル→10枚を展開（裏向き）→1枚ずつタップして開く
+   ・テーマを選ぶ→シャッフル→10枚を展開（裏向き）→1枚ずつタップして開く
+   ・結果は「その日の日付＋選んだテーマ」から決定論的に算出する
+   　（乱数保存ではなく計算式なので、端末を変えても同じ日・同じ
+   　テーマなら同じ結果になる。tarotMakeRng/tarotSeedFromStringは
+   　tarot_data.js参照）
    ・下の結果欄には「直前にめくった1枚」だけを表示する
    　（積み上げ式だと下に長くなり探しづらいため）
    ・「全体の結果を見る」ボタンで、めくった分を一覧できる
@@ -8,6 +12,7 @@
    ========================================================= */
 document.addEventListener("DOMContentLoaded", function () {
   var startBtn    = document.getElementById("tarotStart");
+  var themeGrid   = document.getElementById("tarotThemeGrid");
   var spread      = document.getElementById("tarotSpread");
   var result      = document.getElementById("result");
   var intro       = document.getElementById("tarotIntro");
@@ -19,6 +24,50 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var reducedMotion = false;
   try { reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { /* 判定不能なら演出あり */ }
+
+  var TAROT_THEMES = [
+    { key: "overall", label: "総合運", icon: "🔮" },
+    { key: "love",    label: "恋愛運", icon: "💗" },
+    { key: "work",    label: "仕事運", icon: "💼" },
+    { key: "money",   label: "金運",   icon: "💰" }
+  ];
+  var selectedTheme = null;
+
+  function todayStr() {
+    var d = new Date();
+    return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
+  }
+
+  if (themeGrid) {
+    TAROT_THEMES.forEach(function (theme) {
+      var b = document.createElement("button");
+      b.className = "month-btn tarot-theme-btn";
+      b.type = "button";
+      b.innerHTML = '<span class="zodiac-btn-symbol">' + theme.icon + '</span>' + theme.label;
+      b.addEventListener("click", function () {
+        if (selectedTheme === theme.key) return;
+        selectedTheme = theme.key;
+        var actives = themeGrid.querySelectorAll(".month-btn");
+        for (var i = 0; i < actives.length; i++) actives[i].classList.remove("on");
+        b.classList.add("on");
+
+        startBtn.disabled = false;
+        startBtn.textContent = "「" + theme.label + "」を占う";
+
+        /* テーマを変えたら、前のテーマの結果は一旦リセット */
+        result.innerHTML = "";
+        result.hidden = true;
+        revealedCount = 0;
+        revealedByPos = {};
+        if (fullBtn) fullBtn.hidden = true;
+        if (hint) hint.hidden = true;
+        spread.hidden = true;
+        spread.classList.remove("dealt");
+        spread.innerHTML = "";
+      });
+      themeGrid.appendChild(b);
+    });
+  }
 
   function runShuffle(callback) {
     if (!shuffleBox || !shuffleDeck || reducedMotion) { callback(); return; }
@@ -233,7 +282,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var drawing = false;
   startBtn.addEventListener("click", function () {
-    if (drawing) return;
+    if (drawing || !selectedTheme) return;
     drawing = true;
     startBtn.disabled = true;
 
@@ -248,7 +297,9 @@ document.addEventListener("DOMContentLoaded", function () {
     spread.classList.remove("dealt");
 
     runShuffle(function () {
-      var draw = drawCelticCross();
+      var seed = tarotSeedFromString(todayStr() + "|" + selectedTheme);
+      var rng = tarotMakeRng(seed);
+      var draw = drawCelticCross(rng);
       spread.hidden = false;
       buildSlots(draw);
 
@@ -256,7 +307,8 @@ document.addEventListener("DOMContentLoaded", function () {
         requestAnimationFrame(function () { spread.classList.add("dealt"); });
       });
 
-      startBtn.textContent = "もう一度シャッフルする";
+      var themeObj = TAROT_THEMES.filter(function (t) { return t.key === selectedTheme; })[0];
+      startBtn.textContent = "もう一度「" + (themeObj ? themeObj.label : "") + "」を占う";
       startBtn.disabled = false;
       if (hint) hint.hidden = false;
       spread.scrollIntoView({ behavior: "smooth", block: "start" });

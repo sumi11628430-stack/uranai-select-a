@@ -1279,6 +1279,12 @@ body.ok-impact-shake { animation: ok-impact-shake .3s ease-out 1; }
   box-shadow: 0 0 46px rgba(150,90,220,.55);
   outline: none;
 }
+.tarot-start-btn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.tarot-start-btn:disabled:hover { transform: none; }
 .tarot-spread { margin: 0 auto 1rem; max-width: 620px; }
 .tarot-cross {
   display: grid;

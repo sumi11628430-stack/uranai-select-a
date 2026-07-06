@@ -361,13 +361,40 @@ function astroChip(card) {
   return null;
 }
 
-function drawCelticCross() {
+/* 文字列から32bitの整数シードを作る（xmur3） */
+function tarotSeedFromString(str) {
+  var h = 1779033703 ^ str.length;
+  for (var i = 0; i < str.length; i++) {
+    h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
+    h = (h << 13) | (h >>> 19);
+  }
+  h = Math.imul(h ^ (h >>> 16), 2246822507);
+  h = Math.imul(h ^ (h >>> 13), 3266489909);
+  h ^= h >>> 16;
+  return h >>> 0;
+}
+
+/* シード値から0〜1の疑似乱数を生成する関数を作る（mulberry32）。
+   同じシードなら常に同じ乱数列＝同じ結果になる。 */
+function tarotMakeRng(seed) {
+  var a = seed >>> 0;
+  return function () {
+    a = (a + 0x6D2B79F5) | 0;
+    var t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/* rngを渡すと日付/テーマ固定の決定論的な結果に、省略すると通常の乱数になる */
+function drawCelticCross(rng) {
+  var rand = rng || Math.random;
   var pool = ALL_CARDS.slice();
   var drawn = [];
   for (var i = 0; i < 10; i++) {
-    var idx = Math.floor(Math.random() * pool.length);
+    var idx = Math.floor(rand() * pool.length);
     var card = pool.splice(idx, 1)[0];
-    drawn.push({ card: card, reversed: Math.random() < 0.5, position: CELTIC_POSITIONS[i] });
+    drawn.push({ card: card, reversed: rand() < 0.5, position: CELTIC_POSITIONS[i] });
   }
   return drawn;
 }
