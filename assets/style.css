@@ -214,11 +214,19 @@ body {
 
 .select-grid {
   display: grid;
-  grid-template-columns: 1fr;   /* 1列＝カードを縦に積む（誕生花は誕生石の真下） */
-  gap: 1.2rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
   width: 100%;
   max-width: 460px;
   margin: 0 auto;
+}
+@media (min-width: 720px) {
+  /* 占いの数が増えたため、広い画面では4列（例：7個なら上段4・下段3）に並べる */
+  .select-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: 1060px; gap: 1.1rem; }
+  .fortune-card { padding: 2rem 1.2rem; gap: .6rem; }
+  .fortune-card .card-icon { font-size: 2.2rem; }
+  .fortune-card .card-title { font-size: clamp(.95rem, 1.6vw, 1.1rem); }
+  .fortune-card .card-note { font-size: .82rem; }
 }
 
 .fortune-card {
@@ -227,6 +235,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: .8rem;
+  min-width: 0;   /* グリッドの列幅より内容が広くなってはみ出すのを防ぐ */
   padding: 2.4rem 1.4rem;
   border-radius: 18px;
   text-decoration: none;
@@ -251,11 +260,15 @@ body {
   font-size: clamp(1.05rem, 3.2vw, 1.3rem);
   letter-spacing: .12em;
   color: var(--gold-bright);
+  min-width: 0;
+  overflow-wrap: break-word;
 }
 .fortune-card .card-note {
   font-size: .9rem;
   color: var(--text-dim);
   letter-spacing: .06em;
+  min-width: 0;
+  overflow-wrap: break-word;
 }
 
 /* 「準備中」カードの見た目 */
