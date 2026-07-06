@@ -1363,6 +1363,15 @@ body.ok-impact-shake { animation: ok-impact-shake .3s ease-out 1; }
   font-size: 1.5rem;
   box-shadow: 0 0 18px rgba(150,100,220,.35), inset 0 0 14px rgba(0,0,0,.4);
 }
+/* 次にめくるカードを光らせて誘導する */
+.tarot-card.next-up .tarot-card-back {
+  border-color: var(--gold-bright);
+  animation: tarot-next-glow 1.6s ease-in-out infinite;
+}
+@keyframes tarot-next-glow {
+  0%, 100% { box-shadow: 0 0 16px rgba(232,200,110,.5), inset 0 0 14px rgba(0,0,0,.4); }
+  50%      { box-shadow: 0 0 34px rgba(232,200,110,.95), inset 0 0 14px rgba(0,0,0,.3); }
+}
 .tarot-card-front {
   background: linear-gradient(155deg, #efe2c8, #d8c79a);
   border: 2px solid rgba(122,32,32,.5);
@@ -1493,4 +1502,8 @@ body.tarot-page-body { padding-bottom: 5.5rem; }
   .tarot-slot { transition: none; }
   .tarot-card, .tarot-card-inner { transition: none; }
   .tarot-shuffle-card { animation: none; }
+  .tarot-card.next-up .tarot-card-back {
+    animation: none;
+    box-shadow: 0 0 24px rgba(232,200,110,.7), inset 0 0 14px rgba(0,0,0,.4);
+  }
 }

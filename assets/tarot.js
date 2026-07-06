@@ -179,6 +179,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var revealedCount = 0;
   var revealedByPos = {};
+  var cardElByPos = {};
+
+  /* まだめくっていない中で一番若い番号のカードだけを光らせ、
+     「次にめくるならこれ」がひと目でわかるようにする */
+  function updateNextGlow() {
+    Object.keys(cardElByPos).forEach(function (n) {
+      cardElByPos[n].classList.remove("next-up");
+    });
+    for (var n = 1; n <= 10; n++) {
+      if (!revealedByPos[n] && cardElByPos[n]) {
+        cardElByPos[n].classList.add("next-up");
+        break;
+      }
+    }
+  }
 
   function showDetail(entry) {
     var box = document.createElement("div");
@@ -273,6 +288,7 @@ document.addEventListener("DOMContentLoaded", function () {
         cardEl.setAttribute("aria-label", entry.position.n + "番目・" + entry.position.label + "の結果をもう一度見る");
         revealedCount++;
         revealedByPos[entry.position.n] = entry;
+        updateNextGlow();
       }
       showDetail(entry);
     }
@@ -285,6 +301,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function buildSlots(draw) {
     spread.innerHTML = "";
+    cardElByPos = {};
     var cross = document.createElement("div");
     cross.className = "tarot-cross";
     var staff = document.createElement("div");
@@ -302,8 +319,12 @@ document.addEventListener("DOMContentLoaded", function () {
     centerSlot.style.transitionDelay = "0ms";
     var stack = document.createElement("div");
     stack.className = "tarot-card-stack";
-    stack.appendChild(makeCardEl(byPos[1]));
-    stack.appendChild(makeCardEl(byPos[2], "tarot-card-cross"));
+    var card1 = makeCardEl(byPos[1]);
+    var card2 = makeCardEl(byPos[2], "tarot-card-cross");
+    cardElByPos[1] = card1;
+    cardElByPos[2] = card2;
+    stack.appendChild(card1);
+    stack.appendChild(card2);
     centerSlot.appendChild(stack);
     [1, 2].forEach(function (n) {
       var cap = document.createElement("p");
@@ -321,10 +342,14 @@ document.addEventListener("DOMContentLoaded", function () {
       var caption = document.createElement("p");
       caption.className = "tarot-slot-label";
       caption.textContent = n + ". " + entry.position.label;
-      slot.appendChild(makeCardEl(entry));
+      var cardEl = makeCardEl(entry);
+      cardElByPos[n] = cardEl;
+      slot.appendChild(cardEl);
       slot.appendChild(caption);
       (n <= 6 ? cross : staff).appendChild(slot);
     });
+
+    updateNextGlow();
   }
 
   if (fullBtn) fullBtn.addEventListener("click", openFullResults);
