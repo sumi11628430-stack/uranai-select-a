@@ -236,10 +236,12 @@ document.addEventListener("DOMContentLoaded", function () {
       (cssHref ? '<link rel="stylesheet" href="' + cssHref + '">' : "") +
       '<style>' +
       'body{background:#180c28;padding:1.4rem clamp(1rem,3vw,2.2rem);}' +
-      '.tarot-popup-head{max-width:1200px;margin:0 auto 1.2rem;text-align:center;}' +
+      '.tarot-popup-head{max-width:1300px;margin:0 auto 1.2rem;text-align:center;}' +
       '.tarot-popup-note{color:var(--text-dim);font-size:.9rem;margin-top:.4rem;}' +
-      '.tarot-popup-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));gap:.8rem;max-width:1200px;margin:0 auto;align-items:start;}' +
-      '.tarot-popup-item{margin:0;padding:1rem 1.1rem;}' +
+      '.tarot-popup-grid{display:grid;grid-template-columns:repeat(2, 1fr);gap:.7rem;max-width:1300px;margin:0 auto;align-items:start;}' +
+      '@media (min-width:700px){.tarot-popup-grid{grid-template-columns:repeat(3, 1fr);}}' +
+      '@media (min-width:1000px){.tarot-popup-grid{grid-template-columns:repeat(5, 1fr);}}' +
+      '.tarot-popup-item{margin:0;padding:.85rem .95rem;}' +
       '.tarot-popup-item h3{font-size:1rem;margin-bottom:.3rem;}' +
       '.tarot-popup-item p{font-size:.86rem;line-height:1.6;margin:.35rem 0;}' +
       '.tarot-popup-item .tarot-detail-card{font-size:.94rem;}' +
