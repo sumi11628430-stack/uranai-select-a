@@ -1426,6 +1426,28 @@ body.tarot-page-body { padding-bottom: 5.5rem; }
   font-size: .85rem;
   line-height: 1.7;
 }
+.tarot-field-label {
+  color: var(--text-dim);
+  font-size: .88rem;
+  letter-spacing: .04em;
+  margin-bottom: .6rem;
+}
+.tarot-question {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto 1.8rem;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--text);
+  background: rgba(20,8,50,.7);
+  border: 1px solid rgba(232,200,110,.45);
+  border-radius: 10px;
+  padding: .7rem 1rem;
+  text-align: center;
+}
+.tarot-question::placeholder { color: rgba(185,174,224,.6); }
+.tarot-question:focus-visible { outline: none; border-color: var(--gold-bright); box-shadow: 0 0 14px rgba(232,200,110,.4); }
 /* --- シャッフル演出（占い映像風のカット） --- */
 .tarot-shuffle {
   display: flex;

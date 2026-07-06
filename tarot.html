@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="assets/style.css?v=20" />
+  <link rel="stylesheet" href="assets/style.css?v=21" />
 </head>
 <body class="tarot-page-body">
 
@@ -28,13 +28,24 @@
       <p class="tarot-intro">
         78枚のタロットカードから10枚を引き、「現在の状況」「障害」「顕在意識」「潜在意識」「近い過去」
         「近い未来」「あなたの立場」「周囲の環境」「願望と不安」「最終結果」という10の視点で
-        今のテーマを読み解く、タロットの中でも最も本格的なスプレッドです。まずは占いたいテーマを選んでください。
+        今のテーマを読み解く、タロットの中でも最も本格的なスプレッドです。
+        同じ端末を家族や友人と共有していても、生まれ月日と質問が違えば結果も変わります。
       </p>
     </div>
 
+    <p class="tarot-field-label">生年月日（月日）を選んでください</p>
+    <div class="date-pick">
+      <select id="tarotMonth" class="date-sel" aria-label="生まれ月"></select>
+      <select id="tarotDay" class="date-sel" aria-label="生まれた日"></select>
+    </div>
+
+    <p class="tarot-field-label">気になっていることを一言で（例：転職について、彼との今後）</p>
+    <input type="text" class="tarot-question" id="tarotQuestion" maxlength="60" placeholder="今の気持ちや知りたいことを入力してください" />
+
+    <p class="tarot-field-label">占いたいテーマを選んでください</p>
     <div class="month-grid tarot-theme-grid" id="tarotThemeGrid"></div>
 
-    <button class="tarot-start-btn" id="tarotStart" type="button" disabled>まずテーマを選んでください</button>
+    <button class="tarot-start-btn" id="tarotStart" type="button" disabled>すべて入力してください</button>
 
     <!-- シャッフル演出（占い映像風のカット） -->
     <div class="tarot-shuffle" id="tarotShuffle" hidden aria-live="polite">
@@ -52,9 +63,11 @@
     <button class="tarot-full-btn" id="tarotFullResults" type="button" hidden>全体の結果を見る</button>
 
     <p class="bs-source">
-      ※結果は「その日の日付」と「選んだテーマ」から算出しており、同じ日に同じテーマを選べば、
-      端末を変えても・何度シャッフルしても同じ結果になります（乱数ではなく計算による決定論的な
-      抽選のため）。日付が変わる、または別のテーマを選ぶと結果も変わります。<br />
+      ※結果は「その日の日付」「生年月日（月日）」「質問」「選んだテーマ」から算出しており、
+      同じ日に同じ内容を入力すれば、端末を変えても・何度シャッフルしても同じ結果になります
+      （乱数ではなく計算による決定論的な抽選のため）。同じ端末を家族や友人と共有していても、
+      生年月日や質問が違えば別の結果になります。日付が変わる、または入力内容を変えると結果も
+      変わります。生年月日・質問はこのページの計算にのみ使い、送信・保存はされません。<br />
       カードの意味の解説はオリジナルで作成しています。一部のカード（大アルカナ22枚、小アルカナの
       数札2〜10・36枚）には、19世紀末の神秘主義結社「黄金の夜明け団」が体系化した、星座・惑星・
       デカン（星座を10日ごとに3分割した区分）との伝統的な対応（占星タロット）を表示しています。
@@ -68,8 +81,8 @@
   <p class="site-foot">© 占いの館</p>
 
   <script src="assets/tarot_bg.js?v=1"></script>
-  <script src="assets/tarot_data.js?v=2"></script>
-  <script src="assets/tarot.js?v=4"></script>
+  <script src="assets/tarot_data.js?v=3"></script>
+  <script src="assets/tarot.js?v=5"></script>
   <script src="assets/nav.js?v=3"></script>
 </body>
 </html>

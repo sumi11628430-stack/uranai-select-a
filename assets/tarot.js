@@ -11,15 +11,18 @@
    　別ウィンドウを開く（1画面にできるだけ多く収まる配置）
    ========================================================= */
 document.addEventListener("DOMContentLoaded", function () {
-  var startBtn    = document.getElementById("tarotStart");
-  var themeGrid   = document.getElementById("tarotThemeGrid");
-  var spread      = document.getElementById("tarotSpread");
-  var result      = document.getElementById("result");
-  var intro       = document.getElementById("tarotIntro");
-  var fullBtn     = document.getElementById("tarotFullResults");
-  var hint        = document.getElementById("tarotHint");
-  var shuffleBox  = document.getElementById("tarotShuffle");
-  var shuffleDeck = document.getElementById("tarotShuffleDeck");
+  var startBtn     = document.getElementById("tarotStart");
+  var themeGrid    = document.getElementById("tarotThemeGrid");
+  var monthSel     = document.getElementById("tarotMonth");
+  var daySel       = document.getElementById("tarotDay");
+  var questionEl   = document.getElementById("tarotQuestion");
+  var spread       = document.getElementById("tarotSpread");
+  var result       = document.getElementById("result");
+  var intro        = document.getElementById("tarotIntro");
+  var fullBtn      = document.getElementById("tarotFullResults");
+  var hint         = document.getElementById("tarotHint");
+  var shuffleBox   = document.getElementById("tarotShuffle");
+  var shuffleDeck  = document.getElementById("tarotShuffleDeck");
   if (!startBtn || !spread || !result) return;
 
   var reducedMotion = false;
@@ -38,6 +41,65 @@ document.addEventListener("DOMContentLoaded", function () {
     return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate();
   }
 
+  /* ---- 生年月日ピッカー ---- */
+  var DAYS_IN_MONTH = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  function fillDays(m) {
+    if (!daySel) return;
+    var max = DAYS_IN_MONTH[m - 1];
+    var cur = parseInt(daySel.value, 10) || 1;
+    daySel.innerHTML = "";
+    for (var d = 1; d <= max; d++) {
+      var o = document.createElement("option");
+      o.value = d; o.textContent = d + "日";
+      daySel.appendChild(o);
+    }
+    daySel.value = Math.min(cur, max);
+  }
+  if (monthSel && daySel) {
+    for (var m = 1; m <= 12; m++) {
+      var mo = document.createElement("option");
+      mo.value = m; mo.textContent = m + "月";
+      monthSel.appendChild(mo);
+    }
+    monthSel.selectedIndex = -1;
+    fillDays(1);
+    daySel.selectedIndex = -1;
+    monthSel.addEventListener("change", function () {
+      fillDays(parseInt(monthSel.value, 10));
+      resetForNewInput();
+    });
+    daySel.addEventListener("change", resetForNewInput);
+  }
+  if (questionEl) questionEl.addEventListener("input", resetForNewInput);
+
+  /* 入力（生年月日・質問・テーマ）が揃ったらシャッフルできるようにする */
+  function refreshReadiness() {
+    var hasDate = !!(monthSel && daySel && monthSel.value && daySel.value);
+    var hasQuestion = !!(questionEl && questionEl.value.trim().length > 0);
+    var ready = hasDate && hasQuestion && !!selectedTheme;
+    startBtn.disabled = !ready;
+    if (ready) {
+      var themeObj = TAROT_THEMES.filter(function (t) { return t.key === selectedTheme; })[0];
+      startBtn.textContent = "「" + (themeObj ? themeObj.label : "") + "」を占う";
+    } else {
+      startBtn.textContent = "すべて入力してください";
+    }
+  }
+
+  /* 入力内容が変わったら、前の結果は一旦リセットして再シャッフルを促す */
+  function resetForNewInput() {
+    result.innerHTML = "";
+    result.hidden = true;
+    revealedCount = 0;
+    revealedByPos = {};
+    if (fullBtn) fullBtn.hidden = true;
+    if (hint) hint.hidden = true;
+    spread.hidden = true;
+    spread.classList.remove("dealt");
+    spread.innerHTML = "";
+    refreshReadiness();
+  }
+
   if (themeGrid) {
     TAROT_THEMES.forEach(function (theme) {
       var b = document.createElement("button");
@@ -50,20 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var actives = themeGrid.querySelectorAll(".month-btn");
         for (var i = 0; i < actives.length; i++) actives[i].classList.remove("on");
         b.classList.add("on");
-
-        startBtn.disabled = false;
-        startBtn.textContent = "「" + theme.label + "」を占う";
-
-        /* テーマを変えたら、前のテーマの結果は一旦リセット */
-        result.innerHTML = "";
-        result.hidden = true;
-        revealedCount = 0;
-        revealedByPos = {};
-        if (fullBtn) fullBtn.hidden = true;
-        if (hint) hint.hidden = true;
-        spread.hidden = true;
-        spread.classList.remove("dealt");
-        spread.innerHTML = "";
+        resetForNewInput();
       });
       themeGrid.appendChild(b);
     });
@@ -282,7 +331,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   var drawing = false;
   startBtn.addEventListener("click", function () {
-    if (drawing || !selectedTheme) return;
+    var birthMonth = monthSel && monthSel.value;
+    var birthDay = daySel && daySel.value;
+    var question = questionEl ? questionEl.value.trim() : "";
+    if (drawing || !selectedTheme || !birthMonth || !birthDay || !question) return;
     drawing = true;
     startBtn.disabled = true;
 
@@ -297,7 +349,8 @@ document.addEventListener("DOMContentLoaded", function () {
     spread.classList.remove("dealt");
 
     runShuffle(function () {
-      var seed = tarotSeedFromString(todayStr() + "|" + selectedTheme);
+      var seedStr = todayStr() + "|" + selectedTheme + "|" + birthMonth + "-" + birthDay + "|" + question;
+      var seed = tarotSeedFromString(seedStr);
       var rng = tarotMakeRng(seed);
       var draw = drawCelticCross(rng);
       spread.hidden = false;
