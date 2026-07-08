@@ -12,6 +12,9 @@ document.addEventListener("DOMContentLoaded", function () {
   if (!box || !result) return;
 
   var STORAGE_KEY = "omikuji_last_draw";
+  /* ローカルファイル(file://)で開いたときはテスト用に「1日1回」制限を無効化。
+     本番(https)では通常どおり1日1回。リロードすれば何度でも引ける。 */
+  var testMode = (location.protocol === "file:");
   var reduced = false;
   try { reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { /* 判定不能なら演出あり */ }
 
@@ -45,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fortuneSec("✨", "今日の一言", o.advice, "advice") +
       '</div>';
     if (animate) result.classList.add("ok-reveal");
-    result.scrollIntoView({ behavior: "smooth", block: "start" });
+    /* 結果への自動スクロールはしない（その場で見せる） */
   }
 
   function loadToday() {
@@ -64,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ date: todayStr(), kind: o.kind })); } catch (e) { /* 保存できなくても続行 */ }
   }
 
-  var existing = loadToday();
+  var existing = testMode ? null : loadToday();
   if (existing) {
     box.classList.add("drawn");
     box.textContent = "🎋";
@@ -129,6 +132,43 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  /* 出た結果に応じた色のキラキラ演出。
+     半吉〜大吉のみ色つき、末吉以下は何もしない（既存演出のみ）。
+       大吉=金 / 中吉=銀 / 小吉=緑 / 吉=青 / 半吉=青 */
+  var RESULT_GLOW = {
+    "ok-daikichi": ["#ffe9a8", "#ffd76b", "#fff3c2"], // 金
+    "ok-chukichi": ["#eef2f9", "#c9d3e2", "#ffffff"], // 銀
+    "ok-shokichi": ["#a8ecc2", "#5ecb8b", "#d9f7e6"], // 緑
+    "ok-kichi":    ["#fff27a", "#ffe63d", "#fff6c2"], // 黄
+    "ok-hankichi": ["#a9cdf2", "#6ea8e6", "#dbeafe"]  // 青
+  };
+  function spawnResultGlow(o) {
+    var palette = RESULT_GLOW[o.cls];
+    if (!palette) return; // 末吉以下は色つき演出なし
+
+    /* 色つきの光の輪 */
+    var halo = document.createElement("span");
+    halo.className = "ok-color-halo";
+    halo.style.setProperty("--glow", palette[1]);
+    box.appendChild(halo);
+    setTimeout(function () { if (halo.parentNode) halo.parentNode.removeChild(halo); }, 1500);
+
+    /* 星（キラキラ）を放射状に飛ばす */
+    for (var i = 0; i < 22; i++) {
+      var t = document.createElement("span");
+      t.className = "ok-twinkle";
+      var ang  = (Math.PI * 2 * i) / 22 + Math.random() * .5;
+      var dist = 90 + Math.random() * 140;
+      t.style.color = palette[i % palette.length];
+      t.style.fontSize = (11 + Math.random() * 12).toFixed(0) + "px";
+      t.style.setProperty("--dx", (Math.cos(ang) * dist).toFixed(1) + "px");
+      t.style.setProperty("--dy", (Math.sin(ang) * dist).toFixed(1) + "px");
+      t.style.animationDelay = (Math.random() * .28).toFixed(2) + "s";
+      box.appendChild(t);
+      (function (el) { setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 1900); })(t);
+    }
+  }
+
   var drawing = false;
   function doDraw() {
     if (drawing || box.classList.contains("drawn")) return;
@@ -172,6 +212,7 @@ document.addEventListener("DOMContentLoaded", function () {
         spawnScreenFlash();
         spawnSparks();
         spawnConfetti();
+        spawnResultGlow(o);
         status.textContent = "";
         render(o, true);
         setTimeout(function () { document.body.classList.remove("ok-impact-shake"); }, 320);

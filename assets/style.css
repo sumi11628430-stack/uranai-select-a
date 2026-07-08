@@ -221,7 +221,7 @@ body {
   margin: 0 auto;
 }
 @media (min-width: 720px) {
-  /* 占いの数が増えたため、広い画面では4列（例：7個なら上段4・下段3）に並べる */
+  /* 占いの数が増えたため、広い画面では4列（例：8個なら上段4・下段4）に並べる */
   .select-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: 1060px; gap: 1.1rem; }
   .fortune-card { padding: 2rem 1.2rem; gap: .6rem; }
   .fortune-card .card-icon { font-size: 2.2rem; }
@@ -294,15 +294,13 @@ body {
 .back-link:hover { color: var(--gold-bright); border-color: var(--gold); }
 
 .site-foot {
-  position: fixed;
-  bottom: 1rem;
-  left: 0;
+  /* 画面に貼り付く固定はやめ、本文の一番下に置く通常フッター */
   width: 100%;
+  padding: 1.8rem 1rem 2.2rem;
   text-align: center;
   font-size: .7rem;
   letter-spacing: .2em;
   color: rgba(185,174,224,.5);
-  pointer-events: none;
 }
 
 /* ---- 動きを抑える設定の人への配慮 ------------------------------- */
@@ -1033,12 +1031,84 @@ body {
   letter-spacing: .2em;
   margin-bottom: .3rem;
   font-weight: 700;
+  position: relative;
 }
-.ok-daikichi { color: #f2c53d; text-shadow: 0 0 26px rgba(242,197,61,.6); }
-.ok-chukichi { color: #f2a63d; text-shadow: 0 0 22px rgba(242,166,61,.5); }
-.ok-shokichi { color: #e0b45c; text-shadow: 0 0 20px rgba(224,180,92,.45); }
-.ok-kichi { color: #7fd6a0; text-shadow: 0 0 20px rgba(127,214,160,.45); }
-.ok-hankichi { color: #7fd6c8; text-shadow: 0 0 20px rgba(127,214,200,.45); }
+/* 結果タイトルの色（半吉〜大吉は指定色：金・銀・緑・黄・青）。
+   金・銀はメタリックなグラデーション文字＋動く光沢、緑・黄・青はくっきり発色。 */
+.ok-daikichi { /* 金＋きらきら（流れる光沢＋星は::before/::afterで） */
+  color: #ffd76b;
+  background: linear-gradient(100deg, #d9a63c 0%, #ffdf86 28%, #fff6da 46%, #ffdf86 64%, #d9a63c 100%);
+  background-size: 220% 100%;
+  background-position: 60% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 26px rgba(255,210,90,.6);
+  animation: ok-shine-gold 2.6s linear infinite;
+}
+.ok-chukichi { /* 銀＋ぴかぴか（光沢がきらっと横切る） */
+  color: #dbe3f0;
+  background: linear-gradient(100deg, #9fadc6 0%, #e7edf7 30%, #ffffff 48%, #e7edf7 66%, #9fadc6 100%);
+  background-size: 220% 100%;
+  background-position: 60% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 22px rgba(210,222,245,.6), 0 0 8px rgba(255,255,255,.45);
+  animation: ok-shine-silver 2.8s ease-in-out infinite;
+}
+/* 流れる光沢（背景位置を動かす）。中吉はスイープ後に少し止めて「ぴかっ…ぴかっ」に */
+@keyframes ok-shine-gold {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -40% 0; }
+}
+@keyframes ok-shine-silver {
+  0%   { background-position: 210% 0; }
+  50%  { background-position: -30% 0; }
+  100% { background-position: -30% 0; }
+}
+/* 大吉：文字の脇できらきら瞬く星 */
+.omikuji-result-title.ok-daikichi::before,
+.omikuji-result-title.ok-daikichi::after {
+  content: "\2726";
+  position: absolute;
+  font-size: .5em;
+  line-height: 1;
+  background: none;
+  -webkit-text-fill-color: #fff6cf;
+  color: #fff6cf;
+  text-shadow: 0 0 8px #ffd76b, 0 0 16px rgba(255,200,90,.85);
+  pointer-events: none;
+}
+.omikuji-result-title.ok-daikichi::before {
+  left: -.05em; top: -.12em;
+  animation: ok-sparkle-a 1.7s ease-in-out infinite;
+}
+.omikuji-result-title.ok-daikichi::after {
+  right: -.05em; top: .45em;
+  animation: ok-sparkle-b 1.7s ease-in-out .55s infinite;
+}
+@keyframes ok-sparkle-a {
+  0%, 100% { opacity: .2; transform: scale(.55) rotate(0deg); }
+  50%      { opacity: 1;  transform: scale(1.2) rotate(90deg); }
+}
+@keyframes ok-sparkle-b {
+  0%, 100% { opacity: 1;  transform: scale(1.15) rotate(0deg); }
+  50%      { opacity: .25; transform: scale(.55) rotate(-90deg); }
+}
+/* 引いた直後（ok-reveal）はタイトルのポップ演出が animation を占有するため、
+   ポップと光沢を両方指定して上書きする（ポップ後に光沢を開始） */
+.ok-reveal .omikuji-result-title.ok-daikichi {
+  animation: ok-title-pop .8s cubic-bezier(.2, 1.5, .4, 1) .15s both,
+             ok-shine-gold 2.6s linear .95s infinite;
+}
+.ok-reveal .omikuji-result-title.ok-chukichi {
+  animation: ok-title-pop .8s cubic-bezier(.2, 1.5, .4, 1) .15s both,
+             ok-shine-silver 2.8s ease-in-out .95s infinite;
+}
+.ok-shokichi { color: #7fe0a5; text-shadow: 0 0 22px rgba(94,203,139,.55); }   /* 緑 */
+.ok-kichi { color: #ffe860; text-shadow: 0 0 22px rgba(255,230,61,.55); }      /* 黄 */
+.ok-hankichi { color: #8fc0f5; text-shadow: 0 0 22px rgba(110,168,230,.55); }  /* 青 */
 .ok-sueyoshi { color: #9cc4e8; text-shadow: 0 0 18px rgba(156,196,232,.4); }
 .ok-sueshokichi { color: #a8a8d8; text-shadow: 0 0 18px rgba(168,168,216,.4); }
 .ok-kyo { color: #d68a5c; text-shadow: 0 0 18px rgba(214,138,92,.4); }
@@ -1237,6 +1307,47 @@ body.ok-impact-shake { animation: ok-impact-shake .3s ease-out 1; }
   75%  { transform: scale(.94) rotate(-2deg); }
   100% { opacity: 1; transform: scale(1) rotate(0); }
 }
+/* --- 結果に応じた色つきキラキラ（半吉〜大吉のみ・末吉以下はなし） --- */
+.ok-color-halo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 210%;
+  height: 210%;
+  transform: translate(-50%, -50%) scale(.3);
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--glow) 0%, transparent 62%);
+  opacity: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  animation: ok-color-halo 1.4s ease-out forwards;
+}
+@keyframes ok-color-halo {
+  0%   { opacity: 0;  transform: translate(-50%, -50%) scale(.3); }
+  25%  { opacity: .7; }
+  100% { opacity: 0;  transform: translate(-50%, -50%) scale(1.25); }
+}
+.ok-twinkle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  line-height: 1;
+  pointer-events: none;
+  opacity: 0;
+  animation: ok-twinkle-fly 1.5s ease-out forwards;
+}
+.ok-twinkle::before {
+  content: "\2726"; /* ✦ */
+  color: currentColor;
+  text-shadow: 0 0 6px currentColor, 0 0 13px currentColor;
+}
+@keyframes ok-twinkle-fly {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(.3) rotate(0deg); }
+  20%  { opacity: 1; }
+  70%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1) rotate(90deg); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .omikuji-box.shaking,
   .omikuji-box.stick-out .omikuji-stick,
@@ -1245,9 +1356,17 @@ body.ok-impact-shake { animation: ok-impact-shake .3s ease-out 1; }
   .ok-rays,
   .ok-screen-flash,
   .ok-confetti,
+  .ok-color-halo,
+  .ok-twinkle,
   body.ok-page-shake,
   body.ok-impact-shake,
   .bs-result.ok-reveal,
+  .ok-daikichi,
+  .ok-chukichi,
+  .omikuji-result-title.ok-daikichi::before,
+  .omikuji-result-title.ok-daikichi::after,
+  .ok-reveal .omikuji-result-title.ok-daikichi,
+  .ok-reveal .omikuji-result-title.ok-chukichi,
   .ok-reveal .omikuji-result-title { animation: none; }
 }
 
