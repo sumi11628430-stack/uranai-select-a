@@ -647,6 +647,18 @@ body {
   border-color: rgba(232,200,110,.45);
 }
 
+/* 姓名判断：分類別の運勢 */
+.unsei-stars { margin-left: .6em; color: #f4d06a; letter-spacing: .08em; font-size: .95em; white-space: nowrap; }
+.unsei-stars .off { color: rgba(255,255,255,.22); }
+.unsei-card h3 { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; }
+.unsei-basis { margin-top: .4rem; color: var(--text-dim) !important; font-size: .8rem !important; line-height: 1.5 !important; }
+.unsei-wide { grid-column: 1 / -1; }
+.unsei-sub { margin-left: .7em; color: var(--text-dim); font-size: .8rem; font-weight: 400; letter-spacing: .04em; }
+.unsei-gift { color: var(--gold-bright); }
+.unsei-jobs { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .7rem; }
+.unsei-jobs span { padding: .25em .85em; border-radius: 999px; background: rgba(255,255,255,.06); border: 1px solid rgba(232,200,110,.28); color: var(--text); font-size: .9rem; }
+.soon-badge { margin-left: .7em; padding: .1em .7em; border-radius: 999px; background: rgba(232,200,110,.2); color: var(--gold-bright); font-size: .75rem; letter-spacing: .1em; vertical-align: middle; }
+
 /* ラッキー要素チップ */
 .lucky-row {
   display: flex;

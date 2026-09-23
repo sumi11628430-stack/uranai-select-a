@@ -196,6 +196,13 @@ document.addEventListener("DOMContentLoaded", function () {
     var jinInfo = kakusuInfo(jinkaku);
     var souInfo = kakusuInfo(soukaku);
 
+    var unseiCtx = {
+      tenkaku: tenkaku, jinkaku: jinkaku, chikaku: chikaku, gaikaku: gaikaku, soukaku: soukaku,
+      sokokuCount: [gogyoRelate(gogyoOf(tenkaku), gogyoOf(jinkaku)), gogyoRelate(gogyoOf(jinkaku), gogyoOf(chikaku))]
+                     .filter(function (r) { return r === "相剋"; }).length,
+      jinGogyo: gogyoOf(jinkaku)
+    };
+
     var chipsRow =
       '<div class="char-chips">' +
         seiItems.map(charChip).join("") +
@@ -205,7 +212,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var summary =
       '<div class="f-sec advice">' +
-        '<h3>🔮 総合鑑定</h3>' +
+        '<h3>🔮 総合鑑定' + seimeiStars(seimeiUnseiScores(unseiCtx).sogo) + '</h3>' +
         '<p>もっとも重視される「人格」（' + jinkaku + '画・' + jinInfo.kind + '「' + jinInfo.title + '」）は、あなたの性格や対人運、中年期までの運勢を映す核となる数です。' + jinInfo.text + '</p>' +
         '<p>人生全体・晩年運を示す「総格」（' + soukaku + '画・' + souInfo.kind + '「' + souInfo.title + '」）は、' + souInfo.text + '</p>' +
       '</div>';
@@ -226,6 +233,8 @@ document.addEventListener("DOMContentLoaded", function () {
       '<h2 class="bs-rtitle">「' + sei + '　' + mei + '」の姓名判断</h2>' +
       chipsRow +
       summary +
+      '<p class="bs-listtitle" style="margin-top:2rem;">分類別の運勢</p>' +
+      seimeiUnseiHTML(unseiCtx) +
       '<p class="bs-listtitle" style="margin-top:2rem;">五格 詳細</p>' +
       grids +
       '<p class="bs-listtitle" style="margin-top:2rem;">陰陽・五行でみる、もうひとつの鑑定</p>' +
@@ -234,6 +243,7 @@ document.addEventListener("DOMContentLoaded", function () {
       '<p class="bs-source" style="margin-top:2rem;">' +
         '※画数は伝統的な「旧字体（正字）」基準を採用し、新字体と旧字体で画数が異なる代表的な漢字は旧字体の画数で判定しています。' +
         '画数の吉凶は熊崎式姓名判断の考え方に基づく代表的な分類ですが、49画以降を中心に流派によって評価が分かれる数があります。' +
+        '分類別の運勢は、各運勢に関わる格の吉凶を組み合わせた当サイト独自の鑑定です（どの格で何を見るかは流派により異なります）。' +
         '姓名判断は統計的な伝承に基づく占いであり、結果は絶対的なものではなく、楽しみの一つとしてご覧ください。' +
       '</p>';
 
