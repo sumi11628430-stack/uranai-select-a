@@ -659,6 +659,17 @@ body {
 .unsei-jobs span { padding: .25em .85em; border-radius: 999px; background: rgba(255,255,255,.06); border: 1px solid rgba(232,200,110,.28); color: var(--text); font-size: .9rem; }
 .soon-badge { margin-left: .7em; padding: .1em .7em; border-radius: 999px; background: rgba(232,200,110,.2); color: var(--gold-bright); font-size: .75rem; letter-spacing: .1em; vertical-align: middle; }
 
+/* 星座占い：基本データ＋性格／今日の運勢 */
+.zodiac-top { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 1rem; text-align: left; }
+@media (min-width: 620px) { .zodiac-top { grid-template-columns: minmax(280px, 330px) 1fr; } }
+.zodiac-basics { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; align-content: start; }
+.zodiac-today { margin-bottom: 1rem; }
+.today-grid { display: grid; grid-template-columns: 1fr; gap: .3rem 1.4rem; margin: .3rem 0 .8rem; }
+@media (min-width: 520px) { .today-grid { grid-template-columns: 1fr 1fr; } }
+.today-item { white-space: nowrap; display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; padding: .35rem 0; border-bottom: 1px dashed rgba(232,200,110,.2); color: var(--text); }
+.today-item .unsei-stars { margin-left: 0; }
+.today-word { margin-bottom: .8rem; }
+
 /* ラッキー要素チップ */
 .lucky-row {
   display: flex;

@@ -17,16 +17,19 @@ document.addEventListener("DOMContentLoaded", function () {
       '<div class="zodiac-symbol">' + z.symbol + '</div>' +
       '<h2 class="bs-rtitle">' + z.name + '<small style="display:block;font-size:.5em;letter-spacing:.2em;color:var(--text-dim);margin-top:.3em;">' + z.en + '　' + z.range + '</small></h2>' +
       '<p class="bs-title">' + z.catch + '</p>' +
-      '<div class="lucky-row" style="margin-bottom:1.6rem;">' +
-        '<span class="lucky-chip"><b>エレメント</b>' + z.element + '</span>' +
-        '<span class="lucky-chip"><b>支配星</b>' + z.planet + '</span>' +
-        '<span class="lucky-chip"><b>守護石</b>' + z.stone + '</span>' +
-        '<span class="lucky-chip"><b>ラッキーカラー</b>' + z.color + '</span>' +
-      '</div>' +
-      '<div class="fortune-sections">' +
+      '<div class="zodiac-top">' +
+        '<div class="zodiac-basics">' +
+          '<span class="lucky-chip"><b>エレメント</b>' + z.element + '</span>' +
+          '<span class="lucky-chip"><b>支配星</b>' + z.planet + '</span>' +
+          '<span class="lucky-chip"><b>守護石</b>' + z.stone + '</span>' +
+          '<span class="lucky-chip"><b>ラッキーカラー</b>' + z.color + '</span>' +
+        '</div>' +
         fortuneSec("🌟", "性格", z.personality) +
-        fortuneSec("💗", "恋愛運", z.love) +
-        fortuneSec("💼", "仕事運", z.work) +
+      '</div>' +
+      zodiacDailyHTML(ZODIAC.indexOf(z)) +
+      '<div class="fortune-sections">' +
+        fortuneSec("💗", "恋愛傾向", z.love) +
+        fortuneSec("💼", "仕事傾向", z.work) +
         fortuneSec("✨", "開運アドバイス", z.advice, "advice") +
       '</div>' +
       '<p class="bs-listtitle" style="margin-top:1.6rem;">相性の良い星座</p>' +
