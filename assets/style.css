@@ -560,6 +560,7 @@ body {
 }
 .stone-block {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 1.3rem;
   padding: 1.3rem 1.2rem;
@@ -575,7 +576,11 @@ body {
   filter: drop-shadow(0 6px 16px rgba(0,0,0,.5));
 }
 .gem-svg { width: 100%; height: 100%; display: block; }
-.stone-info { flex: 1 1 auto; min-width: 0; }
+.gem-img { width: 100%; height: 100%; display: block; object-fit: cover; border-radius: 16px; border: 1px solid rgba(232,200,110,.35); box-shadow: 0 0 18px rgba(160,110,255,.18); }
+.stone-visual .gem-svg { display: none; }
+.stone-visual.no-img .gem-img { display: none; }
+.stone-visual.no-img .gem-svg { display: block; }
+.stone-info { flex: 1 1 0; min-width: 0; }
 .stone-title {
   display: flex;
   align-items: baseline;
@@ -599,6 +604,19 @@ body {
   margin-bottom: .5rem;
 }
 .stone-meaning { color: var(--text-dim); line-height: 1.85; font-size: clamp(1rem, 1.4vw, 1.05rem); }
+.stone-vars { flex: 1 0 100%; margin-top: -.2rem; padding-top: .8rem; border-top: 1px dashed rgba(232,200,110,.28); }
+.stone-vars-title { display: flex; align-items: baseline; flex-wrap: wrap; gap: .6em; color: var(--gold-bright); font-size: .98rem; letter-spacing: .08em; margin-bottom: .55rem; }
+.stone-vars-title small { color: var(--text-dim); font-size: .8rem; letter-spacing: .04em; }
+.stone-vars ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: .6rem; }
+.stone-vars li { display: flex; flex-direction: column; align-items: center; gap: .4rem; padding: .55rem .4rem .6rem; border-radius: 12px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12); color: var(--text); font-size: .8rem; line-height: 1.45; text-align: center; }
+.var-name { font-weight: 600; letter-spacing: .03em; }
+.var-name small { display: block; font-weight: 400; font-size: .72rem; color: var(--text-dim); letter-spacing: 0; overflow-wrap: anywhere; }
+.var-img { width: 100%; max-width: 88px; aspect-ratio: 1 / 1; display: block; object-fit: cover; border-radius: 10px; border: 1px solid rgba(232,200,110,.3); }
+.stone-vars li .var-dot { display: none; }
+.stone-vars li.no-img .var-img { display: none; }
+.stone-vars li.no-img .var-dot { display: block; width: 2.2em; height: 2.2em; }
+.var-dot { width: 1.05em; height: 1.05em; border-radius: 50%; flex: 0 0 auto; box-shadow: inset -2px -2px 4px rgba(0,0,0,.35), inset 2px 2px 3px rgba(255,255,255,.45), 0 0 6px rgba(255,255,255,.15); }
+.stone-vars-note { margin-top: .55rem; color: var(--text-dim); font-size: .85rem; line-height: 1.7; }
 
 /* 占いセクション（総合・恋愛・仕事金運・気質・アドバイス） */
 .fortune-sections {

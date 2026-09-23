@@ -313,21 +313,67 @@ var MONTHS = [
   }
 ];
 
+/* ---- カラーバリエーション（同じ宝石名で呼ばれ、誕生石として通用する色のみ） ---- */
+var STONE_VARIANTS = {
+  "garnet":      { items: [["赤（アルマンディン）", "#8e1b2c", "garnet_red"], ["緑（ツァボライト・デマントイド）", "#2f9e52", "garnet_green"], ["オレンジ（スペサルティン）", "#e8761c", "garnet_orange"], ["ローズ（ロードライト）", "#b8386e", "garnet_rose"], ["黄褐色（ヘソナイト）", "#c9822e", "garnet_hessonite"]],
+                   note: "ガーネットは色ではなく鉱物グループの名前。どの色もガーネットです。" },
+  "aquamarine":  { items: [["淡い水色", "#bfe6f2", "aquamarine_pale"], ["深い青（サンタマリア）", "#3f86c8", "aquamarine_deep"], ["緑がかった青", "#7cc4bb", "aquamarine_green"]] },
+  "coral":       { items: [["血赤（ちあか）", "#b3121f", "coral_red"], ["桃色", "#f29c8f", "coral_pink"], ["白", "#f3ece4", "coral_white"]] },
+  "diamond":     { items: [["無色", "#f4f7fb", "diamond_colorless"], ["イエロー", "#f3d34a", "diamond_yellow"], ["ピンク", "#f2a3c0", "diamond_pink"], ["ブルー", "#6fa8e6", "diamond_blue"], ["ブラウン（シャンパン）", "#b5895a", "diamond_brown"], ["ブラック", "#2a2a2e", "diamond_black"]],
+                   note: "色の付いたものは「カラーダイヤモンド」と呼ばれ、どれもダイヤモンドです。" },
+  "jade":        { items: [["緑", "#2f9e5b", "jade_green"], ["ラベンダー", "#b9a4d8", "jade_lavender"], ["白", "#eef0e8", "jade_white"], ["黄〜赤", "#d9893a", "jade_yellowred"], ["黒", "#26302a", "jade_black"]],
+                   note: "翡翠（ジェダイト）は緑以外の色もあり、どれも翡翠と呼ばれます。" },
+  "pearl":       { items: [["ホワイト", "#f6f1ea", "pearl_white"], ["ピンク", "#f4d3d6", "pearl_pink"], ["クリーム", "#efe0bf", "pearl_cream"], ["ゴールド", "#d9b35c", "pearl_gold"], ["ブラック（黒蝶真珠）", "#3b3f4a", "pearl_black"]] },
+  "moonstone":   { items: [["ホワイト（青い光）", "#dfe9f7", "moonstone_white"], ["ピーチ", "#f0c2a6", "moonstone_peach"], ["グレー", "#9a9aa3", "moonstone_grey"]] },
+  "alexandrite": { items: [["太陽光：青緑", "#2f8f7f", "alexandrite_day"], ["室内灯：赤紫", "#8e2c5c", "alexandrite_night"]],
+                   note: "1つの石が光によって色を変える「カラーチェンジ」が特徴です。" },
+  "spinel":      { items: [["レッド", "#c8102e", "spinel_red"], ["ピンク", "#ee4d8b", "spinel_pink"], ["ブルー", "#2f5fd0", "spinel_blue"], ["ラベンダー", "#a58ad6", "spinel_lavender"], ["オレンジ", "#f07a2a", "spinel_orange"], ["ブラック", "#23232a", "spinel_black"]] },
+  "sapphire":    { items: [["ブルー", "#1f4fb8", "sapphire_blue"], ["ピンク", "#f07aa8", "sapphire_pink"], ["イエロー", "#f2c73a", "sapphire_yellow"], ["パパラチア（桃橙）", "#f4a283", "sapphire_padparadscha"], ["パープル", "#7d4bc2", "sapphire_purple"], ["ホワイト（無色）", "#eef2f7", "sapphire_white"]],
+                   note: "赤以外の色はすべてサファイア（赤はルビー）。伝統的には青が代表色です。" },
+  "opal":        { items: [["ホワイトオパール", "#eef0f5", "opal_white"], ["ブラックオパール", "#1f2a44", "opal_black"], ["ファイアオパール", "#f0672a", "opal_fire"], ["ボルダーオパール", "#6b4a2f", "opal_boulder"]] },
+  "tourmaline":  { items: [["ピンク", "#ee5a9a", "tourmaline_pink"], ["レッド（ルベライト）", "#b3123e", "tourmaline_red"], ["グリーン", "#2e8b57", "tourmaline_green"], ["ブルー（インディゴライト）", "#2a5caa", "tourmaline_blue"], ["ネオンブルー（パライバ）", "#20d0d0", "tourmaline_paraiba"], ["バイカラー（ウォーターメロン）", "linear-gradient(135deg,#ee5a9a 50%,#2e8b57 50%)", "tourmaline_watermelon"]],
+                   note: "トルマリンは宝石の中でも特に色数が多い石。どの色もトルマリンです。" },
+  "topaz":       { items: [["インペリアル（橙）", "#e8892a", "topaz_imperial"], ["イエロー", "#f2c14e", "topaz_yellow"], ["ピンク", "#f2a0b5", "topaz_pink"], ["ブルー", "#6cb6e8", "topaz_blue"], ["無色", "#eef2f7", "topaz_colorless"]] },
+  "turquoise":   { items: [["スカイブルー", "#3fc1c9", "turquoise_sky"], ["グリーン寄り", "#5fae8b", "turquoise_green"]] },
+  "zircon":      { items: [["ブルー", "#6fc0e8", "zircon_blue"], ["無色", "#eef2f7", "zircon_colorless"], ["イエロー", "#f0cf4a", "zircon_yellow"], ["オレンジ", "#e8863a", "zircon_orange"], ["レッド", "#b3232e", "zircon_red"], ["グリーン", "#5fa65a", "zircon_green"]] }
+};
+
 /* ---- 表示ロジック ----------------------------------------------- */
 document.addEventListener("DOMContentLoaded", function () {
   var grid   = document.getElementById("monthGrid");
   var result = document.getElementById("result");
   if (!grid || !result) return;
 
+  function variantBlock(s) {
+    var v = STONE_VARIANTS[s.en.toLowerCase().replace(/ /g, "_")];
+    if (!v) return "";
+    var chips = v.items.map(function (it) {
+      return '<li>' +
+               '<img class="var-img" src="assets/stones/vars/' + it[2] + '.webp" alt="" loading="lazy" onerror="this.parentNode.classList.add(&quot;no-img&quot;)">' +
+               '<span class="var-dot" style="background:' + it[1] + '"></span>' +
+               '<span class="var-name">' + it[0].replace(/（(.+)）$/, '<small>$1</small>') + '</span>' +
+             '</li>';
+    }).join("");
+    return '<div class="stone-vars">' +
+             '<div class="stone-vars-title">カラーバリエーション<small>どの色も' + s.jp.replace(/（.*）/, "") + 'として誕生石になります</small></div>' +
+             '<ul>' + chips + '</ul>' +
+             (v.note ? '<p class="stone-vars-note">' + v.note + '</p>' : '') +
+           '</div>';
+  }
+
   function stoneBlock(s) {
     return '<div class="stone-block">' +
-             '<div class="stone-visual">' + gemSVG(s) + '</div>' +
+             '<div class="stone-visual">' +
+               '<img class="gem-img" src="assets/stones/' + s.en.toLowerCase().replace(/ /g, "_") + '.webp" alt="' + s.jp + '" loading="lazy" onerror="this.parentNode.classList.add(&quot;no-img&quot;)">' +
+               gemSVG(s) +
+             '</div>' +
              '<div class="stone-info">' +
                '<div class="stone-title">' + s.jp + '<small>' + s.en + '</small></div>' +
                '<p class="stone-appear">' + s.appear + '</p>' +
                '<p class="stone-words">石言葉：' + s.words + '</p>' +
                '<p class="stone-meaning">' + s.meaning + '</p>' +
              '</div>' +
+             variantBlock(s) +
            '</div>';
   }
 
