@@ -211,13 +211,17 @@ document.addEventListener("DOMContentLoaded", function () {
               "「" + firstWord + "」——それは、あなたが自然と人へ手渡している魅力そのもの。" +
               "今日という一日に、どうかあなたらしい花を、あなたのペースで咲かせてください。";
 
-    var lucky =
-      '<div class="lucky-row">' +
+    var basics =
+      '<div class="zodiac-basics">' +
         '<span class="lucky-chip"><b>ラッキーカラー</b>' + prof.lucky.color + '</span>' +
         '<span class="lucky-chip"><b>ラッキーフラワー</b>' + prof.lucky.flower + '</span>' +
         '<span class="lucky-chip"><b>開運アクション</b>' + prof.lucky.action + '</span>' +
         '<span class="lucky-chip"><b>相性の良い月</b>' + prof.lucky.match + '</span>' +
       '</div>';
+
+    // 今日の運勢：誕生日（1/1=0 … 12/31=365）ごとに日替わり。星座の結果と重ならないよう添字を100ずらす
+    var doy = dd - 1;
+    for (var i = 0; i < mm - 1; i++) doy += DAYS[i];
 
     result.hidden = false;
     result.innerHTML =
@@ -233,13 +237,16 @@ document.addEventListener("DOMContentLoaded", function () {
       '<p class="bs-catch">' + msg + '</p>' +
       '<p class="bs-title">「' + prof.title + '」（' + prof.flower + '）</p>' +
       '<p class="bs-catch" style="margin-bottom:1.6rem;">' + prof.catch + '</p>' +
-      '<div class="fortune-sections">' +
+      '<div class="zodiac-top">' +
+        basics +
         fortuneSec("🌸", "あなたの気質", prof.personality) +
-        fortuneSec("💗", "恋愛運", prof.love) +
-        fortuneSec("🌟", "才能・仕事運", prof.talent) +
-        fortuneSec("✨", "開運アドバイス", prof.advice, "advice") +
       '</div>' +
-      lucky;
+      zodiacDailyHTML(100 + doy) +
+      '<div class="fortune-sections">' +
+        fortuneSec("💗", "恋愛傾向", prof.love) +
+        fortuneSec("🌟", "才能・仕事傾向", prof.talent) +
+        fortuneSec("✨", "開運アドバイス", prof.advice, "advice") +
+      '</div>';
   }
 
   btn.addEventListener("click", function () {
