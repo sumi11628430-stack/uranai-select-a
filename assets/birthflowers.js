@@ -45,6 +45,24 @@ function colorForFlower(n) {
   return "#ee87a8";
 }
 
+/* ---- 花の写真（assets/flowers/mMMdDD.webp） -------------------------
+   同じ花が複数の日に出てくる場合は、その花が最初に登場する日の画像を共用。
+   表記違いの同じ植物は FLOWER_IMG_ALIAS で統一。 */
+var FLOWER_IMG_ALIAS = { "ヒルザキツキミソウ": "昼咲き月見草", "プリムラ（オブコニカ）": "プリムラオブコニカ", "葉牡丹（ハボタン）": "葉牡丹" };
+var __flowerImgKey = null;
+function flowerImgKey(name) {
+  if (!__flowerImgKey) {
+    __flowerImgKey = {};
+    for (var m = 1; m <= 12; m++) {
+      for (var d = 1; d < DAILY_FLOWERS[m].length; d++) {
+        var n = DAILY_FLOWERS[m][d].split("|")[0];
+        if (!__flowerImgKey[n]) __flowerImgKey[n] = "m" + (m < 10 ? "0" : "") + m + "d" + (d < 10 ? "0" : "") + d;
+      }
+    }
+  }
+  return __flowerImgKey[FLOWER_IMG_ALIAS[name] || name];
+}
+
 /* ---- 月別の占いプロフィール ------------------------------------- */
 var MONTH_FLOWER = [
   { m: 1, title: "凛と咲く、冬の花の月", flower: "福寿草・水仙",
@@ -205,7 +223,10 @@ document.addEventListener("DOMContentLoaded", function () {
     result.innerHTML =
       '<h2 class="bs-rtitle">' + mm + '月' + dd + '日の誕生花</h2>' +
       '<div class="daily-hero">' +
-        '<span class="flower-visual">' + flowerSVG(col) + '</span>' +
+        '<span class="flower-visual">' +
+          '<img class="flower-img" src="assets/flowers/' + flowerImgKey(name) + '.webp" alt="' + name + '" onerror="this.parentNode.classList.add(&quot;no-img&quot;)">' +
+          flowerSVG(col) +
+        '</span>' +
         '<div class="daily-name"><span class="daily-label">あなたの誕生花</span><b>' + name + '</b></div>' +
       '</div>' +
       '<div class="flower-words-wrap"><span class="stone-words">花言葉：' + wordsDisp + '</span></div>' +
