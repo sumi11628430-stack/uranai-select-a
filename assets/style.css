@@ -279,6 +279,49 @@ body {
 }
 .fortune-card.coming:hover { transform: none; box-shadow: 0 8px 30px rgba(0,0,0,.4); }
 
+/* ---- 選択ページ：カードの上半分にイラスト（2026-09 改修） ---- */
+.fortune-card {
+  justify-content: flex-start;
+  padding: 0 0 1.3rem;
+  overflow: hidden;
+  position: relative;
+}
+@media (min-width: 720px) { .fortune-card { padding: 0 0 1.4rem; } }
+.fortune-card .card-art {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background-size: cover;
+  background-position: center;
+  -webkit-mask-image: linear-gradient(180deg, #000 62%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 62%, transparent 100%);
+  transition: transform .6s ease, filter .6s ease;
+  margin-bottom: -.4rem;
+}
+.fortune-card:hover .card-art, .fortune-card:focus-visible .card-art { transform: scale(1.06); filter: brightness(1.12) saturate(1.1); }
+.fortune-card .card-title, .fortune-card .card-note { padding: 0 .9rem; text-align: center; }
+.fortune-card .card-title { text-shadow: 0 0 14px rgba(232,200,110,.35); }
+/* 光の縁取り（ホバーで金の光が走る） */
+.fortune-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 35%, rgba(255,236,170,.28) 50%, transparent 65%);
+  background-size: 250% 100%;
+  background-position: 120% 0;
+  transition: background-position .9s ease;
+}
+.fortune-card:hover::after, .fortune-card:focus-visible::after { background-position: -20% 0; }
+.fortune-card.coming .card-art { filter: grayscale(.45) brightness(.8); }
+.fortune-card .soon-badge { display: inline-block; white-space: nowrap; font-size: .68rem; }
+.fortune-card.coming:hover .card-art { transform: none; }
+.fortune-card.coming::after { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .fortune-card .card-art, .fortune-card::after { transition: none; }
+}
+
 /* ---- 戻るリンク / フッター --------------------------------------- */
 
 .back-link {
