@@ -11,9 +11,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="assets/style.css?v=25" />
+  <link rel="stylesheet" href="assets/style.css?v=48" />
 </head>
-<body>
+<body class="top-body">
 
   <!-- 背景（奥から：グラデ → 星canvas → ビネット） -->
   <div class="bg-gradient"></div>
@@ -32,6 +32,7 @@
 
     <!-- 入口ゲート：クリックで選択ページへ -->
     <a class="gate" href="select.html" data-transition aria-label="占いの世界へ入る">
+      <span class="gate-ring" aria-hidden="true"></span>
       <span class="gate-mark">⛩</span>
       <span class="gate-label">入口</span>
       <span class="gate-en">E N T E R</span>
@@ -42,5 +43,6 @@
 
   <script src="assets/starfield.js?v=3"></script>
   <script src="assets/nav.js?v=3"></script>
+  <script src="assets/entrance.js?v=1"></script>
 </body>
 </html>
