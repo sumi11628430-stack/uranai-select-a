@@ -260,9 +260,14 @@ document.addEventListener("DOMContentLoaded", function () {
       '.tarot-popup-item .lucky-chip{font-size:.72rem;padding:.25rem .5rem;}' +
       '.tarot-popup-item{flex-direction:column;}' +
       '.tarot-popup-item .tarot-detail-art{width:62%;margin:0 auto .5rem;}' +
+      '.tarot-popup-close{position:fixed;top:.8rem;right:.8rem;z-index:10;padding:.45rem 1rem;border-radius:999px;border:1px solid rgba(232,200,110,.7);background:rgba(40,18,70,.9);color:var(--gold-bright);font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;}' +
+      '.tarot-popup-close:hover{background:rgba(90,52,128,.95);}' +
+      '.tarot-popup-close-bottom{position:static;display:block;margin:1.6rem auto .6rem;padding:.75rem 2.4rem;font-size:1rem;}' +
       '</style></head><body>' +
       '<div class="tarot-popup-head"><h1 class="brand" style="font-size:clamp(1.3rem,3.6vw,1.9rem);">🔮 ケルト十字：全体の結果</h1>' + note + '</div>' +
+      '<button type="button" class="tarot-popup-close" onclick="window.close()" aria-label="この画面を閉じる">✕ 閉じる</button>' +
       '<div class="tarot-popup-grid">' + items + '</div>' +
+      '<button type="button" class="tarot-popup-close tarot-popup-close-bottom" onclick="window.close()">閉じて占いに戻る</button>' +
       '</body></html>';
 
     var win = window.open("", "_blank");
