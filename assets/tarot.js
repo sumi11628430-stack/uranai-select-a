@@ -125,7 +125,6 @@ document.addEventListener("DOMContentLoaded", function () {
     for (var i = 0; i < count; i++) {
       var c = document.createElement("div");
       c.className = "tarot-shuffle-card";
-      c.textContent = "✦";
       c.style.setProperty("--dx", (Math.random() * 46 - 23).toFixed(0) + "px");
       c.style.setProperty("--r0", (Math.random() * 14 - 7).toFixed(1) + "deg");
       c.style.setProperty("--r1", (Math.random() * 44 - 22).toFixed(1) + "deg");
@@ -145,6 +144,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function cardIcon(card) {
     return card.suit ? SUIT_ICON[card.suit] : "✦";
+  }
+
+  /* カードの絵（assets/tarot/<id>.webp）。逆位置は絵も上下逆に表示 */
+  function cardArtSrc(card) { return "assets/tarot/" + card.id + ".webp"; }
+  function cardArtImg(entry, cls) {
+    return '<img class="' + cls + (entry.reversed ? " rev" : "") + '" src="' + cardArtSrc(entry.card) +
+           '" alt="' + entry.card.name + (entry.reversed ? "（逆位置）" : "") + '" decoding="async">';
   }
 
   function cardTitle(card) {
@@ -168,12 +174,15 @@ document.addEventListener("DOMContentLoaded", function () {
     var meaning = entry.reversed ? entry.card.reversed : entry.card.upright;
     var astro = astroText(entry.card);
     return (
+      '<div class="tarot-detail-art">' + cardArtImg(entry, "tarot-detail-img") + '</div>' +
+      '<div class="tarot-detail-body">' +
       '<h3>' + entry.position.n + '. ' + entry.position.label + '</h3>' +
       '<p class="tarot-detail-pos">' + entry.position.desc + '</p>' +
       '<p class="tarot-detail-card">' + cardIcon(entry.card) + ' <b>' + cardTitle(entry.card) + '</b> ' + orient + '</p>' +
       '<p>' + meaning + '</p>' +
       (astro ? '<div class="lucky-row"><span class="lucky-chip"><b>キーワード</b>' + entry.card.keyword + '</span><span class="lucky-chip"><b>星の対応</b>' + astro + '</span></div>'
-             : '<div class="lucky-row"><span class="lucky-chip"><b>キーワード</b>' + entry.card.keyword + '</span></div>')
+             : '<div class="lucky-row"><span class="lucky-chip"><b>キーワード</b>' + entry.card.keyword + '</span></div>') +
+      '</div>'
     );
   }
 
@@ -221,8 +230,10 @@ document.addEventListener("DOMContentLoaded", function () {
     var link = document.querySelector('link[rel="stylesheet"][href*="style.css"]');
     if (link) cssHref = link.href;
 
+    var base = location.href.replace(/[^\/]*$/, "");
     var items = entries.map(function (entry) {
-      return '<div class="f-sec tarot-detail tarot-popup-item">' + detailHTML(entry) + '</div>';
+      return '<div class="f-sec tarot-detail tarot-popup-item">' +
+             detailHTML(entry).replace(/src="assets\//g, 'src="' + base + 'assets/') + '</div>';
     }).join("");
 
     var note = entries.length < 10
@@ -247,6 +258,8 @@ document.addEventListener("DOMContentLoaded", function () {
       '.tarot-popup-item .tarot-detail-card{font-size:.94rem;}' +
       '.tarot-popup-item .lucky-row{gap:.35rem;}' +
       '.tarot-popup-item .lucky-chip{font-size:.72rem;padding:.25rem .5rem;}' +
+      '.tarot-popup-item{flex-direction:column;}' +
+      '.tarot-popup-item .tarot-detail-art{width:62%;margin:0 auto .5rem;}' +
       '</style></head><body>' +
       '<div class="tarot-popup-head"><h1 class="brand" style="font-size:clamp(1.3rem,3.6vw,1.9rem);">🔮 ケルト十字：全体の結果</h1>' + note + '</div>' +
       '<div class="tarot-popup-grid">' + items + '</div>' +
@@ -271,13 +284,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var back = document.createElement("div");
     back.className = "tarot-card-face tarot-card-back";
-    back.innerHTML = "✦";
 
     var front = document.createElement("div");
     front.className = "tarot-card-face tarot-card-front";
     front.innerHTML =
+      cardArtImg(entry, "tarot-card-art") +
       '<span class="tarot-card-badge ' + (entry.reversed ? "tarot-badge-rev" : "tarot-badge-up") + '">' + (entry.reversed ? "逆" : "正") + '</span>' +
-      '<span class="tarot-card-icon">' + cardIcon(entry.card) + '</span>' +
       '<span class="tarot-card-name">' + cardTitle(entry.card) + '</span>';
 
     inner.appendChild(back);
@@ -287,6 +299,12 @@ document.addEventListener("DOMContentLoaded", function () {
     function reveal() {
       if (!cardEl.classList.contains("revealed")) {
         cardEl.classList.add("revealed");
+        if (!reducedMotion) {
+          var fx = document.createElement("span");
+          fx.className = "tarot-flip-fx";
+          cardEl.appendChild(fx);
+          setTimeout(function () { if (fx.parentNode) fx.parentNode.removeChild(fx); }, 900);
+        }
         cardEl.setAttribute("aria-label", entry.position.n + "番目・" + entry.position.label + "の結果をもう一度見る");
         revealedCount++;
         revealedByPos[entry.position.n] = entry;

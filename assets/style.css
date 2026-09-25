@@ -1877,7 +1877,7 @@ body.tarot-page-body { padding-bottom: 5.5rem; }
   position: relative;
   width: clamp(70px, 20vw, 96px);
   aspect-ratio: 2 / 3;
-  margin-bottom: 1.1rem;
+  margin: 3.2rem 0 4.2rem;
 }
 .tarot-shuffle-card {
   position: absolute;
@@ -1914,4 +1914,137 @@ body.tarot-page-body { padding-bottom: 5.5rem; }
     animation: none;
     box-shadow: 0 0 24px rgba(232,200,110,.7), inset 0 0 14px rgba(0,0,0,.4);
   }
+}
+
+/* =========================================================
+   タロット：GPT生成のカード絵・裏面・背景・演出（2026-09 改修）
+   画像は assets/tarot/*.webp。光の素材は黒背景＋screen合成
+   ========================================================= */
+.bg-tarot {
+  background:
+    linear-gradient(180deg, rgba(16,8,32,.35) 0%, rgba(16,8,32,.6) 45%, rgba(10,5,22,.85) 100%),
+    url("tarot/bg_wide.webp") center / cover no-repeat,
+    #180c28;
+}
+@media (max-aspect-ratio: 4/5) {
+  .bg-tarot {
+    background:
+      linear-gradient(180deg, rgba(16,8,32,.3) 0%, rgba(16,8,32,.6) 45%, rgba(10,5,22,.85) 100%),
+      url("tarot/bg_tall.webp") center top / cover no-repeat,
+      #180c28;
+  }
+}
+/* カードを少し大きく（絵が見えるように） */
+.tarot-spread { max-width: 700px; }
+.tarot-cross { max-width: 440px; }
+.tarot-card, .tarot-card-stack { width: clamp(72px, 21vw, 108px); }
+.tarot-slot-label { max-width: 112px; }
+/* 裏面：画像 */
+.tarot-card-back, .tarot-shuffle-card {
+  background: url("tarot/back.webp") center / cover no-repeat, #241245;
+  border: 1px solid rgba(232,200,110,.55);
+  font-size: 0;
+}
+/* 表面：カードの絵を全面に */
+.tarot-card-front {
+  padding: 0;
+  overflow: hidden;
+  background: #1c0f33;
+  border: 1px solid rgba(232,200,110,.7);
+  justify-content: flex-end;
+  box-shadow: 0 6px 18px rgba(0,0,0,.45);
+}
+.tarot-card-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.tarot-card-art.rev, .tarot-detail-img.rev { transform: rotate(180deg); }
+.tarot-card-front .tarot-card-name {
+  position: relative;
+  width: 100%;
+  padding: .45rem .15rem .2rem;
+  background: linear-gradient(180deg, transparent, rgba(12,5,26,.9) 45%);
+  color: #f6e7b8;
+  font-size: clamp(.56rem, 1.7vw, .7rem);
+  text-shadow: 0 1px 2px #000;
+}
+.tarot-card-badge { z-index: 1; }
+/* めくった瞬間の光 */
+.tarot-flip-fx {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 320%;
+  aspect-ratio: 1;
+  background: url("tarot/fx_flip.webp") center / contain no-repeat;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+  animation: tarot-flip-fx .85s ease-out forwards;
+}
+@keyframes tarot-flip-fx {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(.3) rotate(0deg); }
+  25%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.15) rotate(40deg); }
+}
+/* シャッフル中：背後で魔法陣が回る */
+.tarot-shuffle-deck::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 300%;
+  aspect-ratio: 1;
+  background: url("tarot/fx_circle.webp") center / contain no-repeat;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  opacity: .8;
+  animation: tarot-circle-spin 6s linear infinite;
+}
+@keyframes tarot-circle-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+/* カードを並べた瞬間に星屑が流れる */
+.tarot-spread.dealt::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url("tarot/fx_stardust.webp") center / cover no-repeat;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0;
+  animation: tarot-stardust 2.2s ease-out forwards;
+}
+@keyframes tarot-stardust {
+  0%   { opacity: 0; transform: translateX(-8%); }
+  25%  { opacity: .9; }
+  100% { opacity: 0; transform: translateX(6%); }
+}
+/* 解説欄：左にカードの絵 */
+.tarot-detail { display: flex; flex-wrap: wrap; gap: 1.1rem; align-items: flex-start; }
+.tarot-detail .tarot-closing { flex: 1 0 100%; margin-top: .4rem; }
+.tarot-detail-art { flex: 0 0 auto; width: clamp(96px, 24vw, 150px); }
+.tarot-detail-img {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid rgba(232,200,110,.7);
+  box-shadow: 0 8px 22px rgba(0,0,0,.5), 0 0 18px rgba(150,90,220,.35);
+  display: block;
+}
+.tarot-detail-body { flex: 1 1 auto; min-width: 0; }
+@media (max-width: 480px) {
+  .tarot-detail { flex-direction: column; align-items: center; }
+  .tarot-detail-art { width: 46%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tarot-flip-fx, .tarot-spread.dealt::before { display: none; }
+  .tarot-shuffle-deck::before { animation: none; }
 }
