@@ -21,6 +21,19 @@
   var season = "spring";
   var CYCLE = 90000;    // 朝昼夕夜 1周 90秒
 
+  /* 背景画像（assets/dayof/<季節>_<day|night>_<wide|tall>.webp）。
+     昼と夜の2枚を重ね、時間帯に合わせて夜の画像の濃さを変える。
+     画像レイヤーがある時は、空・太陽月・雲・星・提灯の図形描画は行わない
+     （花びら等の舞い物と夜の花火だけをcanvasに描く）。 */
+  var skyEl = document.querySelector(".bg-sky");
+  var nightLayer = null;
+  if (skyEl) {
+    skyEl.innerHTML = '<div class="sky-layer sky-day"></div><div class="sky-layer sky-night"></div>';
+    skyEl.setAttribute("data-season", season);
+    nightLayer = skyEl.querySelector(".sky-night");
+  }
+  var useImg = !!nightLayer;
+
   function rand(a, b) { return a + Math.random() * (b - a); }
   function lerp(a, b, t) { return a + (b - a) * t; }
   function lerpC(c1, c2, t) {
@@ -46,6 +59,7 @@
   window.setSeasonMonth = function (m) {
     var s = (m >= 3 && m <= 5) ? "spring" : (m >= 6 && m <= 8) ? "summer" : (m >= 9 && m <= 11) ? "autumn" : "winter";
     if (s !== season) { season = s; buildLeaves(); }
+    if (skyEl) skyEl.setAttribute("data-season", season);
   };
 
   function resize() {
@@ -285,6 +299,15 @@
     var dt = Math.min(2, (ts - last) / 16.67 || 1);
     last = ts;
     var t = (ts % CYCLE) / CYCLE;
+    if (useImg) {
+      ctx.clearRect(0, 0, w, h);
+      var nf = nightFactor(t);
+      nightLayer.style.opacity = nf.toFixed(3);
+      drawFireworks(nf, dt);
+      stepLeaves(dt);
+      for (var k = 0; k < leaves.length; k++) drawLeaf(leaves[k]);
+      return;
+    }
     var sky = drawSky(t);
     drawStars(sky.night);
     drawSunMoon(t);
@@ -302,6 +325,12 @@
 
   function drawStatic() {
     // 動きを抑える設定：昼の空で静止画
+    if (useImg) {
+      ctx.clearRect(0, 0, w, h);
+      nightLayer.style.opacity = "0";
+      for (var k = 0; k < leaves.length; k++) drawLeaf(leaves[k]);
+      return;
+    }
     var sky = drawSky(.25);
     drawSunMoon(.25);
     for (var i = 0; i < clouds.length; i++) drawCloud(clouds[i], 0);
