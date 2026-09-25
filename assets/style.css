@@ -805,6 +805,17 @@ body {
   font-size: clamp(1rem, 1.4vw, 1.08rem) !important;
   letter-spacing: .02em;
 }
+/* ほかの記念日：タップで由来に切り替え */
+.dayof-more-btn {
+  font-family: inherit; font-size: inherit; line-height: inherit; letter-spacing: inherit;
+  color: var(--gold-bright); background: none; border: none; padding: 0; cursor: pointer;
+  text-decoration: underline; text-decoration-color: rgba(232,200,110,.45); text-underline-offset: .25em;
+}
+.dayof-more-btn:hover, .dayof-more-btn:focus-visible { color: #fff; text-decoration-color: #fff; outline: none; }
+.dayof-more-plain { color: var(--text); }
+.dayof-sep { margin: 0 .7em; color: var(--text-dim); }
+.dayof-more-note { margin-top: .5rem; color: var(--text-dim) !important; font-size: .82rem !important; }
+
 /* 何の日ページの一覧は読める背景を担保 */
 .dayof-list-wrap {
   width: 100%;

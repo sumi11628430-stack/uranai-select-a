@@ -54,24 +54,72 @@ document.addEventListener("DOMContentLoaded", function () {
     return s;
   }
 
-  function render(mm, dd) {
+  /* そのほかの記念日の由来（月ごとのJSONを必要な時だけ読み込む）
+     assets/daysof_origin/MM.json = { "日": { "記念日名": "由来・意味" } } */
+  var ORIGIN_CACHE = {};
+  function loadOrigins(mm, cb) {
+    if (ORIGIN_CACHE[mm]) { cb(ORIGIN_CACHE[mm]); return; }
+    var done = function (j) { ORIGIN_CACHE[mm] = j || {}; cb(ORIGIN_CACHE[mm]); };
+    if (typeof fetch !== "function") { done({}); return; }
+    fetch("assets/daysof_origin/" + (mm < 10 ? "0" : "") + mm + ".json?v=1")
+      .then(function (r) { return r.ok ? r.json() : {}; })
+      .then(done)
+      .catch(function () { done({}); });
+  }
+
+  var state = null;   // { mm, dd, names:[代表, そのほか…], origin:function(name) }
+
+  function render(mm, dd, selected) {
     var e = entry(mm, dd);
     var more = moreOf(mm, dd, e.name);
-    var moreCount = more ? more.split("・").length : 0;
-    var moreHtml = more
-      ? '<div class="f-sec" style="margin-top:1.1rem;"><h3>🎌 この日のそのほかの記念日（約' + moreCount + '件）</h3>' +
-        '<p class="dayof-more">' + more.split("・").join("　・　") + '</p></div>'
-      : '';
+    var parts = more ? more.split("・").filter(function (n) { return n; }) : [];
     result.hidden = false;
-    result.innerHTML =
-      '<h2 class="bs-rtitle">' + mm + '月' + dd + '日は…</h2>' +
-      '<p class="dayof-name">「' + e.name + '」</p>' +
-      '<div class="f-sec advice"><h3>📖 由来・意味</h3><p>' + e.origin + '</p></div>' +
-      moreHtml +
-      '<p class="bs-catch" style="margin:1.2rem 0 0;">' + mm + '月は ' + SEASON_NOTE[mm] +
-      '。記念日は語呂合わせ・歴史の出来事・祭事など由来はさまざまで、諸説あります。</p>';
+    loadOrigins(mm, function (O) {
+      var od = O[dd] || {};
+      // 名前自体に「・」を含む記念日（例：ホーリー・スリー・キングス・デー）は由来データの名前に合わせて結合
+      var names = [e.name];
+      for (var i = 0; i < parts.length; ) {
+        var hit = 1;
+        for (var k = parts.length - i; k > 1; k--) {
+          if (od[parts.slice(i, i + k).join("・")]) { hit = k; break; }
+        }
+        names.push(parts.slice(i, i + hit).join("・"));
+        i += hit;
+      }
+      var originOf = function (n) { return n === e.name ? e.origin : (od[n] || ""); };
+      var cur = (selected && names.indexOf(selected) >= 0) ? selected : e.name;
+      state = { mm: mm, dd: dd, names: names };
+      var others = [];
+      names.forEach(function (n, i) {
+        if (n === cur) return;
+        others.push(originOf(n)
+          ? '<button type="button" class="dayof-more-btn" data-i="' + i + '">' + n + '</button>'
+          : '<span class="dayof-more-plain">' + n + '</span>');
+      });
+      var moreHtml = others.length
+        ? '<div class="f-sec" style="margin-top:1.1rem;"><h3>🎌 この日のほかの記念日（' + others.length + '件）</h3>' +
+          '<p class="dayof-more">' + others.join('<span class="dayof-sep">・</span>') + '</p>' +
+          '<p class="dayof-more-note">名前をタップすると、その記念日の由来・意味に切り替わります。</p></div>'
+        : '';
+      result.innerHTML =
+        '<h2 class="bs-rtitle">' + mm + '月' + dd + '日は…</h2>' +
+        '<p class="dayof-name">「' + cur + '」</p>' +
+        '<div class="f-sec advice"><h3>📖 由来・意味</h3><p>' + originOf(cur) + '</p></div>' +
+        moreHtml +
+        '<p class="bs-catch" style="margin:1.2rem 0 0;">' + mm + '月は ' + SEASON_NOTE[mm] +
+        '。記念日は語呂合わせ・歴史の出来事・祭事など由来はさまざまで、諸説あります。</p>';
+    });
     if (typeof setSeasonMonth === "function") setSeasonMonth(mm);
   }
+
+  // ほかの記念日をタップ → その記念日を主表示に切り替え
+  result.addEventListener("click", function (ev) {
+    var b = ev.target.closest ? ev.target.closest(".dayof-more-btn") : null;
+    if (!b || !state) return;
+    render(state.mm, state.dd, state.names[parseInt(b.getAttribute("data-i"), 10)]);
+    var t = result.querySelector(".bs-rtitle");
+    (t || result).scrollIntoView({ behavior: "smooth", block: "start" });
+  });
 
   selMonth.addEventListener("change", function () {
     var mm = parseInt(selMonth.value, 10);
