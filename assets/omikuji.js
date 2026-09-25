@@ -33,12 +33,23 @@ document.addEventListener("DOMContentLoaded", function () {
     return '<div class="f-sec' + (extra ? ' ' + extra : '') + '"><h3>' + icon + ' ' + label + '</h3><p>' + text + '</p></div>';
   }
 
+  /* 運勢の段位 → おみくじ紙の絵柄（assets/omikuji/paper_*.webp） */
+  var PAPER_OF = {
+    "ok-daikichi": "daikichi",
+    "ok-chukichi": "kichi", "ok-shokichi": "kichi", "ok-kichi": "kichi",
+    "ok-hankichi": "sueyoshi", "ok-sueyoshi": "sueyoshi", "ok-sueshokichi": "sueyoshi",
+    "ok-kyo": "kyo", "ok-shokyo": "kyo", "ok-hankyo": "kyo", "ok-suekyo": "kyo",
+    "ok-daikyo": "daikyo"
+  };
+
   function render(o, animate) {
     result.hidden = false;
     result.classList.remove("ok-reveal");
     result.innerHTML =
-      '<p class="omikuji-result-title ' + o.cls + '">' + o.kind + '</p>' +
-      '<p class="bs-title">' + o.catch + '</p>' +
+      '<div class="ok-paper ok-paper-' + (PAPER_OF[o.cls] || "kichi") + '">' +
+        '<p class="omikuji-result-title ' + o.cls + '">' + o.kind + '</p>' +
+        '<p class="ok-paper-catch">' + o.catch + '</p>' +
+      '</div>' +
       '<div class="fortune-sections">' +
         fortuneSec("🔮", "総合運", o.overall) +
         fortuneSec("💗", "恋愛運", o.love) +
@@ -70,7 +81,6 @@ document.addEventListener("DOMContentLoaded", function () {
   var existing = testMode ? null : loadToday();
   if (existing) {
     box.classList.add("drawn");
-    box.textContent = "🎋";
     if (already) already.hidden = false;
     render(existing, false);
   }
@@ -80,6 +90,23 @@ document.addEventListener("DOMContentLoaded", function () {
     rays.className = "ok-rays";
     box.appendChild(rays);
     setTimeout(function () { if (rays.parentNode) rays.parentNode.removeChild(rays); }, 1400);
+  }
+
+  /* 桜吹雪（画像）を画面全体に重ねる：半吉〜大吉 */
+  function spawnSakura() {
+    var el = document.createElement("div");
+    el.className = "ok-fx-sakura";
+    document.body.appendChild(el);
+    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 2600);
+  }
+
+  /* 大吉だけの特別カットイン（全画面の一枚絵が斜めに走り抜ける） */
+  function spawnCutin() {
+    var el = document.createElement("div");
+    el.className = "ok-cutin";
+    el.innerHTML = '<span class="ok-cutin-img"></span><span class="ok-cutin-text">大吉</span>';
+    document.body.appendChild(el);
+    setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 1900);
   }
 
   function spawnScreenFlash() {
@@ -145,6 +172,11 @@ document.addEventListener("DOMContentLoaded", function () {
   function spawnResultGlow(o) {
     var palette = RESULT_GLOW[o.cls];
     if (!palette) return; // 末吉以下は色つき演出なし
+    spawnSakura();
+    var sp = document.createElement("span");
+    sp.className = "ok-fx-sparkle";
+    box.appendChild(sp);
+    setTimeout(function () { if (sp.parentNode) sp.parentNode.removeChild(sp); }, 1700);
 
     /* 色つきの光の輪 */
     var halo = document.createElement("span");
@@ -170,17 +202,25 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   var drawing = false;
+  var preloaded = [];   // 先読みした画像を保持（ガベージコレクションで捨てられないように）
   function doDraw() {
     if (drawing || box.classList.contains("drawn")) return;
     drawing = true;
     var o = drawOmikuji();
     saveToday(o);
+    /* 演出で使う画像を、振っている2秒の間に先読みしておく */
+    ["fx_rays", "fx_ring", "fx_sparkle", "fx_sakura", "paper_" + (PAPER_OF[o.cls] || "kichi")]
+      .concat(o.cls === "ok-daikichi" ? ["cutin_daikichi"] : [])
+      .forEach(function (n) {
+        var im = new Image(); im.src = "assets/omikuji/" + n + ".webp";
+        if (im.decode) im.decode().catch(function () {});   // 表示の瞬間に画像の展開で固まらないよう先に展開
+        preloaded.push(im);
+      });
     if (already) already.hidden = true;
 
     if (reduced) {
       box.classList.add("drawn");
-      box.textContent = "🎋";
-      render(o, false);
+        render(o, false);
       drawing = false;
       return;
     }
@@ -196,7 +236,6 @@ document.addEventListener("DOMContentLoaded", function () {
       /* 2) みくじ棒が光の輪と共にせり出す */
       var stick = document.createElement("span");
       stick.className = "omikuji-stick";
-      stick.textContent = "御神籤";
       box.appendChild(stick);
       box.classList.add("stick-out");
       spawnRays();
@@ -206,13 +245,13 @@ document.addEventListener("DOMContentLoaded", function () {
         /* 3) ドバー！ピカー！の大演出＋結果表示 */
         box.classList.remove("stick-out");
         box.classList.add("drawn");
-        box.textContent = "🎋";
-        box.classList.add("flash");
+            box.classList.add("flash");
         document.body.classList.add("ok-impact-shake");
         spawnScreenFlash();
         spawnSparks();
         spawnConfetti();
         spawnResultGlow(o);
+        if (o.cls === "ok-daikichi") spawnCutin();
         status.textContent = "";
         render(o, true);
         setTimeout(function () { document.body.classList.remove("ok-impact-shake"); }, 320);

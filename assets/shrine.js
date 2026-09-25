@@ -13,6 +13,7 @@
   if (!ctx) return;
 
   var w, h, dpr;
+  var SHOW_LANTERNS = false;   // 背景画像（夜の神社）に提灯が描かれているため、図形の提灯は描かない
   var embers = [];
   var papers = [];
 
@@ -130,7 +131,7 @@
     var dt = Math.min(2, (t - last) / 16.67 || 1);
     last = t;
     ctx.clearRect(0, 0, w, h);
-    drawLanterns(t);
+    if (SHOW_LANTERNS) drawLanterns(t);
     drawEmbers(dt);
     stepPapers(dt);
     for (var i = 0; i < papers.length; i++) drawPaper(papers[i]);
@@ -138,7 +139,7 @@
 
   function drawStatic() {
     ctx.clearRect(0, 0, w, h);
-    drawLanterns(0);
+    if (SHOW_LANTERNS) drawLanterns(0);
     for (var i = 0; i < papers.length; i++) drawPaper(papers[i]);
   }
 

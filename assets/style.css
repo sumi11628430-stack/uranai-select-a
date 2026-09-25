@@ -1428,6 +1428,219 @@ body.ok-impact-shake { animation: ok-impact-shake .3s ease-out 1; }
 }
 
 /* =========================================================
+   おみくじ：GPT生成画像による演出（2026-09 改修）
+   ・画像は assets/omikuji/*.webp。光の素材は黒背景＋screen合成で背景になじませる
+   ========================================================= */
+.bg-shrine {
+  background:
+    linear-gradient(180deg, rgba(12,4,20,.25) 0%, rgba(12,4,20,.55) 45%, rgba(8,3,14,.8) 100%),
+    url("omikuji/bg_wide.webp") center 30% / cover no-repeat,
+    #140818;
+}
+@media (max-aspect-ratio: 4/5) {
+  .bg-shrine {
+    background:
+      linear-gradient(180deg, rgba(12,4,20,.2) 0%, rgba(12,4,20,.55) 45%, rgba(8,3,14,.82) 100%),
+      url("omikuji/bg_tall.webp") center top / cover no-repeat,
+      #140818;
+  }
+}
+/* 筒：朱塗りの六角おみくじ筒の画像 */
+.omikuji-box {
+  width: clamp(130px, 26vw, 170px);
+  height: auto;
+  aspect-ratio: .514;
+  background: url("omikuji/tsutsu.webp") center / contain no-repeat;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 0;
+  filter: drop-shadow(0 12px 26px rgba(0,0,0,.65)) drop-shadow(0 0 22px rgba(255,150,80,.28));
+  transition: transform .3s ease, filter .3s ease;
+}
+.omikuji-box:hover, .omikuji-box:focus-visible {
+  box-shadow: none;
+  filter: drop-shadow(0 12px 26px rgba(0,0,0,.65)) drop-shadow(0 0 34px rgba(255,200,110,.6));
+}
+.omikuji-box.shaking, .omikuji-box.stick-out {
+  box-shadow: none;
+  filter: drop-shadow(0 12px 26px rgba(0,0,0,.6)) drop-shadow(0 0 46px rgba(255,210,110,.85));
+}
+/* みくじ棒：画像。筒の上の穴からせり出す */
+.omikuji-stick {
+  top: -2%;
+  width: 22%;
+  height: auto;
+  aspect-ratio: .164;
+  padding: 0;
+  background: url("omikuji/stick.webp") center / contain no-repeat;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  z-index: -1;
+  filter: drop-shadow(0 0 14px rgba(255,220,120,.9));
+}
+/* 光線：画像（回転しながら広がる） */
+.ok-rays {
+  width: 430%;
+  height: auto;
+  aspect-ratio: 1;
+  top: 42%;
+  background: url("omikuji/fx_rays.webp") center / contain no-repeat;
+  border-radius: 0;
+}
+/* 衝撃の光の輪：画像 */
+.omikuji-box.flash::after {
+  inset: auto;
+  left: 50%;
+  top: 42%;
+  width: 420%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 0;
+  background: url("omikuji/fx_ring.webp") center / contain no-repeat;
+  mix-blend-mode: screen;
+}
+.ok-color-halo { width: 330%; height: auto; aspect-ratio: 1; }
+/* きらめき：画像（筒のまわりにふわっと広がる） */
+.ok-fx-sparkle {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  width: 460%;
+  aspect-ratio: 1;
+  background: url("omikuji/fx_sparkle.webp") center / contain no-repeat;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  opacity: 0;
+  animation: ok-fx-sparkle 1.6s ease-out forwards;
+}
+@keyframes ok-fx-sparkle {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(.4) rotate(0deg); }
+  25%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.1) rotate(25deg); }
+}
+/* 桜吹雪：画像を画面全体に（半吉〜大吉） */
+.ok-fx-sakura {
+  position: fixed;
+  inset: -10% 0 0 0;
+  z-index: 997;
+  background: url("omikuji/fx_sakura.webp") center / cover no-repeat;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  opacity: 0;
+  animation: ok-fx-sakura 2.5s ease-out forwards;
+}
+@keyframes ok-fx-sakura {
+  0%   { opacity: 0; transform: translate(6%, -8%) scale(1.15); }
+  20%  { opacity: .95; }
+  100% { opacity: 0; transform: translate(-4%, 10%) scale(1); }
+}
+/* 大吉だけの特別カットイン */
+.ok-cutin {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  background: rgba(0,0,0,.45);
+  animation: ok-cutin-bg 1.8s ease forwards;
+}
+.ok-cutin-img {
+  position: absolute;
+  left: -5%;
+  right: -5%;
+  top: 50%;
+  height: min(58vh, 60vw);
+  transform: translateY(-50%);
+  background: url("omikuji/cutin_daikichi.webp") center / cover no-repeat;
+  clip-path: polygon(0 12%, 100% 0, 100% 88%, 0 100%);
+  animation: ok-cutin-slide 1.8s cubic-bezier(.2, .9, .2, 1) forwards;
+}
+.ok-cutin-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  font-size: clamp(4rem, 16vw, 9rem);
+  font-weight: 700;
+  letter-spacing: .15em;
+  color: #ffe9a0;
+  -webkit-text-stroke: 3px #6b3f00;
+  paint-order: stroke fill;
+  text-shadow: 0 0 10px #fff6d0, 0 0 30px #ffc84a, 0 0 70px rgba(255,170,40,.95), 0 5px 0 #4a2800;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  animation: ok-cutin-text 1.8s cubic-bezier(.2, 1.4, .3, 1) forwards;
+}
+@keyframes ok-cutin-bg {
+  0% { opacity: 0; } 12% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; }
+}
+@keyframes ok-cutin-slide {
+  0%   { transform: translate(110%, -50%) skewX(-8deg); }
+  18%  { transform: translate(0, -50%) skewX(0); }
+  78%  { transform: translate(-3%, -50%); opacity: 1; }
+  100% { transform: translate(-110%, -50%) skewX(8deg); opacity: 0; }
+}
+@keyframes ok-cutin-text {
+  0%, 15% { opacity: 0; transform: translate(-50%, -50%) scale(2.6); }
+  30%  { opacity: 1; transform: translate(-50%, -50%) scale(.9); }
+  40%  { transform: translate(-50%, -50%) scale(1.05); }
+  80%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.3); }
+}
+/* 結果：段位ごとの「おみくじ紙」に運勢を書く */
+.ok-paper {
+  width: min(600px, 96%);
+  margin: 0 auto 1.4rem;
+  padding: 3% 12%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 10px 24px rgba(0,0,0,.55));
+}
+.ok-paper-daikichi { background-image: url("omikuji/paper_daikichi.webp"); aspect-ratio: 1.931; }
+.ok-paper-kichi    { background-image: url("omikuji/paper_kichi.webp");    aspect-ratio: 1.938; }
+.ok-paper-sueyoshi { background-image: url("omikuji/paper_sueyoshi.webp"); aspect-ratio: 2.016; }
+.ok-paper-kyo      { background-image: url("omikuji/paper_kyo.webp");      aspect-ratio: 1.748; }
+.ok-paper-daikyo   { background-image: url("omikuji/paper_daikyo.webp");   aspect-ratio: 2.358; }
+.ok-paper .omikuji-result-title {
+  font-size: clamp(1.9rem, 8vw, 3.2rem);
+  margin: 0 0 .1em;
+  line-height: 1.2;
+}
+.ok-paper-catch {
+  margin: 0;
+  font-size: clamp(.82rem, 2.6vw, 1.08rem);
+  font-weight: 700;
+  line-height: 1.6;
+  color: #4a2a20;
+  text-align: center;
+}
+/* 紙の上は墨・朱の色で書く（明るい紙で読めるように） */
+.ok-paper .omikuji-result-title:not(.ok-daikichi) {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: #a3201c;
+  text-shadow: 0 1px 0 rgba(255,255,255,.7);
+}
+.ok-paper-kyo .omikuji-result-title:not(.ok-daikichi) { color: #2b3f6b; }
+.ok-paper-daikyo .omikuji-result-title:not(.ok-daikichi) { color: #eef2ff; text-shadow: 0 0 14px rgba(190,210,255,.8); }
+.ok-paper-daikyo .ok-paper-catch { color: #dfe6ff; }
+.ok-paper .omikuji-result-title.ok-daikichi {
+  background-image: linear-gradient(100deg, #6b3f00 0%, #a8700c 30%, #d9a32e 46%, #a8700c 62%, #6b3f00 100%);
+  text-shadow: none;
+  filter: drop-shadow(0 1px 0 rgba(255,255,255,.8)) drop-shadow(0 0 6px rgba(255,215,120,.7));
+}
+.ok-reveal .ok-paper .omikuji-result-title.ok-chukichi {
+  animation: ok-title-pop .8s cubic-bezier(.2, 1.5, .4, 1) .15s both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ok-fx-sparkle, .ok-fx-sakura, .ok-cutin { animation: none; display: none; }
+}
+
+/* =========================================================
    タロット占いページ専用
    ========================================================= */
 .bg-tarot {
