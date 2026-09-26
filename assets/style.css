@@ -888,7 +888,7 @@ body.gate-entering .brand, body.gate-entering .subtitle, body.gate-entering .sit
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(20,12,45,.35) 0%, rgba(20,12,45,.12) 35%, rgba(20,12,45,0) 60%, rgba(20,12,45,.3) 100%);
+  background: linear-gradient(180deg, rgba(40,20,80,.15) 0%, rgba(40,20,80,0) 40%, rgba(30,14,60,.12) 100%);
 }
 .bg-sky[data-season="spring"] .sky-day   { background-image: url("dayof/spring_day_wide.webp"); }
 .bg-sky[data-season="spring"] .sky-night { background-image: url("dayof/spring_night_wide.webp"); }
@@ -1595,14 +1595,14 @@ body.ok-impact-shake { animation: ok-impact-shake .3s ease-out 1; }
    ========================================================= */
 .bg-shrine {
   background:
-    linear-gradient(180deg, rgba(12,4,20,.25) 0%, rgba(12,4,20,.55) 45%, rgba(8,3,14,.8) 100%),
+    linear-gradient(180deg, rgba(40,20,80,.12) 0%, rgba(40,20,80,0) 45%, rgba(30,14,60,.15) 100%),
     url("omikuji/bg_wide.webp") center 30% / cover no-repeat,
     #140818;
 }
 @media (max-aspect-ratio: 4/5) {
   .bg-shrine {
     background:
-      linear-gradient(180deg, rgba(12,4,20,.2) 0%, rgba(12,4,20,.55) 45%, rgba(8,3,14,.82) 100%),
+      linear-gradient(180deg, rgba(40,20,80,.12) 0%, rgba(40,20,80,0) 45%, rgba(30,14,60,.15) 100%),
       url("omikuji/bg_tall.webp") center top / cover no-repeat,
       #140818;
   }
@@ -2084,14 +2084,14 @@ body.tarot-page-body { padding-bottom: 5.5rem; }
    ========================================================= */
 .bg-tarot {
   background:
-    linear-gradient(180deg, rgba(16,8,32,.35) 0%, rgba(16,8,32,.6) 45%, rgba(10,5,22,.85) 100%),
+    linear-gradient(180deg, rgba(40,20,80,.12) 0%, rgba(40,20,80,0) 45%, rgba(30,14,60,.15) 100%),
     url("tarot/bg_wide.webp") center / cover no-repeat,
     #180c28;
 }
 @media (max-aspect-ratio: 4/5) {
   .bg-tarot {
     background:
-      linear-gradient(180deg, rgba(16,8,32,.3) 0%, rgba(16,8,32,.6) 45%, rgba(10,5,22,.85) 100%),
+      linear-gradient(180deg, rgba(40,20,80,.12) 0%, rgba(40,20,80,0) 45%, rgba(30,14,60,.15) 100%),
       url("tarot/bg_tall.webp") center top / cover no-repeat,
       #180c28;
   }
@@ -2210,3 +2210,175 @@ body.tarot-page-body { padding-bottom: 5.5rem; }
   .tarot-flip-fx, .tarot-spread.dealt::before { display: none; }
   .tarot-shuffle-deck::before { animation: none; }
 }
+
+/* 誕生石・誕生花・星座・姓名判断：GPT生成の背景イラスト（2026-09 改修）。既存の動き（canvas）はこの上に重なる */
+body.page-stone .bg-gradient {
+  background:
+    linear-gradient(180deg, rgba(40,20,80,.12) 0%, rgba(40,20,80,0) 45%, rgba(30,14,60,.12) 100%),
+    url("bg/stone_wide.webp") center bottom / cover no-repeat,
+    #140a28;
+}
+@media (max-aspect-ratio: 4/5) {
+  body.page-stone .bg-gradient {
+    background:
+      linear-gradient(180deg, rgba(40,20,80,.12) 0%, rgba(40,20,80,0) 45%, rgba(30,14,60,.12) 100%),
+      url("bg/stone_tall.webp") center bottom / cover no-repeat,
+      #140a28;
+  }
+}
+body.page-stone .bg-gradient::before, body.page-stone .bg-gradient::after { opacity: 0; }
+body.page-zodiac .bg-gradient {
+  background:
+    linear-gradient(180deg, rgba(40,20,80,.12) 0%, rgba(40,20,80,0) 45%, rgba(30,14,60,.12) 100%),
+    url("bg/zodiac_wide.webp") center bottom / cover no-repeat,
+    #140a28;
+}
+@media (max-aspect-ratio: 4/5) {
+  body.page-zodiac .bg-gradient {
+    background:
+      linear-gradient(180deg, rgba(40,20,80,.12) 0%, rgba(40,20,80,0) 45%, rgba(30,14,60,.12) 100%),
+      url("bg/zodiac_tall.webp") center bottom / cover no-repeat,
+      #140a28;
+  }
+}
+body.page-zodiac .bg-gradient::before, body.page-zodiac .bg-gradient::after { opacity: 0; }
+body.page-flower .bg-floral {
+  background:
+    linear-gradient(180deg, rgba(40,20,80,.12) 0%, rgba(40,20,80,0) 45%, rgba(30,14,60,.12) 100%),
+    url("bg/flower_wide.webp") center bottom / cover no-repeat,
+    #140a28;
+}
+@media (max-aspect-ratio: 4/5) {
+  body.page-flower .bg-floral {
+    background:
+      linear-gradient(180deg, rgba(40,20,80,.12) 0%, rgba(40,20,80,0) 45%, rgba(30,14,60,.12) 100%),
+      url("bg/flower_tall.webp") center bottom / cover no-repeat,
+      #140a28;
+  }
+}
+body.page-flower .bg-floral::before, body.page-flower .bg-floral::after { opacity: 0; }
+body.page-seimei .bg-inkwash {
+  background:
+    linear-gradient(180deg, rgba(40,20,80,.12) 0%, rgba(40,20,80,0) 45%, rgba(30,14,60,.12) 100%),
+    url("bg/seimei_wide.webp") center bottom / cover no-repeat,
+    #140a28;
+}
+@media (max-aspect-ratio: 4/5) {
+  body.page-seimei .bg-inkwash {
+    background:
+      linear-gradient(180deg, rgba(40,20,80,.12) 0%, rgba(40,20,80,0) 45%, rgba(30,14,60,.12) 100%),
+      url("bg/seimei_tall.webp") center bottom / cover no-repeat,
+      #140a28;
+  }
+}
+body.page-seimei .bg-inkwash::before, body.page-seimei .bg-inkwash::after { opacity: 0; }
+/* 可愛い背景のページ：暗い縁取りを弱め、細かい文字は半透明のパネルに載せて読みやすく */
+body:is(.page-stone, .page-flower, .page-zodiac, .page-seimei, .page-omikuji, .page-tarot, .page-dayof) .bg-vignette {
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(40,20,70,.28) 100%);
+}
+body.page-seimei .bg-canvas { opacity: .35; }
+body:is(.page-stone, .page-flower, .page-zodiac, .page-seimei, .page-omikuji, .page-tarot, .page-dayof) :is(.bs-source, .seimei-lead, .back-link, .tarot-intro, .tarot-hint) {
+  background: rgba(45, 22, 88, .62);
+  border-radius: 12px;
+  padding: .7rem 1rem;
+  color: #f3ecff;
+  backdrop-filter: blur(3px);
+}
+body:is(.page-stone, .page-flower, .page-zodiac, .page-seimei, .page-omikuji, .page-tarot, .page-dayof) .back-link { border-radius: 999px; padding: .5rem 1.3rem; }
+body:is(.page-stone, .page-flower, .page-zodiac, .page-seimei, .page-omikuji, .page-tarot, .page-dayof) :is(.brand, .select-lead, .tarot-field-label, .omikuji-status) {
+  text-shadow: 0 2px 8px rgba(50, 20, 90, .85), 0 0 24px rgba(50, 20, 90, .55);
+}
+body.page-seimei .seimei-field label, body.page-seimei .field-note {
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(50, 20, 90, .95), 0 0 12px rgba(50, 20, 90, .7);
+}
+/* おみくじ・タロットの背景アニメ（火の粉・魔法陣の輪）はパステル背景を濁らせないよう控えめに */
+body.page-omikuji .bg-canvas, body.page-tarot .bg-canvas { opacity: .45; }
+body.page-tarot .tarot-field-label { color: #fff; }
+/* おみくじ筒の振り方（2026-09 改修）：下の方を支点に左右へ大きく傾ける振り子の動き。
+   振り始めは小さく→中盤で大きく→最後は落ち着く。画面の揺れは軽い上下の振動だけにする */
+@keyframes ok-tsutsu-shake {
+  0%   { transform: rotate(0deg)   translateY(0); }
+  6%   { transform: rotate(-6deg)  translateY(-2px); }
+  14%  { transform: rotate(8deg)   translateY(0); }
+  22%  { transform: rotate(-11deg) translateY(-4px); }
+  30%  { transform: rotate(12deg)  translateY(0); }
+  38%  { transform: rotate(-14deg) translateY(-5px); }
+  46%  { transform: rotate(14deg)  translateY(0); }
+  54%  { transform: rotate(-14deg) translateY(-5px); }
+  62%  { transform: rotate(13deg)  translateY(0); }
+  70%  { transform: rotate(-11deg) translateY(-4px); }
+  78%  { transform: rotate(8deg)   translateY(0); }
+  86%  { transform: rotate(-5deg)  translateY(-2px); }
+  93%  { transform: rotate(2deg)   translateY(0); }
+  100% { transform: rotate(0deg)   translateY(0); }
+}
+.omikuji-box.shaking {
+  transform-origin: 50% 88%;
+  animation: ok-tsutsu-shake 2s ease-in-out 1 both;
+}
+@keyframes ok-page-rattle {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(1.5px); }
+}
+body.ok-page-shake { animation: ok-page-rattle .16s ease-in-out 12; }
+@media (prefers-reduced-motion: reduce) {
+  .omikuji-box.shaking, body.ok-page-shake { animation: none; }
+}
+/* 振ったあと筒を逆さにする。斜め上から見た筒を画面の中で180°回すと、逆さの筒を少し下から見上げた見え方になり、
+   上面の穴が下側に見える（物理的に正しい）。少し持ち上げながら返し、最後に軽く沈んで止まる */
+@keyframes tsutsu-turn-over {
+  0%   { transform: rotate(0deg)   translateY(0); }
+  45%  { transform: rotate(105deg) translateY(-7%); }
+  80%  { transform: rotate(184deg) translateY(1%); }
+  100% { transform: rotate(180deg) translateY(0); }
+}
+.omikuji-box.flipped,
+.omikuji-box.flipped:hover,
+.omikuji-box.flipped:focus-visible {
+  transform-origin: 50% 50%;
+  animation: tsutsu-turn-over .6s cubic-bezier(.45, 0, .35, 1) forwards;
+}
+@media (prefers-reduced-motion: reduce) { .omikuji-box.flipped { animation: none; transform: rotate(180deg); } }
+/* 画面の揺れは本文だけにかける（bodyを動かすと固定背景がずれて一瞬暗くなるため） */
+/* bodyの動き（表示時のフェードイン）は変えない。変えると外した瞬間にフェードインがやり直しになり一瞬暗くなる */
+body.ok-page-shake, body.ok-impact-shake { animation: page-fade-in 1s ease both !important; }
+body.ok-page-shake > main { animation: ok-page-rattle .16s ease-in-out 12; }
+body.ok-impact-shake > main { animation: ok-impact-shake .3s ease-out 1; }
+@media (prefers-reduced-motion: reduce) { body.ok-page-shake > main, body.ok-impact-shake > main { animation: none; } }
+/* みくじ棒は筒の上面の穴（中心：横50%・上から8.4%）から出す。
+   棒の枠の下端を穴の位置にそろえてはみ出しを隠し、中の絵を穴から押し出す。
+   筒ごと逆さになっているので、画面では下の穴から下向きに出てくる */
+.omikuji-box .omikuji-stick {
+  top: auto;
+  bottom: 91.6%;
+  left: 50%;
+  width: 30%;
+  height: auto;
+  aspect-ratio: .30;
+  padding: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  overflow: hidden;
+  opacity: 1;
+  z-index: 1;
+  filter: none;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.omikuji-box .omikuji-stick::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("omikuji/stick.webp") center / contain no-repeat;
+  filter: drop-shadow(0 0 8px rgba(255,220,120,.95));
+  transform: translateY(100%);
+}
+.omikuji-box.stick-out .omikuji-stick { animation: none; }
+.omikuji-box.stick-out .omikuji-stick::before { animation: ok-stick-slide .8s cubic-bezier(.2, 1.25, .35, 1) forwards; }
+@keyframes ok-stick-slide {
+  0%   { transform: translateY(100%); }
+  100% { transform: translateY(8%); }
+}
+@media (prefers-reduced-motion: reduce) { .omikuji-box.stick-out .omikuji-stick::before { animation: none; transform: translateY(8%); } }

@@ -233,7 +233,14 @@ document.addEventListener("DOMContentLoaded", function () {
       box.classList.remove("shaking");
       document.body.classList.remove("ok-page-shake");
 
-      /* 2) みくじ棒が光の輪と共にせり出す */
+      /* 2) 筒を逆さにする（本物のおみくじと同じ手順）。筒は真正面から見た絵なので、
+            画面の中でそのまま180°回しても見え方が正しいまま逆さになる */
+      box.classList.add("flipped");
+      status.textContent = "くるっ……";
+
+      setTimeout(function () {
+      /* 3) 逆さの筒の穴から、みくじ棒が光の輪と共に出てくる
+            （筒ごと180°回っているので、棒は画面の下向きに出る） */
       var stick = document.createElement("span");
       stick.className = "omikuji-stick";
       box.appendChild(stick);
@@ -242,8 +249,9 @@ document.addEventListener("DOMContentLoaded", function () {
       status.textContent = "キター――ッ！！";
 
       setTimeout(function () {
-        /* 3) ドバー！ピカー！の大演出＋結果表示 */
+        /* 4) ドバー！ピカー！の大演出＋結果表示（筒は元の向きに戻る） */
         box.classList.remove("stick-out");
+        box.classList.remove("flipped");
         box.classList.add("drawn");
             box.classList.add("flash");
         document.body.classList.add("ok-impact-shake");
@@ -257,6 +265,7 @@ document.addEventListener("DOMContentLoaded", function () {
         setTimeout(function () { document.body.classList.remove("ok-impact-shake"); }, 320);
         setTimeout(function () { box.classList.remove("flash"); drawing = false; }, 900);
       }, 1000);
+      }, 700);
     }, 2000);
   }
   box.addEventListener("click", doDraw);
