@@ -7,7 +7,7 @@
    　tarot_data.js参照）
    ・下の結果欄には「直前にめくった1枚」だけを表示する
    　（積み上げ式だと下に長くなり探しづらいため）
-   ・「全体の結果を見る」ボタンで、めくった分を一覧できる
+   ・結果欄の「めくったカードを一覧で見る（n/10枚）」ボタンで、めくった分を一覧できる
    　別ウィンドウを開く（1画面にできるだけ多く収まる配置）
    ========================================================= */
 document.addEventListener("DOMContentLoaded", function () {
@@ -211,14 +211,39 @@ document.addEventListener("DOMContentLoaded", function () {
     if (Object.keys(revealedByPos).length === 10) {
       var p = document.createElement("p");
       p.className = "bs-source tarot-closing";
-      p.textContent = "10枚すべてが出そろいました。「全体の結果を見る」で通して眺めると、より深いメッセージが見えてきます。";
+      p.textContent = "10枚すべてが出そろいました。「10枚の結果をまとめて見る」で通して眺めると、より深いメッセージが見えてきます。";
       box.appendChild(p);
     }
+    /* 結果欄の下のボタン：次のカードへ戻る／めくった分を一覧で見る。
+       一覧で見られるのはめくったカードだけなので、途中は枚数を添えて「全体」と誤解されないようにする */
+    var actions = document.createElement("div");
+    actions.className = "tarot-detail-actions";
+    var back = document.createElement("button");
+    back.type = "button";
+    back.className = "tarot-back-btn";
+    back.textContent = "▲ カードに戻る";
+    back.addEventListener("click", function () {
+      /* 次にめくるカード（光っているカード）が画面の中央に来るように戻る。全部めくり終わっていたら並びの先頭へ */
+      var next = spread.querySelector(".tarot-card.next-up");
+      var how = reducedMotion ? "auto" : "smooth";
+      if (next) next.scrollIntoView({ behavior: how, block: "center" });
+      else spread.scrollIntoView({ behavior: how, block: "start" });
+    });
+    var n = Object.keys(revealedByPos).length;
+    var list = document.createElement("button");
+    list.type = "button";
+    list.className = "tarot-back-btn tarot-list-btn";
+    list.textContent = n === 10 ? "10枚の結果をまとめて見る" : "めくったカードを一覧で見る（" + n + "/10枚）";
+    list.addEventListener("click", openFullResults);
+    actions.appendChild(back);
+    actions.appendChild(list);
+    box.appendChild(actions);
     result.innerHTML = "";
     result.appendChild(box);
     result.hidden = false;
-    if (revealedCount === 1) result.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    if (fullBtn) fullBtn.hidden = false;
+    /* めくるたびに結果欄までスクロールする（以前は1枚目だけだった） */
+    result.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
+    if (fullBtn) fullBtn.hidden = true;   // 画面下に浮かぶボタンは使わない（結果欄の中のボタンに一本化）
   }
 
   function openFullResults() {
@@ -242,7 +267,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var html =
       '<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8">' +
-      '<title>ケルト十字：全体の結果 ― 占いの館</title>' +
+      '<title>' + (entries.length < 10 ? 'めくったカードの一覧' : 'ケルト十字：10枚の結果') + ' ― 占いの館</title>' +
       '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
       (cssHref ? '<link rel="stylesheet" href="' + cssHref + '">' : "") +
       '<style>' +
@@ -264,7 +289,8 @@ document.addEventListener("DOMContentLoaded", function () {
       '.tarot-popup-close:hover{background:rgba(90,52,128,.95);}' +
       '.tarot-popup-close-bottom{position:static;display:block;margin:1.6rem auto .6rem;padding:.75rem 2.4rem;font-size:1rem;}' +
       '</style></head><body>' +
-      '<div class="tarot-popup-head"><h1 class="brand" style="font-size:clamp(1.3rem,3.6vw,1.9rem);">🔮 ケルト十字：全体の結果</h1>' + note + '</div>' +
+      '<div class="tarot-popup-head"><h1 class="brand" style="font-size:clamp(1.3rem,3.6vw,1.9rem);">🔮 ' +
+        (entries.length < 10 ? 'めくったカードの一覧（' + entries.length + '/10枚）' : 'ケルト十字：10枚の結果') + '</h1>' + note + '</div>' +
       '<button type="button" class="tarot-popup-close" onclick="window.close()" aria-label="この画面を閉じる">✕ 閉じる</button>' +
       '<div class="tarot-popup-grid">' + items + '</div>' +
       '<button type="button" class="tarot-popup-close tarot-popup-close-bottom" onclick="window.close()">閉じて占いに戻る</button>' +

@@ -2382,3 +2382,77 @@ body.ok-impact-shake > main { animation: ok-impact-shake .3s ease-out 1; }
   100% { transform: translateY(8%); }
 }
 @media (prefers-reduced-motion: reduce) { .omikuji-box.stick-out .omikuji-stick::before { animation: none; transform: translateY(8%); } }
+/* タロット：結果欄から次のカードへ戻るボタン */
+.tarot-detail .tarot-back-btn {
+  flex: 1 0 100%;
+  margin: .6rem auto 0;
+  max-width: 220px;
+  padding: .6rem 1.4rem;
+  border-radius: 999px;
+  border: 1px solid rgba(232,200,110,.6);
+  background: rgba(60, 30, 110, .7);
+  color: var(--gold-bright);
+  font-family: inherit;
+  font-size: .95rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  cursor: pointer;
+}
+.tarot-detail .tarot-back-btn:hover, .tarot-detail .tarot-back-btn:focus-visible { background: rgba(95, 55, 150, .85); outline: none; }
+#result { scroll-margin-top: 12px; }
+#tarotSpread { scroll-margin-top: 12px; }
+/* タロット：次にめくるカードをはっきり示す（2026-09 改修）
+   ・そのカードだけ少し大きくなって上下にふわふわ浮き、白金の光が強く脈打つ
+   ・上に「▼ タップ」の矢印を出す
+   ・まだめくらない他のカードは少し暗くして、めくるカードを際立たせる */
+.tarot-card.next-up { position: relative; z-index: 3; }
+.tarot-card.next-up .tarot-card-inner { animation: tarot-next-float 1.4s ease-in-out infinite; }
+@keyframes tarot-next-float {
+  0%, 100% { transform: translateY(0) scale(1.08); }
+  50%      { transform: translateY(-7px) scale(1.12); }
+}
+.tarot-card.next-up .tarot-card-back {
+  border: 2px solid #fff4c8;
+  animation: tarot-next-glow2 1.4s ease-in-out infinite;
+}
+@keyframes tarot-next-glow2 {
+  0%, 100% { box-shadow: 0 0 10px 2px rgba(255,236,170,.75), 0 0 26px 6px rgba(255,200,90,.45); }
+  50%      { box-shadow: 0 0 18px 5px rgba(255,248,215,1),   0 0 44px 14px rgba(255,205,100,.75); }
+}
+.tarot-card.next-up::after {
+  content: "▼ タップ";
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+  white-space: nowrap;
+  padding: .15rem .55rem;
+  border-radius: 999px;
+  background: rgba(255, 240, 190, .95);
+  color: #5a2a86;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  box-shadow: 0 2px 8px rgba(60, 20, 90, .35);
+  pointer-events: none;
+  animation: tarot-next-arrow 1.4s ease-in-out infinite;
+}
+@keyframes tarot-next-arrow {
+  0%, 100% { transform: translate(-50%, 0); }
+  50%      { transform: translate(-50%, -6px); }
+}
+/* 中央で横向きに重なる2番のカードは、矢印も回転してしまうので文字を正しい向きに戻す */
+.tarot-card-cross.next-up::after { content: "◀ タップ"; left: calc(100% + 8px); bottom: auto; top: 50%; transform: translateY(-50%) rotate(-90deg); transform-origin: left center; animation: none; }
+.tarot-spread:has(.next-up) .tarot-card:not(.revealed):not(.next-up) .tarot-card-back { filter: brightness(.62) saturate(.75); }
+@media (prefers-reduced-motion: reduce) {
+  .tarot-card.next-up .tarot-card-inner, .tarot-card.next-up .tarot-card-back, .tarot-card.next-up::after { animation: none; }
+  .tarot-card.next-up .tarot-card-inner { transform: scale(1.08); }
+}
+.tarot-spread { padding-top: 2.4rem; }
+body.page-tarot .tarot-slot-label { color: #fff; font-weight: 700; text-shadow: 0 1px 4px rgba(50, 20, 90, .95), 0 0 10px rgba(50, 20, 90, .7); }
+/* タロット：結果欄の下のボタン2つ（カードに戻る／めくったカードの一覧） */
+.tarot-detail .tarot-detail-actions { flex: 1 0 100%; display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; margin-top: .6rem; }
+.tarot-detail .tarot-detail-actions .tarot-back-btn { flex: 0 1 auto; margin: 0; max-width: none; }
+.tarot-detail .tarot-list-btn { background: linear-gradient(160deg, #5a3480, #2c1450); }
+body.tarot-page-body { padding-bottom: 2rem; }
+.tarot-detail .tarot-detail-body { flex: 1 1 0; min-width: 200px; }
