@@ -267,7 +267,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var html =
       '<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8">' +
-      '<title>' + (entries.length < 10 ? 'めくったカードの一覧' : 'ケルト十字：10枚の結果') + ' ― 占いの館</title>' +
+      '<title>' + (entries.length < 10 ? 'めくったカードの一覧' : 'ケルト十字：10枚の結果') + ' ― ☆ねこ占ぽ</title>' +
       '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
       (cssHref ? '<link rel="stylesheet" href="' + cssHref + '">' : "") +
       '<style>' +

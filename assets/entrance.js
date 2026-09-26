@@ -49,10 +49,28 @@
     });
   }
 
+  /* トップのロゴの☆：ランダムな間隔（2〜6秒）で、左右または上下にくるっと反転する。
+     ☆は対称な形なので、途中で一度細くつぶれてから戻る動きで「反転」が見えるようにする */
+  function startStarFlip() {
+    var star = document.querySelector(".logo-star");
+    if (!star || reduced || !star.animate) return;
+    function flipOnce() {
+      var horizontal = Math.random() < 0.5;
+      var mid = horizontal ? "scale(-1, 1)" : "scale(1, -1)";
+      star.animate(
+        [{ transform: "scale(1, 1)" }, { transform: mid }, { transform: "scale(1, 1)" }],
+        { duration: 900, easing: "ease-in-out" }
+      );
+      setTimeout(flipOnce, 2000 + Math.random() * 4000);
+    }
+    setTimeout(flipOnce, 1200 + Math.random() * 1500);
+  }
+
   window.addEventListener("pageshow", cleanupEnter);
   document.addEventListener("DOMContentLoaded", function () {
     cleanupEnter();
     setupGate();
+    startStarFlip();
     arrive();
   });
 })();
