@@ -11,10 +11,16 @@ document.addEventListener("DOMContentLoaded", function () {
     return '<div class="f-sec' + (extra ? ' ' + extra : '') + '"><h3>' + icon + ' ' + label + '</h3><p>' + text + '</p></div>';
   }
 
+  /* 星座のイラスト（assets/zodiac/<key>.webp）。画像がまだ無い・読めない時は記号（♈など）を表示 */
+  function zodiacIcon(z, cls) {
+    return '<img class="' + cls + '" src="assets/zodiac/' + z.key + '.webp" alt="' + z.name + '" ' +
+           'onerror="this.replaceWith(document.createTextNode(&quot;' + z.symbol + '&quot;))">';
+  }
+
   function render(z) {
     result.hidden = false;
     result.innerHTML =
-      '<div class="zodiac-symbol">' + z.symbol + '</div>' +
+      '<div class="zodiac-symbol">' + zodiacIcon(z, "zodiac-symbol-img") + '</div>' +
       '<h2 class="bs-rtitle">' + z.name + '<small style="display:block;font-size:.5em;letter-spacing:.2em;color:var(--text-dim);margin-top:.3em;">' + z.en + '　' + z.range + '</small></h2>' +
       '<p class="bs-title">' + z.catch + '</p>' +
       '<div class="zodiac-top">' +
@@ -43,7 +49,10 @@ document.addEventListener("DOMContentLoaded", function () {
     var b = document.createElement("button");
     b.className = "month-btn zodiac-btn";
     b.type = "button";
-    b.innerHTML = '<span class="zodiac-btn-symbol">' + z.symbol + '</span>' + z.name;
+    /* イラストだけでは何座か分からない人のために、星座名と誕生日の範囲を文字で添える */
+    b.innerHTML = '<span class="zodiac-btn-symbol">' + zodiacIcon(z, "zodiac-btn-img") + '</span>' +
+                  '<span class="zodiac-btn-name">' + z.name + '</span>' +
+                  '<span class="zodiac-btn-range">' + z.range + '</span>';
     b.addEventListener("click", function () {
       var actives = grid.querySelectorAll(".month-btn");
       for (var i = 0; i < actives.length; i++) actives[i].classList.remove("on");
