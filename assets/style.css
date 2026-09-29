@@ -818,6 +818,64 @@ body.gate-entering .brand, body.gate-entering .subtitle, body.gate-entering .sit
 }
 .lucky-chip b { color: var(--gold-bright); font-size: .8rem; letter-spacing: .1em; font-weight: 700; }
 
+/* 誕生石の結果下：誕生石のお守り（楽天の検索結果へのリンク） */
+.charm-sec { max-width: 680px; margin: 2rem auto 0; }
+.charm-label { margin-top: .9rem; color: var(--gold-bright); font-size: .85rem; letter-spacing: .08em; }
+.charm-pr { margin-left: .6em; padding: 0 .45em; border: 1px solid rgba(232,200,110,.45); border-radius: 5px; font-size: .68rem; color: rgba(232,200,110,.85); vertical-align: middle; }
+.f-sec p.charm-guide { margin-top: .3rem; color: var(--text-dim); font-size: .85rem; line-height: 1.6; }
+.charm-sub { margin-top: .8rem; color: var(--text-dim); font-size: .8rem; letter-spacing: .1em; }
+.charm-chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: .55rem; margin-top: .5rem; }
+.charm-chip {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; gap: .3rem;
+  padding: .7rem .3rem .55rem;
+  border-radius: 14px;
+  background: radial-gradient(circle at 50% 38%, rgba(255,255,255,.1), rgba(255,255,255,.03) 70%);
+  border: 1px solid rgba(232,200,110,.3);
+  color: var(--text); text-decoration: none;
+  transition: transform .2s, border-color .2s, box-shadow .2s, background .2s;
+}
+.charm-icon {
+  width: 50px; height: 50px; margin: 7px 0;
+  fill: none; stroke: var(--gold-bright); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  overflow: visible;
+}
+.charm-icon .ci-gem {
+  fill: var(--gem); stroke: rgba(255,255,255,.75); stroke-width: 1;
+  filter: drop-shadow(0 0 3px var(--gem));
+  animation: charm-twinkle 3.2s ease-in-out infinite;
+  animation-delay: calc(var(--i) * .35s);
+}
+.charm-icon .ci-shine { fill: rgba(255,255,255,.55); stroke: none; }
+/* 楽天の商品写真：切り取らず縮小のみ（object-fit: contain） */
+.charm-photo {
+  display: block; width: 64px; height: 64px;
+  border-radius: 10px; overflow: hidden; background: #fff;
+  box-shadow: 0 0 0 1px rgba(232,200,110,.35), 0 0 10px color-mix(in srgb, var(--gem) 45%, transparent);
+  transition: box-shadow .2s;
+}
+.charm-photo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.charm-chip:hover .charm-photo { box-shadow: 0 0 0 1px rgba(232,200,110,.7), 0 0 16px color-mix(in srgb, var(--gem) 70%, transparent); }
+.f-sec p.charm-credit { margin-top: .2rem; font-size: .7rem; line-height: 1.4; }
+.charm-credit a { color: var(--text-dim); }
+.charm-name { font-size: .76rem; letter-spacing: 0; white-space: nowrap; }
+.charm-chip:hover, .charm-chip:focus-visible, .charm-chip:active {
+  transform: translateY(-3px);
+  border-color: rgba(232,200,110,.7);
+  background: radial-gradient(circle at 50% 38%, rgba(232,200,110,.22), rgba(255,255,255,.04) 70%);
+  box-shadow: 0 6px 18px rgba(0,0,0,.25), 0 0 14px rgba(232,200,110,.25);
+}
+.charm-chip:hover .ci-gem { filter: drop-shadow(0 0 7px var(--gem)) brightness(1.25); }
+@keyframes charm-twinkle {
+  0%, 70%, 100% { filter: drop-shadow(0 0 3px var(--gem)); }
+  80% { filter: drop-shadow(0 0 8px var(--gem)) brightness(1.4); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .charm-icon .ci-gem { animation: none; }
+  .charm-chip { transition: none; }
+}
+.f-sec p.charm-note { margin-top: .6rem; color: var(--text-dim); font-size: .75rem; line-height: 1.5; }
+
 /* =========================================================
    誕生花ページ専用（花の背景・花のSVG）
    ========================================================= */

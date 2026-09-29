@@ -122,19 +122,27 @@
     fadeTo(0, 1000, function () { play("remix"); });
   }
 
+  /* スマホのブラウザは「指が触れた瞬間」ではなく「指を離した瞬間」を1回のタップと数え、
+     そこで初めて音を出す許可を出す。そのため音を流す合図は指を離した時（pointerup/touchend）にする */
+  var GESTURE_EVENTS = ["pointerup", "touchend", "keydown"];
+  function onGesture(handler) {
+    GESTURE_EVENTS.forEach(function (ev) { window.addEventListener(ev, handler, true); });
+  }
+  function offGesture(handler) {
+    GESTURE_EVENTS.forEach(function (ev) { window.removeEventListener(ev, handler, true); });
+  }
+
   /* 自動再生が止められた時：このページで最初に押した瞬間に流す */
   function waitForGesture() {
     if (waitingGesture) return;
     waitingGesture = true;
     var handler = function (e) {
       if (e.target && e.target.closest && e.target.closest(".bgm-toggle")) return;
-      window.removeEventListener("pointerdown", handler, true);
-      window.removeEventListener("keydown", handler, true);
+      offGesture(handler);
       waitingGesture = false;
       play();
     };
-    window.addEventListener("pointerdown", handler, true);
-    window.addEventListener("keydown", handler, true);
+    onGesture(handler);
   }
 
   function saveRemixPos() {
@@ -262,12 +270,10 @@
       root.classList.remove("tap-gate-open");
       root.classList.add("tap-gate-leaving");
       setTimeout(function () { root.classList.remove("tap-gate-leaving"); if (hint.parentNode) hint.parentNode.removeChild(hint); }, 1200);
-      window.removeEventListener("pointerdown", open, true);
-      window.removeEventListener("keydown", open, true);
+      offGesture(open);
       play("top");
     };
-    window.addEventListener("pointerdown", open, true);
-    window.addEventListener("keydown", open, true);
+    onGesture(open);
   } else if (getItem(KEY_ENTERED) === "1") {
     play("top");
   }

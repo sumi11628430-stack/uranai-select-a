@@ -2,6 +2,27 @@
    星座占い：表示ロジック
    ・12星座ボタンから選んで詳細表示
    ========================================================= */
+
+/* ---- 星座のお守り（部品は assets/charm.js） ---------------------- */
+// [ボタンの表示名, 楽天で検索する言葉, アイコン, ひらがな表記で検索するか]
+// 楽天の調査（2026-09）で、ストラップ・ブレスレット・イヤリングはひらがな表記の方が商品が多かった
+var ZODIAC_CHARM_TYPES = [
+  ["ストラップ", "ストラップ", "strap", true], ["キーホルダー", "キーホルダー", "key", false],
+  ["ブローチ", "ブローチ", "brooch", false], ["ブレスレット", "ブレスレット", "bracelet", true],
+  ["ネックレス", "ネックレス", "necklace", false]
+];
+var ZODIAC_CHARM_EAR_TYPES = [["イヤリング", "イヤリング", "earring", true], ["ピアス", "ピアス", "pierce", false], ["イヤーカフ", "イヤーカフ", "cuff", false]];
+var ZODIAC_KANA = {
+  aries: "おひつじ座", taurus: "おうし座", gemini: "ふたご座", cancer: "かに座", leo: "しし座", virgo: "おとめ座",
+  libra: "てんびん座", scorpio: "さそり座", sagittarius: "いて座", capricorn: "やぎ座", aquarius: "みずがめ座", pisces: "うお座"
+};
+// 宝石・光の色（星座のラッキーカラーに合わせる）
+var ZODIAC_GEM = {
+  aries: "#d64541", taurus: "#3f9a5a", gemini: "#7cc8e8", cancer: "#f1efe6", leo: "#e8b83a", virgo: "#34569c",
+  libra: "#e89ab8", scorpio: "#8f1f3a", sagittarius: "#e8873a", capricorn: "#9a6a44", aquarius: "#3a7ad6", pisces: "#b49ae0"
+};
+function zodiacCharmWord(z, t) { return t[3] ? ZODIAC_KANA[z.key] : z.name; }
+
 document.addEventListener("DOMContentLoaded", function () {
   var grid   = document.getElementById("zodiacGrid");
   var result = document.getElementById("result");
@@ -39,7 +60,16 @@ document.addEventListener("DOMContentLoaded", function () {
         fortuneSec("✨", "開運アドバイス", z.advice, "advice") +
       '</div>' +
       '<p class="bs-listtitle" style="margin-top:1.6rem;">相性の良い星座</p>' +
-      '<div class="lucky-row"><span class="lucky-chip"><b>好相性</b>' + z.compatible.join("・") + '</span></div>';
+      '<div class="lucky-row"><span class="lucky-chip"><b>好相性</b>' + z.compatible.join("・") + '</span></div>' +
+      charmSectionHTML({
+        gem: ZODIAC_GEM[z.key],
+        title: z.symbol + " " + z.name + "のお守り",
+        text: "支配星は" + z.planet + "、守護石は" + z.stone + "。" + z.name + "のモチーフをお守りとして身につけると、あなたらしい輝きがそっと引き出されるといわれます。",
+        name: z.name,
+        types: ZODIAC_CHARM_TYPES, earTypes: ZODIAC_CHARM_EAR_TYPES,
+        photos: window.ZODIAC_CHARM_PHOTOS && ZODIAC_CHARM_PHOTOS[z.key],
+        words: function (t) { return [zodiacCharmWord(z, t), t[1]]; }
+      });
 
     if (typeof setZodiacConstellation === "function") setZodiacConstellation(z.key);
     result.scrollIntoView({ behavior: "smooth", block: "start" });

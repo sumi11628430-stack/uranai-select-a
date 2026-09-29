@@ -338,6 +338,22 @@ var STONE_VARIANTS = {
   "zircon":      { items: [["ブルー", "#6fc0e8", "zircon_blue"], ["無色", "#eef2f7", "zircon_colorless"], ["イエロー", "#f0cf4a", "zircon_yellow"], ["オレンジ", "#e8863a", "zircon_orange"], ["レッド", "#b3232e", "zircon_red"], ["グリーン", "#5fa65a", "zircon_green"]] }
 };
 
+/* ---- 誕生石のお守り（部品は assets/charm.js） ------------------ */
+// [ボタンの表示名, 楽天で検索する言葉, アイコン]
+var CHARM_TYPES = [
+  ["ストラップ", "ストラップ", "strap"], ["キーホルダー", "キーホルダー", "key"], ["ブローチ", "ブローチ", "brooch"],
+  ["ヘアアクセ", "ヘアアクセサリー", "hair"], ["ブレスレット", "ブレスレット", "bracelet"],
+  ["ネックレス", "ネックレス", "necklace"]
+];
+var CHARM_EAR_TYPES = [["イヤリング", "イヤリング", "earring"], ["ピアス", "ピアス", "pierce"], ["イヤーカフ", "イヤーカフ", "cuff"]];
+
+// 検索用の石の名前：「真珠（パール）」→「パール」、「ターコイズ（トルコ石）」→「ターコイズ」
+function charmStoneName(s) {
+  var m = s.jp.match(/^(.+?)（(.+)）$/);
+  if (!m) return s.jp;
+  return /[ァ-ヶ]/.test(m[1].charAt(0)) ? m[1] : m[2];
+}
+
 /* ---- 表示ロジック ----------------------------------------------- */
 document.addEventListener("DOMContentLoaded", function () {
   var grid   = document.getElementById("monthGrid");
@@ -381,6 +397,21 @@ document.addEventListener("DOMContentLoaded", function () {
     return '<div class="f-sec' + (extra ? ' ' + extra : '') + '"><h3>' + icon + ' ' + label + '</h3><p>' + text + '</p></div>';
   }
 
+  // 誕生石のお守り：月の代表の石（最初の石）で、身につける形ごとに楽天の検索結果へ
+  function charmBlock(b) {
+    var s = b.stones[0];
+    var name = charmStoneName(s);
+    return charmSectionHTML({
+      gem: s.c,
+      title: "🔮 " + name + "のお守り",
+      text: "石言葉は「" + s.words + "」。お守りとして身につけると、" + b.m + "月生まれのあなたの力がそっと引き出されるといわれます。",
+      name: name,
+      types: CHARM_TYPES, earTypes: CHARM_EAR_TYPES,
+      photos: window.CHARM_PHOTOS && CHARM_PHOTOS[b.m],
+      words: function (t) { return [name, t[1]]; }
+    });
+  }
+
   function render(b) {
     var stones = b.stones.map(stoneBlock).join("");
     var lucky =
@@ -404,7 +435,8 @@ document.addEventListener("DOMContentLoaded", function () {
         fortuneSec("🌙", "あなたの気質", b.personality) +
         fortuneSec("✨", "開運アドバイス", b.advice, "advice") +
       '</div>' +
-      lucky;
+      lucky +
+      charmBlock(b);
   }
 
   MONTHS.forEach(function (b) {
